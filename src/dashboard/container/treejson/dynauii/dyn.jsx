@@ -5,6 +5,8 @@ import AddElements from "./AddElemnts";
 import bracket from "@/dashboard/assets/dynicons/bracket.png";
 import check from "@/dashboard/assets/dynicons/checked.png";
 import "../../treejson/tree.css";
+import Image from "next/image";
+
 
 export default function Dyn({
   data,
@@ -78,7 +80,7 @@ export default function Dyn({
                       />
                     </div>
                     <div>
-                      <img
+                      <Image
                         src={check}
                         alt="check"
                         width={15}
@@ -103,7 +105,7 @@ export default function Dyn({
                       </div>
                     </span>
                     {title} :{" "}
-                    <img
+                    <Image
                       src={bracket}
                       alt="array"
                       style={{

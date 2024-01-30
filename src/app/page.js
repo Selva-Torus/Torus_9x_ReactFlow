@@ -39,7 +39,7 @@ export default function Home() {
           <div className="h-[82vh] flex">
             <SideNavAccordian setOpen={setOpen} />
 
-            {open && <div className="ml-[80px] h-[82vh] w-[90vw]"> <Dashboard
+            {open && <div className="ml-[60px] h-[82vh] w-[90vw]"> <Dashboard
           ten={"TORUS9X"}
           applicationG={"Group-1"}
           applicationV={"app1"}

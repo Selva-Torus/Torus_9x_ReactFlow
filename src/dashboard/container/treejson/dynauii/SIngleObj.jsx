@@ -15,6 +15,8 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import "../../treejson/tree.css";
 import { Dialog } from "primereact/dialog";
+import Image from "next/image";
+
 
 const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
   const [json, setJson] = useState({});
@@ -600,7 +602,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                     />
                                   </div>
                                   <div>
-                                    <img
+                                    <Image
                                       src={check}
                                       alt="check"
                                       width={15}

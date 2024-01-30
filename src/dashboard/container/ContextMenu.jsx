@@ -10,6 +10,7 @@ import Builder from "./treejson/builder.jsx";
 
 import entity from "@/utilsfunctions/entity.json";
 import { getControlPolicy } from "@/utilsfunctions/apiCallUnit";
+import Image from "next/image";
 
 export default function ContextMenu({
   sideT,
@@ -186,7 +187,7 @@ export default function ContextMenu({
 
                 <div className="context-menu-div">
                   <div className="context-menu-button-div" id="divbtn">
-                    <img src={editSVG} alt="editIcon" />
+                    <Image src={editSVG} alt="editIcon" />
                     <button
                       onClick={() => {
                         handleDropDown(controlPolicy.configControlpolicy, "CP");
@@ -196,7 +197,7 @@ export default function ContextMenu({
                     </button>
                   </div>
                   <div className="context-menu-button-div">
-                    <img src={editSVG} alt="deleteIcon" />
+                    <Image src={editSVG} alt="deleteIcon" />
                     <button
                       onClick={() => {
                         handleDropDown(
@@ -217,7 +218,7 @@ export default function ContextMenu({
                       cursor: !isAdmin.canEdit ? "not-allowed" : "pointer",
                     }}
                   >
-                    <img src={settingPNG} alt="settingPng" />
+                    <Image src={settingPNG} alt="settingPng" />
                     <button
                       onClick={() => {
                         if (isAdmin.canEdit) {
@@ -240,7 +241,7 @@ export default function ContextMenu({
                       cursor: !isAdmin.canEdit ? "not-allowed" : "pointer",
                     }}
                   >
-                    <img src={deleteSVG} alt="deleteIcon" />
+                    <Image src={deleteSVG} alt="deleteIcon" />
                     <button
                       onClick={() => {
                         if (isAdmin.canDelete) deleteNode(id, node);

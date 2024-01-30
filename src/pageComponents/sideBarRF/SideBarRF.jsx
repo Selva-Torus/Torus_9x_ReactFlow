@@ -27,12 +27,9 @@ const MenuDetailsComponent = () => {
 
   return (
     <>
-      <div
-        className={toside ? "bigContainer" : "smallContainer"}
-        style={{ backgroundColor: "#DFE4E2" }}
-      >
+      <div>
         <div
-          className="flex flex-col justify-between items-center px-4"
+          className="flex flex-col justify-between items-center pr-3"
           style={{ width: "100%", height: "100%" }}
         >
           <div

@@ -171,7 +171,7 @@ export default function SideNavAccordian({ setOpen }) {
     <Accordion
       type="single"
       collapsible
-      className="h-[86vh] w-[70px] bg-gray-200 flex flex-col justify-evenly "
+      className="h-[88vh] w-[70px] bg-gray-200 flex flex-col justify-evenly "
     >
       {Icons.map((item) => (
         <AccordionItem value={item.id} className="w-[70px]  ">

@@ -9,6 +9,8 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
 import "../../treejson/tree.css";
+import Image from "next/image";
+
 
 const TreeView = ({
   titile,
@@ -89,7 +91,7 @@ const TreeView = ({
                                 }
                               }}
                             >
-                              <img
+                              <Image
                                 src={arrow}
                                 alt="arrow"
                                 className={`${
@@ -117,7 +119,7 @@ const TreeView = ({
                            
                               <span className="flex">
                                 {Array.isArray(data[key]) ? (
-                                  <img
+                                  <Image
                                     src={bracket}
                                     alt="bracket"
                                     style={{ width: "20px" ,
@@ -127,7 +129,7 @@ const TreeView = ({
                                 ) : (
                                   typeof data[key] == "object" &&
                                   !Array.isArray(data[key]) && (
-                                    <img
+                                    <Image
                                       src={curly}
                                       alt="curly"
                                       style={{ width: "20px" ,
@@ -333,7 +335,7 @@ const TreeView = ({
                           }
                         }}
                       >
-                        <img
+                        <Image
                           src={arrow}
                           alt=""
                           width={20}
@@ -358,7 +360,7 @@ const TreeView = ({
                         </span>
 
                         {Array.isArray(element) ? (
-                                  <img
+                                  <Image
                                     src={bracket}
                                     alt="bracket"
                                     style={{ width: "20px" ,
@@ -368,7 +370,7 @@ const TreeView = ({
                                 ) : (
                                   typeof element == "object" &&
                                   !Array.isArray(element) && (
-                                    <img
+                                    <Image
                                       src={curly}
                                       alt="curly"
                                       style={{ width: "20px" ,

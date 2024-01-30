@@ -10,6 +10,8 @@ import AddElements from "./AddElemnts";
 import object from "@/dashboard/assets/dynicons/curly-brackets.png";
 import arrow from "@/dashboard/assets/dynicons/arrow.png";
 import "../../treejson/tree.css";
+import Image from "next/image";
+
 
 export default function DynObj({
   title,
@@ -66,9 +68,9 @@ export default function DynObj({
             <summary className="summary-title">
               <div className="heading-primary ">
                 {expanded ? (
-                  <img src={arrow} alt="" className="arrow-caret caret-down" />
+                  <Image src={arrow} alt="" className="arrow-caret caret-down" />
                 ) : (
-                  <img src={arrow} alt="" className="arrow-caret" />
+                  <Image src={arrow} alt="" className="arrow-caret" />
                 )}
 
                 <div
@@ -84,7 +86,7 @@ export default function DynObj({
                   ? json[json["isHeader"]]
                   : title}
 
-                <img
+                <Image
                   src={object}
                   style={{
                     width: "20px",

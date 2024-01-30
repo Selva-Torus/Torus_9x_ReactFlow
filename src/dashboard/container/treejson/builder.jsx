@@ -18,6 +18,7 @@ import "../treejson/tree.css";
 
 import SingleObj from "./dynauii/SIngleObj";
 import { Toast } from "primereact/toast";
+import Image from "next/image";
 
 export default function Builder({
   keys,
@@ -409,7 +410,7 @@ export default function Builder({
               <div className="json-container">
                 <div className="json-title">
                   <div className="json-title" onClick={() => setToggl(!toggl)}>
-                    <img
+                    <Image
                       src={arrow}
                       alt="arrow"
                       class={toggl ? "arrow-caret caret-down " : "arrow-caret"}
@@ -424,7 +425,7 @@ export default function Builder({
                       ></i>
                     </div>
 
-                    <img
+                    <Image
                       src={curly}
                       alt="curly-brackets"
                       style={{ width: "20px" ,

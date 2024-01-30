@@ -55,7 +55,7 @@ const ModuleDetails = ({
     >
       <div
         // absolute z-10
-        className=" w-full flex flew-row justify-content-end gap-4 align-items-center"
+        className=" w-full flex flew-row justify-content-end gap-2 align-items-center"
         style={{ height: "100%", borderBottom: "1px solid #d3d3d3" }}
       >
         <div
@@ -127,7 +127,7 @@ const ModuleDetails = ({
           role="button"
           className=" flex justify-content-center align-items-center "
           style={{
-            width: "150px",
+            width: "130px",
             height: "32px",
             borderRadius: "10px",
             border: "1px solid #5A47B0",
