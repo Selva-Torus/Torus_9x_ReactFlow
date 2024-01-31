@@ -175,7 +175,7 @@ export default function SideNavAccordian({ setOpen }) {
     >
       {Icons.map((item) => (
         <AccordionItem value={item.id} className="w-[70px]  ">
-          <AccordionTrigger
+          <AccordionTrigger className="hover:no-underline"
             onClick={item.id == `1` ? handleClick : () => setOpen(false)}
           >
             <div className="flex flex-col items-center w-[70px] ">

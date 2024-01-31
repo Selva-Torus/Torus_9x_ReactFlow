@@ -134,6 +134,33 @@ export default function ContextMenu({
               </Dialog>
             )}
 
+{node &&
+            (node.type == "startNode" || node.type == "endNode") &&
+            controlPolicy && (
+              <Dialog
+                visible={visible}
+                style={{ height: "90vh", width: "66vw" }}
+                onHide={() => {
+                  setVisible(!visible);
+                  setMenu(null);
+                  updatedNodeConfig(
+                    { [`config.${node?.id}`]: { ...json } },
+                    "config"
+                  );
+                }}
+                maximizable
+                header={`${node?.property.name}`}
+                headerStyle={{
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+                modal={true}
+                resizable={true}
+              >
+                still on process
+              </Dialog>
+            )}
+
       
           {controlPolicy && (
             <>
