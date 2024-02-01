@@ -5,6 +5,8 @@ import GithubProviders from "next-auth/providers/github";
 import { authorizeUsers } from "../../../../utilsfunctions/authorizeUser";
 import { sign } from "jsonwebtoken";
 import axios from "axios";
+
+let user;
 const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -32,10 +34,10 @@ const authOptions = {
         let datas = authorizeUsers.authorizeUser;
         // console.log("My datas in local json", datas);
         // console.log(credentials.username);
-        const res = await axios.get(
-              `http://localhost:3001/userRole?roleId=${credentials.role}`
-            );
-            console.log("res : ", res.data);
+        // const res = await axios.get(
+        //       `http://localhost:3001/userRole?roleId=${credentials.role}`
+        //     );
+        //     console.log("res : ", res.data);
         try {
           const foundUser = datas.find(
             (user) =>
@@ -51,10 +53,11 @@ const authOptions = {
                 expiresIn: "3m",
               }
             );
-            
+            user = { ...foundUser, token: jwtToken }
+
             // console.log("users data in token : ", jwtToken);
             // console.log("user is found : ", foundUser);
-            return foundUser;
+            return user;
           } else {
             throw new Error("Error during API call");
           }
@@ -79,17 +82,19 @@ const authOptions = {
         if (profile?.email == "amrishs@torus.tech") {
           userRole = "admin";
         }
-        return {
+        user = {
           ...profile,
           role: userRole,
+          token: jwtToken,
         };
+        return user
       },
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
     GoogleProviders({
       profile(profile) {
-        console.log("Your Google profile : ", profile);
+        // console.log("Your Google profile : ", profile);
         const jwtToken = sign(
           { email: profile.email },
           process.env.JWT_SECRET,
@@ -99,27 +104,26 @@ const authOptions = {
         );
         console.log("My jwt token for google is : ", jwtToken);
         let userRole = "Google User";
-        return {
+        user = {
           ...profile,
           id: profile.sub,
           role: userRole,
-        };
+          token: jwtToken,
+        }
+        return user;
       },
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
   callbacks: {
-    async jwt(token, user) {
-      if (user) {
-        token.user = user;
-        // Add other user-related fields as needed
-      }
+    async jwt({ token, user }) {
+      if (user) token.role = user.role;
       return token;
     },
-    async session(session, token) {
-      // console.log(session , 'next one is token' , token , 'next one is user ');
-      session.user = token;
+    async session({ session, token }) {
+      if (session?.user) session.user.role = token.role;
+      session.user = user;
       return session;
     },
   },
