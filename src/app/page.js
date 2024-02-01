@@ -34,7 +34,6 @@ export default function Home() {
     <main>
       {status !== "loading" && (
         <>
-        DSP here
           <Tabbar />
           <div className="h-[82vh] flex">
             <SideNavAccordian setOpen={setOpen} />
