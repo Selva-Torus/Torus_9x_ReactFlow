@@ -24,7 +24,7 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   if (status == "authenticated" && session) {
-    const token = session?.token?.token?.user?.token;
+    const token = session?.user?.token;
     if (token) {
       Cookies.set("token", token);
     }

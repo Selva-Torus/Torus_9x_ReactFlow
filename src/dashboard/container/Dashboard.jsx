@@ -109,7 +109,7 @@ const Dashboard = ({ ten, applicationG, applicationV, admin }) => {
   }, [selectedApp]);
   // tosters
   const showSuccess = (msg) => {
-    toast.current.show({
+    toast.current?.show({
       severity: "success",
       summary: "Success",
       detail: `${msg}`,
@@ -117,7 +117,7 @@ const Dashboard = ({ ten, applicationG, applicationV, admin }) => {
     });
   };
   const showError = (msg) => {
-    toast.current.show({
+    toast.current?.show({
       severity: "error",
       summary: "Error",
       detail: msg,
@@ -842,10 +842,16 @@ const Dashboard = ({ ten, applicationG, applicationV, admin }) => {
 
   useEffect(() => {
     (async () => {
-      const res = await getTenantDetails();
-      console.log("tenant details -->", res.saveOptions);
-
-      setTenant(res.saveOptions);
+      try {
+        const res = await getTenantDetails();
+        if (res) {
+          setTenant(res.saveOptions);
+        } else {
+          showError("Something went wrong");
+        }
+      } catch (error) {
+        showError(error.message);
+      }
     })();
   }, []);
 
