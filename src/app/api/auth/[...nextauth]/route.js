@@ -4,6 +4,7 @@ import GoogleProviders from "next-auth/providers/google";
 import GithubProviders from "next-auth/providers/github";
 import { authorizeUsers } from "../../../../utilsfunctions/authorizeUser";
 import { sign } from "jsonwebtoken";
+import Path from "../../../favicon.ico";
 
 let user;
 const authOptions = {
@@ -40,7 +41,7 @@ const authOptions = {
                 expiresIn: "3m",
               }
             );
-            user = { ...foundUser, token: jwtToken }
+            user = { ...foundUser, token: jwtToken };
             return user;
           } else {
             throw new Error("Error during API call");
@@ -71,7 +72,7 @@ const authOptions = {
           role: userRole,
           token: jwtToken,
         };
-        return user
+        return user;
       },
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
@@ -93,7 +94,7 @@ const authOptions = {
           id: profile.sub,
           role: userRole,
           token: jwtToken,
-        }
+        };
         return user;
       },
       clientId: process.env.GOOGLE_ID,
@@ -101,7 +102,7 @@ const authOptions = {
     }),
   ],
   theme: {
-    logo: 'https://media.licdn.com/dms/image/C4D0BAQFjPc3I67zt1g/company-logo_200_200/0/1631350280882?e=2147483647&v=beta&t=0lJyd-DPHalElVIM3wiiPV8oIC8l2ef9E8PAJdSNrHo', // Replace with the path to your logo
+    logo: "/Torus-Logo.png", // Replace with the path to your logo
   },
   callbacks: {
     async jwt({ token, user }) {
