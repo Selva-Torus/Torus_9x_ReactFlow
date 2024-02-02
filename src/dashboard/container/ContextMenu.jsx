@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useReactFlow } from "reactflow";
 import editSVG from "../img/edit.png";
 import deleteSVG from "../img/delete.png";
@@ -11,6 +11,8 @@ import Builder from "./treejson/builder.jsx";
 import entity from "@/utilsfunctions/entity.json";
 import { getControlPolicy } from "@/utilsfunctions/apiCallUnit";
 import Image from "next/image";
+import { Toast } from "primereact/toast";
+
 
 export default function ContextMenu({
   sideT,
@@ -35,13 +37,12 @@ export default function ContextMenu({
   const [json, setJson] = useState({});
   const [newJson, setNewJson] = useState({});
   const [toggle, setToggle] = useState(false);
- 
 
-  
   const [controlPolicy, setControlPolicy] = useState(null);
   const getNodeConfig = (jsonb) => {
     setNewJson(jsonb);
   };
+  const toast = useRef(null);
 
   const getConfig = (jsons) => {
     setJson(jsons);
@@ -50,16 +51,23 @@ export default function ContextMenu({
   useEffect(() => {
     (async () => {
       if (!node) return;
-      const result = await getControlPolicy(node.type);
-      console.log(result, "result");
-      setControlPolicy(result);
+      try {
+        const result = await getControlPolicy(node.type);
+        setControlPolicy(result);
+      } catch (err) {
+        console.log("My msg : ",err.message);
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: err.message,
+          life: 3000,
+        });
+      }
     })();
     return () => {
       setJson({});
     };
   }, [node]);
-
-  
 
   const handleDropDown = (controlpolicy, flowType) => {
     if (flowType === "WF") {
@@ -96,6 +104,7 @@ export default function ContextMenu({
 
   return (
     <>
+    <Toast ref={toast} />
       {controlPolicy && (
         <>
           {node &&
@@ -134,7 +143,7 @@ export default function ContextMenu({
               </Dialog>
             )}
 
-{node &&
+          {node &&
             (node.type == "startNode" || node.type == "endNode") &&
             controlPolicy && (
               <Dialog
@@ -161,7 +170,6 @@ export default function ContextMenu({
               </Dialog>
             )}
 
-      
           {controlPolicy && (
             <>
               <Dialog
@@ -237,7 +245,6 @@ export default function ContextMenu({
                       WorkFlow
                     </button>
                   </div>
-               
 
                   <div
                     className="context-menu-button-div"
