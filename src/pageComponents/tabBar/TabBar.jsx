@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import logo from "../../../public/logo.png";
+import logo from "../../../public/logo.ico";
 import { signOut, useSession } from "next-auth/react";
 import {
   Dialog,
@@ -54,8 +54,8 @@ export const Tabbar = () => {
   };
   return (
     <NavigationMenu className="flex justify-between max-w-none px-3 py-0 bg-gray-200">
-      <Link href="/" className="flex items-center">
-        <Image className="h-10 w-10" src={logo} width={50} height={50}></Image>
+      <Link href="/" className="flex items-center gap-1">
+        <Image className="h-[25px] w-[30px] mt-2" src={logo} ></Image>
         <logo className="text-[16px] font-bold">TORUS</logo>
       </Link>
       <NavigationMenuList className="flex gap-5 pr-4 py-2 items-center text-[15px] font-bold">

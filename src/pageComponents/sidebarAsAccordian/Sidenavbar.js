@@ -22,7 +22,7 @@ const Icons = [
   {
     id: 1,
     icon: FcStart,
-    title: "Start",
+    title: "Process",
     data: [
       {
         id: 11,
@@ -70,7 +70,7 @@ const Icons = [
   {
     id: 3,
     icon: IoDocumentsOutline,
-    title: "Process",
+    title: "Application",
     data: [
       {
         id: 31,
@@ -181,7 +181,7 @@ export default function SideNavAccordian({ setOpen }) {
             <div className="flex flex-col items-center w-[70px] ">
  
               {React.createElement(item.icon, { size: 20 })}
-              <div className="text-[10px] hover:no-underline">{item.title}</div>
+              <div className="text-[10px] ">{item.title}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">

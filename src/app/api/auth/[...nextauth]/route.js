@@ -4,7 +4,6 @@ import GoogleProviders from "next-auth/providers/google";
 import GithubProviders from "next-auth/providers/github";
 import { authorizeUsers } from "../../../../utilsfunctions/authorizeUser";
 import { sign } from "jsonwebtoken";
-import axios from "axios";
 
 let user;
 const authOptions = {
@@ -23,21 +22,9 @@ const authOptions = {
           type: "password",
           placeholder: "Enter your password",
         },
-        role: {
-          label: "Role",
-          type: "text",
-          placeholder: "Enter your Role ID",
-        },
       },
       async authorize(credentials) {
-        // console.log("Authorize callback");
         let datas = authorizeUsers.authorizeUser;
-        // console.log("My datas in local json", datas);
-        // console.log(credentials.username);
-        // const res = await axios.get(
-        //       `http://localhost:3001/userRole?roleId=${credentials.role}`
-        //     );
-        //     console.log("res : ", res.data);
         try {
           const foundUser = datas.find(
             (user) =>
@@ -54,9 +41,6 @@ const authOptions = {
               }
             );
             user = { ...foundUser, token: jwtToken }
-
-            // console.log("users data in token : ", jwtToken);
-            // console.log("user is found : ", foundUser);
             return user;
           } else {
             throw new Error("Error during API call");
@@ -116,6 +100,9 @@ const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
+  theme: {
+    logo: 'https://media.licdn.com/dms/image/C4D0BAQFjPc3I67zt1g/company-logo_200_200/0/1631350280882?e=2147483647&v=beta&t=0lJyd-DPHalElVIM3wiiPV8oIC8l2ef9E8PAJdSNrHo', // Replace with the path to your logo
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.role = user.role;

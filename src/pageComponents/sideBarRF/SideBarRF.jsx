@@ -4,8 +4,7 @@ import backIcon from "@/dashboard/img/arrows.png";
 import Torus from "@/dashboard/img/torus.png";
 import { MENU_DETAILS } from "../../utilsfunctions/content";
 import Image from "next/image";
-// import { FaMoon, FaSun } from "react-icons/fa";
-// import Tooltip from "@mui/material/Tooltip";
+
 const MenuDetailsComponent = () => {
   const [toside, setToside] = useState(false);
   const onDragStart = (
@@ -21,16 +20,13 @@ const MenuDetailsComponent = () => {
     event.dataTransfer.setData("application/roles", roles);
     event.dataTransfer.effectAllowed = "move";
   };
-  //   const handleclick = () => {
-  //     toggleDarkmode();
-  //   };
+
 
   return (
     <>
-      <div>
+      <div className="h-[70vh] w-[60px]">
         <div
-          className="flex flex-col justify-between items-center pr-3"
-          style={{ width: "100%", height: "100%" }}
+          className="flex flex-col gap-5 items-center w-full h-full"
         >
           <div
             style={{ height: "10%", width: "100%", paddingLeft: "18px" }}
@@ -56,13 +52,7 @@ const MenuDetailsComponent = () => {
             </div>
           </div>
           <div
-            className="flex flex-col w-full"
-            style={{
-              height: "69%",
-              gap: "20px",
-              overflow: "scroll",
-              maxHeight: "400px",
-            }}
+            className="flex flex-col w-full gap-4"
           >
             {MENU_DETAILS.map((node, index) => {
               return (
@@ -107,8 +97,10 @@ const MenuDetailsComponent = () => {
                       </div>
                     </p>
                   ) : (
+                    <div className="flex flex-col items-center">
                     <Image src={node.icons} className="opacity-80 w-[30px] h-[30px]" />
-                  )}
+                    <span className="text-[10px] leading-3 text-center">{node.name}</span>
+                  </div>)}
                 </div>
               );
             })}
