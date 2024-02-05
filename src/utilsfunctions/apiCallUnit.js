@@ -78,12 +78,15 @@ export const deleteApplication = async (
   }
 };
 
-export const initailApiCall = async (tenant,appGroup,app) => {
+export const initailApiCall = async (tenant, appGroup, app) => {
   try {
     return Promise.all([
-      fetch(`${BASE_URL}/applicationName?tenant=${tenant}&appGroup=${appGroup}&app=${app}`, {
-        method: "GET",
-      }).then((res) => res.json()),
+      fetch(
+        `${BASE_URL}/applicationName?tenant=${tenant}&appGroup=${appGroup}&app=${app}`,
+        {
+          method: "GET",
+        }
+      ).then((res) => res.json()),
       fetch(`${BASE_URL}/applicationDetails`, {
         method: "GET",
       }).then((res) => res.json()),
@@ -147,20 +150,17 @@ export const getControlPolicy = async (nodeType) => {
   } catch (error) {
     throw error;
   }
-}
-
+};
 
 export const getColorPolicy = async (nodeType) => {
-  try{
-    return await fetch(`${BASE_URL}/colorpolicy?nodeType=${nodeType}`,{
-      method:"GET",
-      headers:{
-        "Content-Type":"application/json",
+  try {
+    return await fetch(`${BASE_URL}/colorpolicy?nodeType=${nodeType}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
     }).then((res) => res.json());
-
-  }
-  catch(error){
+  } catch (error) {
     throw error;
   }
-}
+};
