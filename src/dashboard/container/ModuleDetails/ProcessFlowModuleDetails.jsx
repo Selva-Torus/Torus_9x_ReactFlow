@@ -58,7 +58,7 @@ const ModuleDetails = ({
         className=" w-full flex flew-row justify-content-end gap-2 align-items-center"
         style={{ height: "100%", borderBottom: "1px solid #d3d3d3" }}
       >
-        <div
+        {/* <div
           role="button"
           className=" flex justify-content-center align-items-center "
           style={{
@@ -83,8 +83,8 @@ const ModuleDetails = ({
             style={{ width: "25px", height: "25px" }}
             title="Click to sync file system"
           />
-        </div>
-        <Dropdown
+        </div> */}
+        {/* <Dropdown
           value={selectedApplication}
           onChange={setApplication}
           options={applicationName}
@@ -121,8 +121,8 @@ const ModuleDetails = ({
           className=" flex align-items-center"
           style={{ height: "35px", width: "150px" }}
           disabled={versions.length ? false : true}
-        />
-        <div
+        /> */}
+        {/* <div
           title="Create New Module"
           role="button"
           className=" flex justify-content-center align-items-center "
@@ -172,7 +172,7 @@ const ModuleDetails = ({
           >
             Create Module
           </p>
-        </div>
+        </div> */}
         <div
           className="flex justify-content-center align-items-center "
           style={{

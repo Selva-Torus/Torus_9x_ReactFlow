@@ -8,7 +8,6 @@ import SideNavAccordian from "@/pageComponents/sidebarAsAccordian/Sidenavbar";
 import { Background } from "reactflow";
 import { useState } from "react";
 
-
 import Dashboard from "@/dashboard/container/Dashboard";
 
 export default function Home() {
@@ -19,9 +18,10 @@ export default function Home() {
       signIn();
     },
   });
-  console.log(session, status);
+  // console.log(session, status);
+  const [state, setState] = useState("");
 
-  const [open, setOpen] = useState(false);
+  console.log(state);
 
   if (status == "authenticated" && session) {
     const token = session?.user?.token;
@@ -36,14 +36,26 @@ export default function Home() {
         <>
           <Tabbar />
           <div className="h-[82vh] flex">
-            <SideNavAccordian setOpen={setOpen} />
+            <SideNavAccordian state={state} setState={setState} />
 
-            {open && <div className="ml-[60px] h-[82vh] w-[90vw]"> <Dashboard
-          ten={"TORUS9X"}
-          applicationG={"Group-1"}
-          applicationV={"app1"}
-          admin={{ canAdd: true, canDelete: true, canEdit: true }}
-        /> </div>}
+            {state == "Data" ? (
+              <div className="ml-[60px] h-[82vh] w-[90vw]">
+                <Dashboard
+                  ten={"TORUS9X"}
+                  applicationG={"Group-1"}
+                  applicationV={"app1"}
+                  admin={{ canAdd: true, canDelete: true, canEdit: true }}
+                />
+              </div>
+            ) : state ? (
+              <div className="ml-[60px] h-[82vh] w-[90vw] bg-gray-400 flex justify-center items-center">
+                <div>You are @ {state}</div>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center w-full">
+                <div>Select something</div>
+              </div>
+            )}
           </div>
           <Footer />
         </>

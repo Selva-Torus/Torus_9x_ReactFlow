@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { FcStart } from "react-icons/fc";
 import { CgComponents } from "react-icons/cg";
@@ -21,50 +22,44 @@ import MenuDetailsComponent from "../sideBarRF/SideBarRF";
 const Icons = [
   {
     id: 1,
-    icon: FcStart,
-    title: "Process",
+    icon: CgComponents,
+    title: "Data",
     data: [
-      {
-        id: 11,
-        label: <Image className="w-[40px] h-[40px]" src={start} alt="API" />,
-      },
-      {
-        id: 12,
-        label: <Image className="w-[40px] h-[40px]" src={api} alt="API" />,
-      },
-      {
-        id: 13,
-        label: (
-          <Image
-            className="w-[40px] h-[40px]"
-            src={decisionTree}
-            alt="Decision Tree"
-          />
-        ),
-      },
-      {
-        id: 14,
-        label: <Image className="w-[40px] h-[40px]" src={end} alt="End" />,
-      },
+      // {
+      //   id: 21,
+      //   label: "Data Collection",
+      //   description: "Collect relevant data",
+      // },
+      // { id: 22, label: "Data Analysis", description: "Analyze gathered data" },
+      // {
+      //   id: 23,
+      //   label: "Data Visualization",
+      //   description: "Create visualizations",
+      // },
+      // { id: 24, label: "Data Storage", description: "Manage data storage" },
     ],
   },
   {
     id: 2,
-    icon: CgComponents,
-    title: "Data",
+    icon: FcStart,
+    title: "Process",
     data: [
       {
         id: 21,
-        label: "Data Collection",
+        label: "Process Collection",
         description: "Collect relevant data",
       },
-      { id: 22, label: "Data Analysis", description: "Analyze gathered data" },
+      {
+        id: 22,
+        label: "Process Analysis",
+        description: "Analyze gathered data",
+      },
       {
         id: 23,
-        label: "Data Visualization",
+        label: "Process Visualization",
         description: "Create visualizations",
       },
-      { id: 24, label: "Data Storage", description: "Manage data storage" },
+      { id: 24, label: "Process Storage", description: "Manage data storage" },
     ],
   },
   {
@@ -150,7 +145,7 @@ const Icons = [
   },
 ];
 
-export default function SideNavAccordian({ setOpen }) {
+export default function SideNavAccordian({ state, setState }) {
   const onDragStart = (
     event,
     nodeType,
@@ -164,29 +159,26 @@ export default function SideNavAccordian({ setOpen }) {
     event.dataTransfer.setData("application/roles", roles);
     event.dataTransfer.effectAllowed = "move";
   };
-  const handleClick = () => {
-    setOpen((prev) => !prev);
-  };
+
   return (
     <Accordion
+      value={state}
+      onValueChange={setState}
       type="single"
       collapsible
       className="h-[88vh] w-[70px] bg-gray-200 flex flex-col justify-evenly "
     >
       {Icons.map((item) => (
-        <AccordionItem value={item.id} className="w-[70px]  ">
-          <AccordionTrigger className="hover:no-underline"
-            onClick={item.id == `1` ? handleClick : () => setOpen(false)}
-          >
+        <AccordionItem value={item.title} className="w-[70px]" key={item.id}>
+          <AccordionTrigger className="hover:no-underline">
             <div className="flex flex-col items-center w-[70px] ">
- 
               {React.createElement(item.icon, { size: 20 })}
               <div className="text-[10px] ">{item.title}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
-            {item.id === 1 ? (
-              <MenuDetailsComponent/>
+            {state === "Data" ? (
+              <MenuDetailsComponent />
             ) : (
               item.data.map((subContent) => (
                 <div

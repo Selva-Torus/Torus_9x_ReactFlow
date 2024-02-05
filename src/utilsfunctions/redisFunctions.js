@@ -1,15 +1,13 @@
-"use server"
+"use server";
+
 import redis from "@/lib/redis";
 
-export async function fetchToken() {
-  const get = await redis.call("JSON.GET", "token");
-  return JSON.parse(get);
+export async function Handler(key, value) {
+  const data = await redis.set(key, JSON.stringify(value));
+  return data;
 }
-  export async function setDemoToken(value,ttl) {
-    const set = await redis.call("JSON.SET", "token" ,"." , JSON.stringify(value));
-    await redis.expire("token",ttl)
-   
-   
-    return set;
-  }
 
+export const fetchDataFromRedis = async (key) => {
+  const data = await redis.get(key);
+  return data;
+};
