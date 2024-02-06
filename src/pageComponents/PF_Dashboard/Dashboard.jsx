@@ -150,7 +150,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // const [roleId, setRoleId] = useState(null);
   // const [tenant, setTenant] = useState(null);
   const [selectedTenant, setSelectedTenant] = useState("Datafabrics");
-  const [ applicationDetails , setApplicationDetails] = useState({});
+  const [applicationDetails, setApplicationDetails] = useState({});
 
   useEffect(() => {
     console.log("getJS--->", getJS);
@@ -560,8 +560,8 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // Use to save and update the processFlow
   const saveProcessFlow = async (
     type,
-    appName = "App1",
-    processFlow = "Artifacts1"
+    appName = applicationDetails?.application ?? "App1",
+    processFlow = applicationDetails?.artifacts ??  "Artifacts1"
   ) => {
     try {
       if (nodes.length && edges.length) {
@@ -1170,17 +1170,21 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           </div>
         </Dialog> */}
       <Dialog
-          visible={isUserDetailsDialog}
-          style={{ width: "40vw" }}
-          onHide={() => {
-            setIsUserDetailsDialog(!isUserDetailsDialog);
-          }}
-          header="Login"
-          headerStyle={{ textAlign: "center" }}
-          closable={false}
-        >
-          <PF_AppDetail isUserDetailsDialog={isUserDetailsDialog} applicationDetails={applicationDetails} setApplicationDetails={setApplicationDetails} />
-        </Dialog>
+        visible={isUserDetailsDialog}
+        style={{ width: "40vw" }}
+        onHide={() => {
+          setIsUserDetailsDialog(!isUserDetailsDialog);
+        }}
+        header="Login"
+        headerStyle={{ textAlign: "center" }}
+        closable={false}
+      >
+        <PF_AppDetail
+          setIsUserDetailsDialog={setIsUserDetailsDialog}
+          applicationDetails={applicationDetails}
+          setApplicationDetails={setApplicationDetails}
+        />
+      </Dialog>
     </div>
   );
 };

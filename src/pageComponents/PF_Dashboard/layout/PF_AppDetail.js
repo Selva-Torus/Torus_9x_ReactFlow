@@ -1,3 +1,4 @@
+import { Button, Input } from "@mui/material";
 import React, { useState } from "react";
 
 const PF_AppDetail = ({
@@ -9,13 +10,15 @@ const PF_AppDetail = ({
   const handleClick = () => {
     if (
       applicationDetails?.application == "" ||
-      applicationDetails?.artifacts == "" || 
-      Object.keys(applicationDetails).length
+      applicationDetails?.artifacts == "" ||
+      !Object.keys(applicationDetails).length
     ) {
       setError("Please Enter Application Details ");
     } else {
+
       console.log(applicationDetails);
-        // setIsUserDetailsDialog(false);
+
+      setIsUserDetailsDialog(false);
     }
   };
 
@@ -28,14 +31,14 @@ const PF_AppDetail = ({
   };
   return (
     <div className="flex flex-col gap-2 items-center">
-      <input
+      <Input
         className="w-full border-none outline-none p-4"
         onChange={handleChange}
         name="application"
         type="text"
         placeholder="Enter Application name"
       />
-      <input
+      <Input
         className="w-full border-none outline-none p-4"
         onChange={handleChange}
         name="artifacts"
@@ -43,12 +46,12 @@ const PF_AppDetail = ({
         placeholder="Enter Artifacts name"
       />
       <span className="text-red-500 text-xs">{error}</span>
-      <button
+      <Button
         className="bg-blue-500 text-white p-2 rounded"
         onClick={handleClick}
       >
         Get Started
-      </button>
+      </Button>
     </div>
   );
 };
