@@ -633,13 +633,11 @@ export const saveaWorkFlow  = async (
           const appw = JSON.parse(JSON.stringify(application));
 
           await createRedisFiles(appw, '', 1);
-          const res = JSON.stringify({
+          return {
             msg: 'New Version Created',
             versions: versions,
             code: 200,
-          })
-
-          return 'updated';
+          };
         }
       } else {
         const res = await readReddis(tenant);
@@ -736,9 +734,8 @@ export const saveaWorkFlow  = async (
       const appw = JSON.parse(JSON.stringify(application));
 
       await createRedisFiles(appw, '', 1);
-      const res3 = JSON.stringify({ msg: `${version} Updated`, code: 201 })
 
-      return 'updated2';
+      return { msg: `${version} Updated`, code: 201 };
     }
   } catch (error) {
     return error;

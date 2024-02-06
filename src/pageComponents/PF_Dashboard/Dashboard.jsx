@@ -598,7 +598,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
             selectedTenant
           );
           console.log(response);
-          if (response.code === 200) {
+          if (response.code === 200 || response.code === 201) {
             const appVersions = response.versions.sort((a, b) => {
               const version1 = Number(a.split("v")[1]);
               const version2 = Number(b.split("v")[1]);
