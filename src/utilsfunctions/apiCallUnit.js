@@ -36,30 +36,6 @@ export const initialCall = async (
   }
 };
  
-export const saveWorkFlow = async (
-  resquestBody,
-  type,
-  version,
-  tenant,
- 
-) => {
-  try {
-    const URL =
-      type === "create"
-        ? `${BASE_URL}/?type=${type}&tenant=${tenant}`
-        : `${BASE_URL}/?type=${type}&version=${version}&tenant=${tenant}`;
-    return await fetch(URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(resquestBody),
-    }).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
 export const getApplicationName = async (tenant) => {
   try {
     return await fetch(
@@ -768,19 +744,3 @@ export const saveaWorkFlow  = async (
     return error;
   }
 }
-
-
-export const sample = async(payload,
-  type,
-  selectedAppVersion,
-  selectedTenant) => {
-    const workFlows = JSON.parse(JSON.stringify(payload.workFlow));
-    const nodes = JSON.parse(JSON.stringify(payload.workFlow.node));
-    const edges = JSON.parse(JSON.stringify(payload.workFlow.edge));
-    const processFlowSummary = await findAllRoutesWithFormatAndDecision(
-      nodes,
-      edges,
-    );
-
-    console.log('processFlowSummary', processFlowSummary , 'workflow', workFlows);    return 1;
-  }

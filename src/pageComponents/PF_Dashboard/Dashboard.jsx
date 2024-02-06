@@ -79,6 +79,7 @@ import {
 } from "../../utilsfunctions/environment";
 import "./app.css";
 import ModuleHeader from "./layout/ModuleHeader";
+import PF_AppDetail from "./layout/PF_AppDetail";
 const NODE_TYPE = {
   startNode: StartNode,
   decisionNode: DecisionNode,
@@ -145,10 +146,11 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   const [userRoleDetails, setUserRoleDetails] = useState(roleObbj);
   const [selectedRole, setSelectedRole] = useState(null);
 
-  // const [isUserDetailsDialog, setIsUserDetailsDialog] = useState(true);
+  const [isUserDetailsDialog, setIsUserDetailsDialog] = useState(true);
   // const [roleId, setRoleId] = useState(null);
   // const [tenant, setTenant] = useState(null);
   const [selectedTenant, setSelectedTenant] = useState("Datafabrics");
+  const [ applicationDetails , setApplicationDetails] = useState({});
 
   useEffect(() => {
     console.log("getJS--->", getJS);
@@ -1167,7 +1169,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
             </div>
           </div>
         </Dialog> */}
-      {/* <Dialog
+      <Dialog
           visible={isUserDetailsDialog}
           style={{ width: "40vw" }}
           onHide={() => {
@@ -1177,79 +1179,8 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           headerStyle={{ textAlign: "center" }}
           closable={false}
         >
-          <div className="h-full">
-            <div
-              className="flex flex-column justify-content-around gap-3"
-              style={{ height: "60%" }}
-            >
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Dropdown
-                  value={selectedTenant}
-                  onChange={onTenantchange}
-                  options={tenant}
-                  optionLabel="tenant"
-                  optionValue="tenant"
-                  placeholder="Select Tenant"
-                  className=" flex align-items-center py-2"
-                  style={{ width: "92%", fontSize: 200 }}
-                />
-              </div>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Dropdown
-                  value={selectedAppGroup}
-                  onChange={onApplictionGroupchange}
-                  options={applicationGroup}
-                  optionLabel="groupName"
-                  optionValue="groupName"
-                  placeholder="Select Appliction Group"
-                  className=" flex align-items-center py-2 "
-                  style={{ width: "92%" }}
-                  disabled={selectedTenant ? false : true}
-                />
-              </div>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Dropdown
-                  value={selectedApp}
-                  onChange={(e) => setSelectedApp(e.value)}
-                  options={selectApp}
-                  placeholder="Select Appliction "
-                  className=" flex align-items-center py-2"
-                  style={{ width: "92%" }}
-                  disabled={selectedTenant && selectedAppGroup ? false : true}
-                />
-              </div>
-            </div>
-            <div className="flex justify-content-center py-3">
-              <InputText
-                name="roleId"
-                onChange={(event) => setRoleId(event.target.value)}
-                placeholder="Enter your Role"
-                style={{
-                  height: "50px",
-                  width: "calc( 100% - 40px )",
-                  marginLeft: "0px",
-                }}
-                disabled={
-                  selectedTenant && selectedAppGroup && selectedApp ? false : true
-                }
-              />
-            </div>
-            <div
-              className="flex justify-content-center align-items-center mt-3"
-              style={{ height: "40%" }}
-            >
-              <Button
-                label="Submit"
-                severity="info"
-                style={{ height: "50px" }}
-                onClick={getRoleDetailsApi}
-                disabled={
-                  roleId && selectedTenant && selectedAppGroup ? false : true
-                }
-              />
-            </div>
-          </div>
-        </Dialog> */}
+          <PF_AppDetail isUserDetailsDialog={isUserDetailsDialog} applicationDetails={applicationDetails} setApplicationDetails={setApplicationDetails} />
+        </Dialog>
     </div>
   );
 };
