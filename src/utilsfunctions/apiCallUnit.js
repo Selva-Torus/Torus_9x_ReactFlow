@@ -174,7 +174,7 @@ export async function createRedisFiles(obj, currentPath = '', interator) {
       path.push(newPath);
 
       if (typeof obj[key] == 'object' && obj[key] !== null) {
-        if (interator <= 6) {
+        if (interator <= 4) {
           path = path.concat(
             await createRedisFiles(obj[key], newPath, interator + 1),
           );
