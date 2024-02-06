@@ -5,10 +5,10 @@ import { CgComponents } from "react-icons/cg";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { MdOutlineDocumentScanner } from "react-icons/md";
 import { GrDocumentConfig } from "react-icons/gr";
-import start from "@/dashboard/assets/sidebarImg/start-button.png";
-import api from "@/dashboard/assets/sidebarImg/api.png";
-import decisionTree from "@/dashboard/assets/sidebarImg/decision-tree.png";
-import end from "@/dashboard/assets/sidebarImg/end.png";
+// import start from "../PF_Dashboard/assets/sidebarImg/start-button.png";
+// import api from "@/dashboard/assets/sidebarImg/api.png";
+// import decisionTree from "@/dashboard/assets/sidebarImg/decision-tree.png";
+// import end from "@/dashboard/assets/sidebarImg/end.png";
 import {
   Accordion,
   AccordionContent,
@@ -16,8 +16,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Image from "next/image";
+import MenuDetailsComponent from "../PF_Dashboard/layout/PF_nodeMenu";
 
-import MenuDetailsComponent from "../sideBarRF/SideBarRF";
+
 
 const Icons = [
   {
@@ -25,18 +26,18 @@ const Icons = [
     icon: CgComponents,
     title: "Data",
     data: [
-      // {
-      //   id: 21,
-      //   label: "Data Collection",
-      //   description: "Collect relevant data",
-      // },
-      // { id: 22, label: "Data Analysis", description: "Analyze gathered data" },
-      // {
-      //   id: 23,
-      //   label: "Data Visualization",
-      //   description: "Create visualizations",
-      // },
-      // { id: 24, label: "Data Storage", description: "Manage data storage" },
+      {
+        id: 21,
+        label: "Data Collection",
+        description: "Collect relevant data",
+      },
+      { id: 22, label: "Data Analysis", description: "Analyze gathered data" },
+      {
+        id: 23,
+        label: "Data Visualization",
+        description: "Create visualizations",
+      },
+      { id: 24, label: "Data Storage", description: "Manage data storage" },
     ],
   },
   {
@@ -44,22 +45,22 @@ const Icons = [
     icon: FcStart,
     title: "Process",
     data: [
-      {
-        id: 21,
-        label: "Process Collection",
-        description: "Collect relevant data",
-      },
-      {
-        id: 22,
-        label: "Process Analysis",
-        description: "Analyze gathered data",
-      },
-      {
-        id: 23,
-        label: "Process Visualization",
-        description: "Create visualizations",
-      },
-      { id: 24, label: "Process Storage", description: "Manage data storage" },
+      // {
+      //   id: 21,
+      //   label: "Process Collection",
+      //   description: "Collect relevant data",
+      // },
+      // {
+      //   id: 22,
+      //   label: "Process Analysis",
+      //   description: "Analyze gathered data",
+      // },
+      // {
+      //   id: 23,
+      //   label: "Process Visualization",
+      //   description: "Create visualizations",
+      // },
+      // { id: 24, label: "Process Storage", description: "Manage data storage" },
     ],
   },
   {
@@ -177,7 +178,7 @@ export default function SideNavAccordian({ state, setState }) {
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
-            {state === "Data" ? (
+            {state === "Process" ? (
               <MenuDetailsComponent />
             ) : (
               item.data.map((subContent) => (

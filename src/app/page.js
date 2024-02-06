@@ -1,14 +1,14 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
 import Cookies from "js-cookie";
-import { Tabbar } from "@/pageComponents/tabBar/TabBar";
-import Sidenav from "@/pageComponents/menubar/Sidenav";
 import Footer from "@/pageComponents/footer/Footer";
 import SideNavAccordian from "@/pageComponents/sidebarAsAccordian/Sidenavbar";
-import { Background } from "reactflow";
 import { useState } from "react";
-
-import Dashboard from "@/dashboard/container/Dashboard";
+import Dashboard from "../pageComponents/PF_Dashboard/Dashboard";
+import TopBar from "../pageComponents/TopNav/TopNavBar";
+import { DarkmodeProvider } from "../pageComponents/PF_Dashboard/context/DarkmodeContext";
+import { options } from "../utilsfunctions/getterJsOptions";
+import MenuDetailsComponent from "../pageComponents/PF_Dashboard/layout/PF_nodeMenu";
 
 export default function Home() {
   const { data: session, status } = useSession({
@@ -23,6 +23,10 @@ export default function Home() {
 
   console.log(state);
 
+  const [getterJS, getJS] = useState(options);
+  const [setterJS, setJS] = useState({});
+
+
   if (status == "authenticated" && session) {
     const token = session?.user?.token;
     if (token) {
@@ -31,24 +35,29 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main>  
       {status !== "loading" && (
         <>
-          <Tabbar />
-          <div className="h-[82vh] flex">
+        <DarkmodeProvider>
+          <TopBar state={state} />
+          <div className="flex">
             <SideNavAccordian state={state} setState={setState} />
 
-            {state == "Data" ? (
-              <div className="ml-[60px] h-[82vh] w-[90vw]">
+            {state == "Process" ? (
+              <div className="ml-[60px]  w-[90vw]">
                 <Dashboard
-                  ten={"TORUS9X"}
-                  applicationG={"Group-1"}
-                  applicationV={"app1"}
                   admin={{ canAdd: true, canDelete: true, canEdit: true }}
+                  roleObbj={[
+                    { role: "supervisor", color: "#aebbff" },
+                    { role: "admin", color: "#92b2ff" },
+                    { role: "testing", color: "#8ad3ff" },
+                  ]}
+                  getJS={getterJS}
+                  setJS={setJS}
                 />
               </div>
             ) : state ? (
-              <div className="ml-[60px] h-[82vh] w-[90vw] bg-gray-400 flex justify-center items-center">
+              <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
                 <div>You are @ {state}</div>
               </div>
             ) : (
@@ -58,6 +67,7 @@ export default function Home() {
             )}
           </div>
           <Footer />
+          </DarkmodeProvider>
         </>
       )}
     </main>
