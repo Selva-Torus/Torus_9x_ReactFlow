@@ -30,11 +30,11 @@ roles
   return (
     <>
       <div
-        className={toside ? "bigContainer" : "smallContainer"}
+        className={toside ? "bigContainer" : "smallContainer" }
       >
         <div
-          className="flex flex-column justify-content-between align-items-center"
-          style={{ width: "100%", height: "100%" }}
+          className="flex flex-column justify-content-between align-items-center "
+          style={{ width: "100%", height: "100%"  }}
         >
           <div
             style={{ height: "10%", width: "100%", paddingLeft: "18px" }}
@@ -131,7 +131,7 @@ roles
             })}
           </div>
 
-          <span onClick={handleclick}>
+          <span onClick={handleclick} className="mt-5">
             {darkmode ? (
               <Tooltip title="Light Mode">
                 <FaSun style={{ cursor: "pointer", opacity: "0.8" }} />
@@ -143,7 +143,7 @@ roles
             )}
           </span>
 
-          <div style={{ marginTop: "27px" }}>
+          <div style={{ marginTop: "20px" }}>
             <Tooltip title="GSS">
               <a href="https://www.gsstechgroup.com/">
                 <Image

@@ -51,6 +51,7 @@ import {
   initailApiCall,
   initialCall,
   saveWorkFlow,
+  saveaWorkFlow,
   syncFileSystem,
 } from "../../utilsfunctions/apiCallUnit";
 //   import Reactflow from "./layout/reactFlow";
@@ -588,12 +589,13 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
               ? processFlow
               : selectedProcessFlow.processFlow,
           };
-          const response = await saveWorkFlow(
+          const response = await saveaWorkFlow(
             payload,
             type,
             selectedAppVersion,
             selectedTenant
           );
+          console.log(response);
           if (response.code === 200) {
             const appVersions = response.versions.sort((a, b) => {
               const version1 = Number(a.split("v")[1]);

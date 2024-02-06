@@ -1,4 +1,4 @@
-
+"use server"
 import Redis from 'ioredis';
 const redis = new Redis({
   host: '192.168.2.165',
