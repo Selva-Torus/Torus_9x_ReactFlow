@@ -63,7 +63,21 @@ import _, { add, conforms, get, map } from "lodash";
 import CustomEdge from "./container/customEdge/CustomEdge";
 //   import { DarkmodeContext } from "./context/DarkmodeContext";
 //   import ModuleDetails from "./layout/ProcessFlowModuleDetails";
+import {
+  tenant_details,
+  roles,
+  app_pfd_path,
+  read_only,
+  developer,
+  user_type,
+  save_options,
+  workflow_controlpolicy,
+  config_controlpolicy,
+  workflow_colorpolicy,
+  config_colorpolicy,
+} from "../../utilsfunctions/environment";
 import "./app.css";
+import ModuleHeader from "./layout/ModuleHeader";
 const NODE_TYPE = {
   startNode: StartNode,
   decisionNode: DecisionNode,
@@ -133,7 +147,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // const [isUserDetailsDialog, setIsUserDetailsDialog] = useState(true);
   // const [roleId, setRoleId] = useState(null);
   // const [tenant, setTenant] = useState(null);
-  const [selectedTenant, setSelectedTenant] = useState(ten);
+  const [selectedTenant, setSelectedTenant] = useState("Datafabrics");
 
   useEffect(() => {
     console.log("getJS--->", getJS);
@@ -541,70 +555,74 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // };
 
   // Use to save and update the processFlow
-  // const saveProcessFlow = async (type, appName = "", processFlow = "") => {
-  //   try {
-  //     if (nodes.length && edges.length) {
-  //       let checkNode = nodes.findIndex((ele) => ele.type == "startNode");
-  //       let checkendnode = nodes.findIndex((ele) => ele.type == "endNode");
-  //       console.log(checkNode, checkendnode, "ckn");
-  //       if (checkNode !== -1 && checkendnode !== -1) {
-  //         const configuration = {};
-  //         for (let node of nodes) {
-  //           if (node && node.property && node.id) {
-  //             if (nodeConfig.hasOwnProperty(`${node.id}.config`))
-  //               configuration[`${node.id}.${node.property.name}.config`] =
-  //                 nodeConfig[`${node.id}.config`];
+  const saveProcessFlow = async (
+    type,
+    appName = "App1",
+    processFlow = "Artifacts1"
+  ) => {
+    try {
+      if (nodes.length && edges.length) {
+        let checkNode = nodes.findIndex((ele) => ele.type == "startNode");
+        let checkendnode = nodes.findIndex((ele) => ele.type == "endNode");
+        console.log(checkNode, checkendnode, "ckn");
+        if (checkNode !== -1 && checkendnode !== -1) {
+          const configuration = {};
+          for (let node of nodes) {
+            if (node && node.property && node.id) {
+              if (nodeConfig.hasOwnProperty(`${node.id}.config`))
+                configuration[`${node.id}.${node.property.name}.config`] =
+                  nodeConfig[`${node.id}.config`];
 
-  //             if (nodeConfig.hasOwnProperty(`${node.id}.workflow`))
-  //               configuration[`${node.id}.${node.property.name}.WF`] =
-  //                 nodeConfig[`${node.id}.workflow`];
-  //           }
-  //         }
-  //         const payload = {
-  //           workFlow: { node: nodes, edge: edges },
-  //           applicationName: appName
-  //             ? appName
-  //             : selectedApplication.application,
-  //           configuration: { ...configuration },
-  //           processFlow: processFlow
-  //             ? processFlow
-  //             : selectedProcessFlow.processFlow,
-  //         };
-  //         const response = await saveWorkFlow(
-  //           payload,
-  //           type,
-  //           selectedAppVersion,
-  //           selectedTenant
-  //         );
-  //         if (response.code === 200) {
-  //           const appVersions = response.versions.sort((a, b) => {
-  //             const version1 = Number(a.split("v")[1]);
-  //             const version2 = Number(b.split("v")[1]);
-  //             return version1 > version2 ? -1 : 1;
-  //           });
-  //           setVersions(appVersions);
-  //           setSelectedAppVersion(appVersions[0]);
-  //         }
-  //         showSuccess(response.msg);
+              if (nodeConfig.hasOwnProperty(`${node.id}.workflow`))
+                configuration[`${node.id}.${node.property.name}.WF`] =
+                  nodeConfig[`${node.id}.workflow`];
+            }
+          }
+          const payload = {
+            workFlow: { node: nodes, edge: edges },
+            applicationName: appName
+              ? appName
+              : selectedApplication.application,
+            configuration: { ...configuration },
+            processFlow: processFlow
+              ? processFlow
+              : selectedProcessFlow.processFlow,
+          };
+          const response = await saveWorkFlow(
+            payload,
+            type,
+            selectedAppVersion,
+            selectedTenant
+          );
+          if (response.code === 200) {
+            const appVersions = response.versions.sort((a, b) => {
+              const version1 = Number(a.split("v")[1]);
+              const version2 = Number(b.split("v")[1]);
+              return version1 > version2 ? -1 : 1;
+            });
+            setVersions(appVersions);
+            setSelectedAppVersion(appVersions[0]);
+            showSuccess(response.msg);
+          }
 
-  //         return response;
-  //       } else {
-  //         showError(
-  //           checkNode == -1 && checkendnode == -1
-  //             ? "Add Start Node and End Node"
-  //             : checkNode == -1
-  //             ? "Add Start Node"
-  //             : checkendnode == -1 && "Add End Node"
-  //         );
-  //       }
-  //     } else {
-  //       showError("Create Workflow");
-  //     }
-  //   } catch (error) {
-  //     showError(error.message);
-  //     console.error(error.message);
-  //   }
-  // };
+          return response;
+        } else {
+          showError(
+            checkNode == -1 && checkendnode == -1
+              ? "Add Start Node and End Node"
+              : checkNode == -1
+              ? "Add Start Node"
+              : checkendnode == -1 && "Add End Node"
+          );
+        }
+      } else {
+        showError("Create Workflow");
+      }
+    } catch (error) {
+      showError(error.message);
+      console.error(error.message);
+    }
+  };
 
   const updatedNodeConfig = (config) => {
     console.log(config, "config");
@@ -892,14 +910,18 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // };
   console.log("processFlow", selectApp);
 
-  const controlPolicyApi = async (type) => {
-    const res = await getColorPolicy(type);
-
+  const controlPolicyApi = (type) => {
+    // const res = await getColorPolicy(type);
+    const configControlpolicy = config_controlpolicy[type];
+    const workflowControlpolicy = workflow_controlpolicy[type];
+    const configColorpolicy = config_colorpolicy[type];
+    const workflowColorpolicy = workflow_colorpolicy[type];
+    configControlpolicy;
     return {
-      workflowControlpolicy: { ...res.workflowControlpolicy },
-      configControlpolicy: { ...res.configControlpolicy },
-      configColor: { ...res.configColorpolicy },
-      workflowColor: { ...res.workflowColorpolicy },
+      workflowControlpolicy: { ...workflowControlpolicy },
+      configControlpolicy: { ...configControlpolicy },
+      configColorpolicy: { ...configColorpolicy },
+      workflowColorpolicy: { ...workflowColorpolicy },
     };
   };
   return (
@@ -957,6 +979,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           nodes={nodes}
           showError={showError}
         /> */}
+      <ModuleHeader setsavejs={saveProcessFlow} />
       <ReactFlowDia
         nodes={nodes}
         edges={edges}
@@ -982,7 +1005,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         deleteNode={deleteNode}
         setMenu={setMenu}
         updatedNodeConfig={updatedNodeConfig}
-        // setsavejs={saveProcessFlow}
+        setsavejs={saveProcessFlow}
         isAdmin={isAdmin}
         nodeConfig={nodeConfig}
         userRoleDetails={userRoleDetails}

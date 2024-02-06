@@ -2,7 +2,7 @@ import React from "react";
 
 import { useState } from "react";
 import { useEffect } from "react";
-
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import Dyn from "./dynauii/dyn";
@@ -18,6 +18,7 @@ import "../treejson/tree.css";
 
 import SingleObj from "./dynauii/SIngleObj";
 import { Toast } from "primereact/toast";
+import Image from "next/image";
 
 export default function Builder({
   keys,
@@ -68,7 +69,7 @@ export default function Builder({
           : type == "selected"
           ? "selected should not be empty"
           : "please select key and value",
-      life: 3000
+      life: 3000,
     });
   };
 
@@ -427,9 +428,10 @@ export default function Builder({
                     <Image
                       src={curly}
                       alt="curly-brackets"
-                      style={{ width: "20px" ,
+                      style={{
+                        width: "20px",
                         display: isAdmin?.canAdd ? "inline" : "none",
-                      }} 
+                      }}
                     />
                   </div>
 
@@ -447,7 +449,7 @@ export default function Builder({
                       } else setContextMenu(true);
                     }}
                   >
-                    <i class="fa-solid fa-ellipsis caret-down"></i>
+                    <BsThreeDotsVertical />
                   </span>
 
                   {contextMenu &&
@@ -537,7 +539,7 @@ export default function Builder({
                                   ...json,
                                   [Key]:
                                     selected === "string"
-                                      ?{[Key]:value}
+                                      ? { [Key]: value }
                                       : selected === "array"
                                       ? []
                                       : {},

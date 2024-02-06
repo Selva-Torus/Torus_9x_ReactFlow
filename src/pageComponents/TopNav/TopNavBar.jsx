@@ -21,7 +21,7 @@ import Image from "next/image";
 import logo from "../../../public/logo.ico";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-const  TopBar = () => {
+const TopBar = ({ state }) => {
   return (
     <NavigationMenu className="flex justify-between max-w-none px-3 py-0 bg-gray-200">
       <Link href="/" className="flex items-center gap-1">
@@ -34,23 +34,30 @@ const  TopBar = () => {
             Dashboard
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink className="font-semibold" href="/Team">
-            Team
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink className="font-semibold" href="/Projects">
-            Projects
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink className="font-semibold" href="/Calendar">
-            Calendar
-          </NavigationMenuLink>
-          {/* <NavigationMenuLink className="font-semibold" onClick={handleSetData} >setData</NavigationMenuLink> */}
-          {/* <NavigationMenuLink className="font-semibold" onClick={handleGetData}>getData</NavigationMenuLink> */}
-        </NavigationMenuItem>
+        {state !== "Process" && state !=="Data" ? (
+          <>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="font-semibold" href="/Team">
+                Team
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="font-semibold" href="/Projects">
+                Projects
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="font-semibold" href="/Calendar">
+                Calendar
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </>
+        ) : (
+          <>
+            <button>Update (current version)</button>
+            <button>Save (New version)</button>
+          </>
+        )}
         <NavigationMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -73,4 +80,4 @@ const  TopBar = () => {
     </NavigationMenu>
   );
 };
-export default TopBar
+export default TopBar;

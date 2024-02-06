@@ -101,7 +101,7 @@ export default function ContextMenu({
   useEffect(() => {
     (async () => {
       if (!node) return;
-      const result = await getControlPolicy(node.type);
+      const result = controlPolicyApi(node.type);
       console.log(result, "result");
       setControlPolicy(result);
     })();

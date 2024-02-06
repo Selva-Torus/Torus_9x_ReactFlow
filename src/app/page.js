@@ -39,7 +39,7 @@ export default function Home() {
       {status !== "loading" && (
         <>
         <DarkmodeProvider>
-          <TopBar />
+          <TopBar state={state} />
           <div className="flex">
             <SideNavAccordian state={state} setState={setState} />
 
@@ -57,7 +57,7 @@ export default function Home() {
                 />
               </div>
             ) : state ? (
-              <div className="ml-[60px] h-[82vh] w-[90vw] bg-gray-400 flex justify-center items-center">
+              <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
                 <div>You are @ {state}</div>
               </div>
             ) : (

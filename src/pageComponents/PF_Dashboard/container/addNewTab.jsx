@@ -66,7 +66,7 @@ const AddNewTab = ({
         visible={showSideBar}
         position="right"
         onHide={handleClose}
-       
+        style={{ backgroundColor: "#f1efef" }}
       >
         <div
           style={{

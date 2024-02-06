@@ -9,6 +9,7 @@ import "reactflow/dist/style.css";
 import SideBar from "./sideBar";
 import { DarkmodeContext } from "../context/DarkmodeContext";
 import { useContext } from "react";
+import { Button } from "@/components/ui/button";
 
 const ReactFlowDia = ({
   nodes,
@@ -47,10 +48,9 @@ const ReactFlowDia = ({
   connectionLine,
   showSuccess,
   showError,
-
 }) => {
   const proOptions = { hideAttribution: true };
-  const  {darkmode , toggleDarkmode} = useContext(DarkmodeContext);
+  const { darkmode, toggleDarkmode } = useContext(DarkmodeContext);
 
   return (
     <ReactFlowProvider>
@@ -60,11 +60,10 @@ const ReactFlowDia = ({
           height: "100%",
           margin: "0",
           padding: "0",
-          backgroundColor:darkmode ? "#121212" : "#E9E8E8",
+          backgroundColor: darkmode ? "#121212" : "#E9E8E8",
         }}
       >
-        <ReactFlow 
-      
+        <ReactFlow
           ref={reactFlowWrapper}
           nodes={nodes}
           edges={edges}
@@ -84,8 +83,6 @@ const ReactFlowDia = ({
           onEdgeContextMenu={onNodeContextMenu}
           proOptions={proOptions}
           connectionLineComponent={connectionLine}
-
- 
         >
           <p
             style={{
@@ -97,13 +94,18 @@ const ReactFlowDia = ({
             }}
           >
             <span
-            // "#5A47B0"
-              style={{ color:darkmode ? "white": "#5A47B0" , fontSize: "17px", fontWeight: "600" }}
+              // "#5A47B0"
+              style={{
+                color: darkmode ? "white" : "#5A47B0",
+                fontSize: "17px",
+                fontWeight: "600",
+                zIndex: "9999",
+              }}
+       
             >
-              {selectedTenant}/{selectedAppGroup}/{selectedApp}
+              
             </span>
           </p>
-
           <SideBar
             toogle={toogle}
             sideBarData={sideBarData}
@@ -130,7 +132,12 @@ const ReactFlowDia = ({
               showsuccess={showSuccess}
             />
           )}
-          <Background variant="dots" color={darkmode ? "white" : "black"} gap={12} size={1} />
+          <Background
+            variant="dots"
+            color={darkmode ? "white" : "black"}
+            gap={12}
+            size={1}
+          />
         </ReactFlow>
       </div>
     </ReactFlowProvider>
