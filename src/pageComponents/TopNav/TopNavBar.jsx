@@ -34,30 +34,23 @@ const TopBar = ({ state }) => {
             Dashboard
           </NavigationMenuLink>
         </NavigationMenuItem>
-        {state !== "Process" && state !=="Data" ? (
-          <>
-            <NavigationMenuItem>
-              <NavigationMenuLink className="font-semibold" href="/Team">
-                Team
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink className="font-semibold" href="/Projects">
-                Projects
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink className="font-semibold" href="/Calendar">
-                Calendar
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </>
-        ) : (
-          <>
-            <button>Update (current version)</button>
-            <button>Save (New version)</button>
-          </>
-        )}
+
+        <NavigationMenuItem>
+          <NavigationMenuLink className="font-semibold" href="/Team">
+            Team
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink className="font-semibold" href="/Projects">
+            Projects
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink className="font-semibold" href="/Calendar">
+            Calendar
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
         <NavigationMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger>
