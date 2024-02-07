@@ -120,9 +120,9 @@ export default function ContextMenu({
         setNewJson(nodeConfig[`workflow.${node.id}`]);
         setToggle(!toggle);
       } else if (
-        nodeConfig.hasOwnProperty(`${node.id}.${node.property.name}.WF`)
+        nodeConfig.hasOwnProperty(`${node.property.name}.WF`)
       ) {
-        setNewJson(nodeConfig[`${node.id}.${node.property.name}.WF`]);
+        setNewJson(nodeConfig[`${node.property.name}.WF`]);
         setToggle(!toggle);
       } else {
         setToggle(!toggle);
@@ -135,9 +135,9 @@ export default function ContextMenu({
         setJson(nodeConfig[`config.${node.id}`]);
         setVisible(!visible);
       } else if (
-        nodeConfig.hasOwnProperty(`${node.id}.${node.property.name}.config`)
+        nodeConfig.hasOwnProperty(`${node.property.name}.config`)
       ) {
-        setJson(nodeConfig[`${node.id}.${node.property.name}.config`]);
+        setJson(nodeConfig[`${node.property.name}.config`]);
         setVisible(!visible);
       } else {
         setVisible(!visible);
