@@ -154,6 +154,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // const [tenant, setTenant] = useState(null);
   const [selectedTenant, setSelectedTenant] = useState("Datafabrics");
   const [applicationDetails, setApplicationDetails] = useState({});
+  const [reloadversion , setReloadversion] = useState(false);
 
   useEffect(() => {
     console.log("getJS--->", getJS);
@@ -177,7 +178,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   };
   useEffect(() => {
     fetchData();
-  }, [isUserDetailsDialog]);
+  }, [isUserDetailsDialog , reloadversion]);
 
   // useEffect(() => {
   //   (async () => {
@@ -592,6 +593,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
     appName = applicationDetails?.application ?? "App1",
     processFlow = applicationDetails?.artifacts ?? "Artifacts1"
   ) => {
+
     try {
       if (nodes.length && edges.length) {
         let checkNode = nodes.findIndex((ele) => ele.type == "startNode");
@@ -628,6 +630,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           );
           console.log(response);
           if (response.code === 200 || response.code === 201) {
+            setReloadversion(true);
             // const appVersions = response.versions.sort((a, b) => {
             //   const version1 = Number(a.split("v")[1]);
             //   const version2 = Number(b.split("v")[1]);
@@ -774,9 +777,10 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
       version
     );
     console.log(response, "version response");
-      if( response && response.edge && response.node ){
-        setEdges(response.edge);
-        setNodes(response.node);
+      if( response && response.result?.edge && response.result?.node && response?.config){
+        setNodeConfig(response?.config)
+        setEdges(response?.result?.edge);
+        setNodes(response?.result?.node);
       }else{
         showError('No Record Found')
       }
