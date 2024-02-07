@@ -3,7 +3,14 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputNumber } from "primereact/inputnumber";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
+import { FaCheck } from "react-icons/fa";
+
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 
 
 import { Button } from "primereact/button";
@@ -171,10 +178,10 @@ const AddElements = ({
               }
             }}
           >
-            <i class="fa-solid fa-check model-check-btn-size"></i>
+            <FaCheck color="white"/>
           </span>
           <span onClick={() => setFunc(null)}>
-            <i class="fa-solid fa-xmark closebtns-model"></i>
+            <IoCloseSharp size={25} color="#CCC"/>
           </span>
         </div>
       </div>
