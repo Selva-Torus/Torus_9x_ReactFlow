@@ -588,13 +588,13 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           const configuration = {};
           for (let node of nodes) {
             if (node && node.property && node.id) {
-              if (nodeConfig.hasOwnProperty(`${node.id}.config`))
+              if (nodeConfig.hasOwnProperty(`config.${node.id}`))
                 configuration[`${node.id}.${node.property.name}.config`] =
-                  nodeConfig[`${node.id}.config`];
+                  nodeConfig[`config.${node.id}`];
 
-              if (nodeConfig.hasOwnProperty(`${node.id}.workflow`))
+              if (nodeConfig.hasOwnProperty(`workflow.${node.id}`))
                 configuration[`${node.id}.${node.property.name}.WF`] =
-                  nodeConfig[`${node.id}.workflow`];
+                  nodeConfig[`workflow.${node.id}`];
             }
           }
           const payload = {
@@ -1038,6 +1038,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         versions={versions}
         nodes={nodes}
         showError={showError}
+        showSuccess={showSuccess}
         //  deleteApplicationApi={deleteApplicationApi}
       />
       <ReactFlowDia

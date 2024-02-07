@@ -230,6 +230,7 @@ details[open] {
       align-items: center;
       gap: 10px;
       margin-left: 5px;
+      justify-content: center;
 }
 
 .model-check-btn-size {
