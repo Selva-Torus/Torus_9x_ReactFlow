@@ -142,7 +142,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // const [newApplicationName]
   const toast = useRef(null);
   const [isAdmin, setIsAdmin] = useState(admin);
-
+  const edgeUpdateSuccessful = useRef(true);
   const [versions, setVersions] = useState([]);
   const [selectedAppVersion, setSelectedAppVersion] = useState(null);
 
@@ -203,7 +203,9 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   };
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
   const deleteNode = useCallback(
     (id) => {
       setNodes((nodes) => nodes.filter((node) => node.id !== id));
@@ -356,12 +358,23 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   // Function call when edges was changed.
   const onEdgeUpdate = useCallback(
     (oldEdge, newConnection) => {
+      edgeUpdateSuccessful.current = true;
       updateJson(oldEdge, newConnection);
       return setEdges((els) => {
         return updateEdge(oldEdge, newConnection, els);
       });
     },
     [nodes]
+  );
+
+  const onEdgeUpdateEnd = useCallback(
+    (_, edge) => {
+      if (!edgeUpdateSuccessful.current) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
+      edgeUpdateSuccessful.current = true;
+    },
+    [setEdges]
   );
 
   const updateNodeDetails = (nodes, oldEdge, newEdges, childID) => {
@@ -1077,6 +1090,9 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         // selectedAppGroup={selectedAppGroup}
         // selectedApp={selectedApp}
         controlPolicyApi={controlPolicyApi}
+ 
+        onEdgeUpdateStart={onEdgeUpdateStart}
+        onEdgeUpdateEnd={onEdgeUpdateEnd}
       />
       {/* <Dialog
           visible={visible}
