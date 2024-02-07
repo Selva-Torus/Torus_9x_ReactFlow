@@ -3,13 +3,17 @@ import arrow from "../assets/dynicons/arrow.png";
 
 import curly from "../assets/dynicons/curly-brackets.png";
 import bracket from "../assets/dynicons/bracket.png";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Image from "next/image";
+import { FiEdit } from "react-icons/fi";
 
 import AddElements from "./AddElemnts";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
 import "../../treejson/tree.css";
-import Image from "next/image";
 
 const TreeView = ({
   titile,
@@ -44,9 +48,8 @@ const TreeView = ({
         return (
           <>
             <ul
-             style={{marginBottom:"0" ,marginTop:"0" }}
+              style={{ marginBottom: "0", marginTop: "0" }}
               className={
-               
                 Number(iterator) < 2
                   ? to
                     ? "active list-title"
@@ -112,18 +115,20 @@ const TreeView = ({
                                   {totalOptions[depth]?.L}
                                 </span>
                               </div>
-                    
+
                               <span className="heading">{key && key}</span>
 
-                           
                               <span className="flex">
                                 {Array.isArray(data[key]) ? (
                                   <Image
                                     src={bracket}
                                     alt="bracket"
-                                    style={{ width: "20px" ,
-                                    display: isAdmin?.canAdd ? "inline" : "none",
-                                  }} 
+                                    style={{
+                                      width: "20px",
+                                      display: isAdmin?.canAdd
+                                        ? "inline"
+                                        : "none",
+                                    }}
                                   />
                                 ) : (
                                   typeof data[key] == "object" &&
@@ -131,9 +136,12 @@ const TreeView = ({
                                     <Image
                                       src={curly}
                                       alt="curly"
-                                      style={{ width: "20px" ,
-                        display: isAdmin?.canAdd ? "inline" : "none",
-                      }} 
+                                      style={{
+                                        width: "20px",
+                                        display: isAdmin?.canAdd
+                                          ? "inline"
+                                          : "none",
+                                      }}
                                     />
                                   )
                                 )}
@@ -144,7 +152,7 @@ const TreeView = ({
                               style={{
                                 display:
                                   isAdmin?.canAdd || isAdmin?.canDelete
-                                    ? "inline"
+                                    ? "flex"
                                     : "none",
                               }}
                             >
@@ -164,7 +172,7 @@ const TreeView = ({
                                   }
                                 }}
                               >
-                                <i class="fa-solid fa-ellipsis caret-down"></i>
+                                <HiDotsVertical />
                               </span>
 
                               {clicked == key && (
@@ -177,25 +185,24 @@ const TreeView = ({
                                           : "none",
                                       }}
                                       onClick={() => {
-                                        setFunc("add")
+                                        setFunc("add");
                                       }}
                                       className="second-add-btn"
                                     >
-                                      <i class="fa-solid fa-plus second-add-btn-img"></i>
-                                    
+                                      <IoMdAdd size={15} />
                                     </span>
 
                                     <span
                                       style={{
                                         display: isAdmin?.canEdit
-                                          ? "inline"
+                                          ? "flex"
                                           : "none",
                                       }}
                                       htmlFor=""
                                       onClick={() => setFunc("edit")}
                                       className="second-add-btn"
                                     >
-                                      <i class="fa-regular fa-pen-to-square second-add-btn-img"></i>
+                                      <FiEdit size={15} />
                                     </span>
                                     <span
                                       style={{
@@ -209,7 +216,7 @@ const TreeView = ({
                                       }
                                       className="first-add-btn trash-color"
                                     >
-                                      <i class="fa-solid fa-trash first-add-btn-img"></i>
+                                      <RiDeleteBin6Line size={15} />
                                     </span>
                                   </div>
                                   {func && func === "add" ? (
@@ -319,7 +326,6 @@ const TreeView = ({
                             setKey(index);
                           }
                           if (Number(iterator) >= 1) {
-                      
                             setDepth(depth);
                             setPath({
                               header: data[index][[data[index]["isHeader"]]]
@@ -330,7 +336,13 @@ const TreeView = ({
                             });
                             keys === index
                               ? getjson("")
-                              : getjson(Array.isArray(element) ? [...element]:{...element}, "array", index);
+                              : getjson(
+                                  Array.isArray(element)
+                                    ? [...element]
+                                    : { ...element },
+                                  "array",
+                                  index
+                                );
                           }
                         }}
                       >
@@ -359,25 +371,27 @@ const TreeView = ({
                         </span>
 
                         {Array.isArray(element) ? (
-                                  <Image
-                                    src={bracket}
-                                    alt="bracket"
-                                    style={{ width: "20px" ,
-                                    display: isAdmin?.canAdd ? "inline" : "none",
-                                  }} 
-                                  />
-                                ) : (
-                                  typeof element == "object" &&
-                                  !Array.isArray(element) && (
-                                    <Image
-                                      src={curly}
-                                      alt="curly"
-                                      style={{ width: "20px" ,
-                        display: isAdmin?.canAdd ? "inline" : "none",
-                      }} 
-                                    />
-                                  )
-                                )}
+                          <Image
+                            src={bracket}
+                            alt="bracket"
+                            style={{
+                              width: "20px",
+                              display: isAdmin?.canAdd ? "inline" : "none",
+                            }}
+                          />
+                        ) : (
+                          typeof element == "object" &&
+                          !Array.isArray(element) && (
+                            <Image
+                              src={curly}
+                              alt="curly"
+                              style={{
+                                width: "20px",
+                                display: isAdmin?.canAdd ? "inline" : "none",
+                              }}
+                            />
+                          )
+                        )}
                       </li>
 
                       {totalOptions && totalOptions.length > 2 && (

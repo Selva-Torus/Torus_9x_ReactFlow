@@ -1,24 +1,28 @@
 import React from "react";
-
+import { MdOutlineExpand } from "react-icons/md";
 import { useState } from "react";
 import { useEffect } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import Dyn from "./dynauii/dyn";
 import DynObj from "./dynauii/DynObj";
 import { useRef } from "react";
-
 import TreeView from "./dynauii/TreeView";
 import Side from "./dynauii/Side";
 import _ from "lodash";
 import curly from "./assets/dynicons/curly-brackets.png";
 import arrow from "./assets/dynicons/arrow.png";
 import "../treejson/tree.css";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Image from "next/image";
+import { FaCheck } from "react-icons/fa";
 
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 import SingleObj from "./dynauii/SIngleObj";
 import { Toast } from "primereact/toast";
-import Image from "next/image";
 
 export default function Builder({
   keys,
@@ -420,9 +424,15 @@ export default function Builder({
                       class="circle"
                       style={{ backgroundColor: `${totalColors[0]?.color}` }}
                     >
-                      <i
-                        class={`fa-solid fa-number fa-${totalOptions[0]?.L}`}
-                      ></i>
+                      <span
+                        style={{
+                          color: "white",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {totalOptions[0]?.L}
+                      </span>
                     </div>
 
                     <Image
@@ -439,9 +449,7 @@ export default function Builder({
                     ref={iRef}
                     style={{
                       display:
-                        isAdmin?.canAdd || isAdmin?.canDelete
-                          ? "inline"
-                          : "none",
+                        isAdmin?.canAdd || isAdmin?.canDelete ? "flex" : "none",
                     }}
                     onClick={(e) => {
                       if (contextMenu) {
@@ -449,7 +457,7 @@ export default function Builder({
                       } else setContextMenu(true);
                     }}
                   >
-                    <BsThreeDotsVertical />
+                    <HiDotsVertical />
                   </span>
 
                   {contextMenu &&
@@ -463,7 +471,7 @@ export default function Builder({
                           onClick={() => {
                             setFunc("add");
                           }}
-                          className="first-add-btn"
+                         
                         >
                           <span
                             onClick={(e) => {
@@ -472,22 +480,24 @@ export default function Builder({
                               } else setFunc("add");
                             }}
                           >
-                            <i class="fa-solid fa-plus first-add-btn-img"></i>
+                            <IoMdAdd  className="first-add-btn" size={25} />
                           </span>
                         </span>
 
                         <span
                           style={{
-                            display: isAdmin?.canDelete ? "inline" : "none",
+                            display: isAdmin?.canDelete ? "flex" : "none",
                           }}
                           htmlFor=""
                           onClick={() => {
                             setJson({});
                             setSelectedjson(null);
                           }}
-                          className="first-add-btn trash-color"
                         >
-                          <i class="fa-solid fa-trash first-add-btn-img"></i>
+                          <RiDeleteBin6Line
+                            className="first-add-btn trash-color"
+                            size={25}
+                          />
                         </span>
                       </div>
                     )}
@@ -534,6 +544,11 @@ export default function Builder({
                         selected && (
                           <div className="check-btn">
                             <span
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
                               onClick={() => {
                                 settJson({
                                   ...json,
@@ -548,16 +563,20 @@ export default function Builder({
                                 setSelected(null);
                               }}
                             >
-                              <i class="fa-solid fa-check"></i>
+                              <FaCheck color="white" />
                             </span>
                           </div>
                         )}
                       <div className="check-btn close-btn">
-                        <span onClick={() => setFunc(null)}>
-                          <i
-                            class="fa-solid fa-xmark"
-                            style={{ color: "white" }}
-                          ></i>
+                        <span
+                          onClick={() => setFunc(null)}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IoCloseSharp color="white" size={18} />
                         </span>
                       </div>
                     </div>
@@ -600,7 +619,7 @@ export default function Builder({
                   setCollapse(!collapse);
                 }}
               >
-                <i class="fa-solid fa-arrows-left-right-to-line caret-down"></i>
+                  <MdOutlineExpand />
               </span>
             </div>
             {Object.keys(json).length && (
