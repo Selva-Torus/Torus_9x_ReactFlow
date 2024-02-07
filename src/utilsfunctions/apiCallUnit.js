@@ -747,6 +747,19 @@ export const saveaWorkFlow  = async (
 export const versionController = async(tenant , app ='App1' , af = 'Artifacts1')  => {
   const res = await readReddis(tenant);
   const applications = await JSON.parse(res);
-  const versions = Object.keys(applications[tenant][app][af]);
+  let versions=[]
+  if(applications[tenant].hasOwnProperty(app) && applications[tenant][app].hasOwnProperty(af)) {
+     versions = Object.keys(applications[tenant][app][af]);
+    return versions;
+  }
   return versions;  
+}
+
+
+//version server
+export const versionServer = async(DF , app, af , version)  => {
+  const res = await readReddis(DF);
+  const applications = await JSON.parse(res);
+  const result = applications[DF][app][af][version].processFlow;
+  return result;
 }
