@@ -3,6 +3,7 @@ import FILE_SYNC from "../img/data-transfer.png";
 import { Dropdown } from "primereact/dropdown";
 import deleteIcon from "../assets/dynicons/delete.png";
 import Image from "next/image";
+import { fileSyncer } from "@/utilsfunctions/apiCallUnit";
 const ModuleDetails = ({
   children,
   isAdmin,
@@ -21,12 +22,26 @@ const ModuleDetails = ({
   showError,
   setsavejs,
   setVisible,
+  showSuccess,
   deleteApplicationApi,
 }) => {
   const handleChange = (event) => {
     setSelectedAppVersion(event.value);
     updateVersion(event.value);
   };
+
+  const handleFileSync = async() => {
+   try{ 
+    const response = await fileSyncer('Datafabrics');
+    if(typeof response === 'object'){
+      showSuccess('File Synced Successfully')
+    }else{
+      showError('File Sync Failed');
+    }
+  }catch(err){
+    showError('File Sync Failed');
+  }
+  }
 
   const deleteIconTemplate = (option, index) => {
     return (
@@ -71,11 +86,7 @@ const ModuleDetails = ({
             marginLeft: "10px",
           }}
           title="File Sync"
-          onClick={() => {
-            if (isAdmin.canAdd) {
-              syncFileSys();
-            }
-          }}
+          onClick={handleFileSync}
         >
           <Image
             src={FILE_SYNC}
