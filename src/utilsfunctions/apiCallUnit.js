@@ -741,3 +741,12 @@ export const saveaWorkFlow  = async (
     return error;
   }
 }
+
+
+//version controller
+export const versionController = async(tenant , app ='App1' , af = 'Artifacts1')  => {
+  const res = await readReddis(tenant);
+  const applications = await JSON.parse(res);
+  const versions = Object.keys(applications[tenant][app][af]);
+  return versions;  
+}
