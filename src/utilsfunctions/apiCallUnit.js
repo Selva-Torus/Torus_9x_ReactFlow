@@ -15,6 +15,7 @@ const {
   workflow_colorpolicy,
   config_colorpolicy,
 } = require('./environment');
+const fs = require('fs');
 
 const BASE_URL = "http://localhost:3001";
 export const initialCall = async (
@@ -188,6 +189,39 @@ export async function createRedisFiles(obj, currentPath = '', interator) {
       }
     }
   }
+}
+
+export async function getPathsAndCreateFolders(obj, currentPath = '', interator) {
+  let paths = [];
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newPath = `${currentPath}/${key}`;
+      paths.push(newPath);
+
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (interator <= 4) {
+          if (interator === 1 && fs.existsSync(`./${newPath}`)) {
+            await fs.rmSync(`./${newPath}`, {
+              recursive: true,
+              force: true,
+            });
+          }
+          fs.mkdirSync(`./${newPath}`);
+          paths = paths.concat(
+            await getPathsAndCreateFolders(
+              obj[key],
+              newPath,
+              interator + 1,
+            ),
+          );
+        } else {
+          fs.writeFileSync(`./${newPath}.json`, JSON.stringify(obj[key]));
+        }
+      }
+    }
+  }
+  return paths;
 }
 
 export async function newCreatePrcessFlow(edges, node) {
@@ -762,4 +796,15 @@ export const versionServer = async(DF , app, af , version)  => {
   const applications = await JSON.parse(res);
   const result = applications[DF][app][af][version].processFlow;
   return result;
+}
+
+//file Syncer
+export const fileSyncer = async(DF)  => {
+  const res = await readReddis(DF);
+  const applications = await JSON.parse(res);
+  if (applications && Object.keys(applications).length) {
+    let keys = await getPathsAndCreateFolders(applications, '', 1);
+    // console.log(keys, 'klklklkl');
+    return applications;
+  }
 }
