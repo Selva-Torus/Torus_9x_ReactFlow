@@ -53,6 +53,7 @@ import {
   saveWorkFlow,
   saveaWorkFlow,
   syncFileSystem,
+  versionController,
 } from "../../utilsfunctions/apiCallUnit";
 //   import Reactflow from "./layout/reactFlow";
 import { Dialog } from "primereact/dialog";
@@ -162,6 +163,19 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   useEffect(() => {
     setJS({ node: nodes, edge: edges, configuration: nodeConfig });
   }, [nodes, edges, nodeConfig]);
+
+  const fetchData = async () => {
+    const response = await versionController(
+      "Datafabrics",
+      applicationDetails?.application,
+      applicationDetails?.artifacts
+    );
+    console.log(response, "version response");
+    setVersions(response);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [isUserDetailsDialog]);
 
   // useEffect(() => {
   //   (async () => {
@@ -561,7 +575,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   const saveProcessFlow = async (
     type,
     appName = applicationDetails?.application ?? "App1",
-    processFlow = applicationDetails?.artifacts ??  "Artifacts1"
+    processFlow = applicationDetails?.artifacts ?? "Artifacts1"
   ) => {
     try {
       if (nodes.length && edges.length) {
@@ -983,7 +997,13 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           nodes={nodes}
           showError={showError}
         /> */}
-      <ModuleHeader setsavejs={saveProcessFlow} />
+      <ModuleHeader
+        setsavejs={saveProcessFlow}
+        versions={versions}
+        setSelectedAppVersion={setSelectedAppVersion}
+        selectedAppVersion={selectedAppVersion}
+        
+      />
       <ReactFlowDia
         nodes={nodes}
         edges={edges}
