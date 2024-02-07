@@ -48,6 +48,8 @@ const ReactFlowDia = ({
   connectionLine,
   showSuccess,
   showError,
+  onEdgeUpdateStart,
+  onEdgeUpdateEnd
 }) => {
   const proOptions = { hideAttribution: true };
   const { darkmode, toggleDarkmode } = useContext(DarkmodeContext);
@@ -83,6 +85,9 @@ const ReactFlowDia = ({
           onEdgeContextMenu={onNodeContextMenu}
           proOptions={proOptions}
           connectionLineComponent={connectionLine}
+
+          onEdgeUpdateStart={onEdgeUpdateStart}
+          onEdgeUpdateEnd={onEdgeUpdateEnd}
         >
           <p
             style={{
