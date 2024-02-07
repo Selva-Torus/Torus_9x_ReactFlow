@@ -1038,6 +1038,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         versions={versions}
         nodes={nodes}
         showError={showError}
+        showSuccess={showSuccess}
         //  deleteApplicationApi={deleteApplicationApi}
       />
       <ReactFlowDia

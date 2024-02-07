@@ -22,6 +22,7 @@ const ModuleDetails = ({
   showError,
   setsavejs,
   setVisible,
+  showSuccess,
   deleteApplicationApi,
 }) => {
   const handleChange = (event) => {
@@ -30,8 +31,16 @@ const ModuleDetails = ({
   };
 
   const handleFileSync = async() => {
+   try{ 
     const response = await fileSyncer('Datafabrics');
-    console.log(response);
+    if(typeof response === 'object'){
+      showSuccess('File Synced Successfully')
+    }else{
+      showError('File Sync Failed');
+    }
+  }catch(err){
+    showError('File Sync Failed');
+  }
   }
 
   const deleteIconTemplate = (option, index) => {
