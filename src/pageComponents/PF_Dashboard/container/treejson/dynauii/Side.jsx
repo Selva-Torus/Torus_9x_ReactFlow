@@ -4,7 +4,7 @@ import { Sidebar } from "primereact/sidebar";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import "../../treejson/tree.css";
-
+import Image from "next/image";
 export default function Side({ json, toggle, setToggle, func, path, setjs }) {
   let options = [
     { label: "Array", value: "array" },
