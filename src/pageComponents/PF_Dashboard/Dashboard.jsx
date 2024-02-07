@@ -54,6 +54,7 @@ import {
   saveaWorkFlow,
   syncFileSystem,
   versionController,
+  versionServer,
 } from "../../utilsfunctions/apiCallUnit";
 //   import Reactflow from "./layout/reactFlow";
 import { Dialog } from "primereact/dialog";
@@ -81,6 +82,7 @@ import {
 import "./app.css";
 import ModuleHeader from "./layout/ModuleHeader";
 import PF_AppDetail from "./layout/PF_AppDetail";
+import ModuleDetails from "./layout/ProcessFlowModuleDetails";
 const NODE_TYPE = {
   startNode: StartNode,
   decisionNode: DecisionNode,
@@ -570,7 +572,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   //     console.error(error.message);
   //   }
   // };
-
+  console.log(selectedAppVersion, "selectedAppVersion");
   // Use to save and update the processFlow
   const saveProcessFlow = async (
     type,
@@ -613,13 +615,13 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           );
           console.log(response);
           if (response.code === 200 || response.code === 201) {
-            const appVersions = response.versions.sort((a, b) => {
-              const version1 = Number(a.split("v")[1]);
-              const version2 = Number(b.split("v")[1]);
-              return version1 > version2 ? -1 : 1;
-            });
-            setVersions(appVersions);
-            setSelectedAppVersion(appVersions[0]);
+            // const appVersions = response.versions.sort((a, b) => {
+            //   const version1 = Number(a.split("v")[1]);
+            //   const version2 = Number(b.split("v")[1]);
+            //   return version1 > version2 ? -1 : 1;
+            // });
+            // setVersions(appVersions);
+            // setSelectedAppVersion(appVersions[0]);
             showSuccess(response.msg);
           }
 
@@ -751,29 +753,42 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   //   }
   // };
 
-  // const updateVersion = async (version) => {
-  //   const response = await initalApi(
-  //     selectedProcessFlow.processFlow,
-  //     version,
-  //     selectedApplication.application,
-  //     selectedTenant
-  //   );
-  //   if (response && typeof response === "object" && response.workflow) {
-  //     if (response.hasOwnProperty("configuration")) {
-  //       setNodeConfig({ ...response.configuration });
-  //     }
-  //     const result = response.workflow;
+  const updateVersion = async (version) => {
+    const response = await versionServer(
+      "Datafabrics",
+      applicationDetails?.application,
+      applicationDetails?.artifacts,
+      version
+    );
+    console.log(response, "version response");
+      if( response && response.edge && response.node ){
+        setEdges(response.edge);
+        setNodes(response.node);
+      }else{
+        showError('No Record Found')
+      }
+    // const response = await initalApi(
+    //   selectedProcessFlow.processFlow,
+    //   version,
+    //   selectedApplication.application,
+    //   selectedTenant
+    // );
+    // if (response && typeof response === "object" && response.workflow) {
+    //   if (response.hasOwnProperty("configuration")) {
+    //     setNodeConfig({ ...response.configuration });
+    //   }
+    //   const result = response.workflow;
 
-  //     const nodes = result.node;
-  //     const edges = result.edge;
+    //   const nodes = result.node;
+    //   const edges = result.edge;
 
-  //     setEdges(edges);
-  //     setNodes(nodes);
-  //     setVisible(false);
-  //   } else {
-  //     alert("No Record Found");
-  //   }
-  // };
+    //   setEdges(edges);
+    //   setNodes(nodes);
+    //   setVisible(false);
+    // } else {
+    //   alert("No Record Found");
+    // }
+  };
 
   // const applicationDetailsApi = async () => {
   //   try {
@@ -997,12 +1012,33 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           nodes={nodes}
           showError={showError}
         /> */}
-      <ModuleHeader
+      {/* <ModuleHeader
         setsavejs={saveProcessFlow}
         versions={versions}
         setSelectedAppVersion={setSelectedAppVersion}
         selectedAppVersion={selectedAppVersion}
         
+      /> */}
+      <ModuleDetails
+        applicationName={applicationName}
+        // darkmode={darkmode}
+        // toggleDarkmode ={toggleDarkmode}
+        setsavejs={saveProcessFlow}
+        setVisible={setVisible}
+        isAdmin={isAdmin}
+        //  syncFileSys={syncFileSys}
+        selectedApplication={selectedApplication}
+        //  setApplication={setApplication}
+        processFlow={processFlow}
+        setProcessFlow={setProcessFlow}
+        selectedProcessFlow={selectedProcessFlow}
+        selectedAppVersion={selectedAppVersion}
+        setSelectedAppVersion={setSelectedAppVersion}
+        updateVersion={updateVersion}
+        versions={versions}
+        nodes={nodes}
+        showError={showError}
+        //  deleteApplicationApi={deleteApplicationApi}
       />
       <ReactFlowDia
         nodes={nodes}
