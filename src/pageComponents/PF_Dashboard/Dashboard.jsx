@@ -589,11 +589,11 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           for (let node of nodes) {
             if (node && node.property && node.id) {
               if (nodeConfig.hasOwnProperty(`config.${node.id}`))
-                configuration[`${node.id}.${node.property.name}.config`] =
+                configuration[`${node.property.name}.config`] =
                   nodeConfig[`config.${node.id}`];
 
               if (nodeConfig.hasOwnProperty(`workflow.${node.id}`))
-                configuration[`${node.id}.${node.property.name}.WF`] =
+                configuration[`${node.property.name}.WF`] =
                   nodeConfig[`workflow.${node.id}`];
             }
           }
