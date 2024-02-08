@@ -50,7 +50,9 @@ const ReactFlowDia = ({
   showError,
   onEdgeUpdateStart,
   onEdgeUpdateEnd,
-  uniqueNames
+  uniqueNames,
+  applicationDetails,
+  
 }) => {
   const proOptions = { hideAttribution: true };
   const { darkmode, toggleDarkmode } = useContext(DarkmodeContext);
@@ -86,7 +88,6 @@ const ReactFlowDia = ({
           onEdgeContextMenu={onNodeContextMenu}
           proOptions={proOptions}
           connectionLineComponent={connectionLine}
-
           onEdgeUpdateStart={onEdgeUpdateStart}
           onEdgeUpdateEnd={onEdgeUpdateEnd}
         >
@@ -107,9 +108,12 @@ const ReactFlowDia = ({
                 fontWeight: "600",
                 zIndex: "9999",
               }}
-       
             >
-              
+              <span>
+                {applicationDetails?.application}/
+                {applicationDetails?.artifacts}
+             
+              </span>
             </span>
           </p>
           <SideBar
@@ -137,13 +141,12 @@ const ReactFlowDia = ({
               controlPolicyApi={controlPolicyApi}
               showerror={showError}
               showsuccess={showSuccess}
-
             />
           )}
           <Background
             variant="dots"
             color={darkmode ? "white" : "black"}
-            gap={12}
+            gap={25}
             size={1}
           />
         </ReactFlow>
