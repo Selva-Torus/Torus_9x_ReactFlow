@@ -33,7 +33,6 @@ const[leveloption , setLeveloption]= useState(options)
             :"",
       };
       getjson(js);
-      console.log(js, "jsss");
       setKey("");
       setValue("");
       setShowsidebar(null);

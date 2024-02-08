@@ -1,10 +1,5 @@
 /* eslint-disable */
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   useNodesState,
   useEdgesState,
@@ -16,7 +11,6 @@ import "reactflow/dist/style.css";
 import ReactFlowDia from "./container/reactflowDia";
 import dagre from "dagre";
 import FloatingEdge from "./container/customEdge/FloatEdge";
-
 
 import {
   StartNode,
@@ -96,16 +90,15 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   const [selectedTenant, setSelectedTenant] = useState("Datafabrics");
   const [applicationDetails, setApplicationDetails] = useState({});
 
-  useEffect(() => {
-    console.log("getJS--->", getJS);
-    setNodes(getJS?.node);
-    setEdges(getJS?.edge);
-    if (getJS?.configuration) setNodeConfig(getJS?.configuration);
-  }, [getJS]);
+  // useEffect(() => {
+  //   setNodes(getJS?.node);
+  //   setEdges(getJS?.edge);
+  //   if (getJS?.configuration) setNodeConfig(getJS?.configuration);
+  // }, [getJS]);
 
-  useEffect(() => {
-    setJS({ node: nodes, edge: edges, configuration: nodeConfig });
-  }, [nodes, edges, nodeConfig]);
+  // useEffect(() => {
+  //   setJS({ node: nodes, edge: edges, configuration: nodeConfig });
+  // }, [nodes, edges, nodeConfig]);
 
   const fetchVersion = async () => {
     const response = await versionController(
@@ -113,12 +106,11 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
       applicationDetails?.application,
       applicationDetails?.artifacts
     );
-    console.log(response, "version response");
     setVersions(response);
   };
   useEffect(() => {
     fetchVersion();
-  }, [isUserDetailsDialog ]);
+  }, [isUserDetailsDialog]);
 
   const showSuccess = (msg) => {
     toast.current.show({
@@ -246,7 +238,6 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
     },
     [setMenu]
   );
-  console.log("nodes", edges);
   const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 
   const onConnect = useCallback((params) => {
@@ -464,32 +455,38 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
     });
   };
 
-  console.log(selectedAppVersion, "selectedAppVersion");
   // Use to save and update the processFlow
   const saveProcessFlow = async (
     type,
     appName = applicationDetails?.application ?? "App1",
     processFlow = applicationDetails?.artifacts ?? "Artifacts1"
   ) => {
-
     try {
       if (nodes.length && edges.length) {
         let checkNode = nodes.findIndex((ele) => ele.type == "startNode");
         let checkendnode = nodes.findIndex((ele) => ele.type == "endNode");
-        console.log(checkNode, checkendnode, "ckn");
         if (checkNode !== -1 && checkendnode !== -1) {
           const configuration = {};
           for (let node of nodes) {
             if (node && node.property && node.id) {
-              if (nodeConfig.hasOwnProperty(`config.${node.id}`))
+              if (
+                nodeConfig.hasOwnProperty(`config.${node.id}`) ||
+                nodeConfig.hasOwnProperty(`${node.property.name}.config`)
+              )
                 configuration[`${node.property.name}.config`] =
-                  nodeConfig[`config.${node.id}`];
+                  nodeConfig[`config.${node.id}`] ??
+                  nodeConfig[`${node.property.name}.config`];
 
-              if (nodeConfig.hasOwnProperty(`workflow.${node.id}`))
+              if (
+                nodeConfig.hasOwnProperty(`workflow.${node.id}`) ||
+                nodeConfig.hasOwnProperty(`${node.property.name}.WF`)
+              )
                 configuration[`${node.property.name}.WF`] =
-                  nodeConfig[`workflow.${node.id}`];
+                  nodeConfig[`workflow.${node.id}`] ??
+                  nodeConfig[`${node.property.name}.WF`];
             }
           }
+
           const payload = {
             workFlow: { node: nodes, edge: edges },
             applicationName: appName
@@ -506,9 +503,8 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
             selectedAppVersion,
             selectedTenant
           );
-          console.log(response);
           if (response.code === 200 || response.code === 201) {
-            fetchVersion()
+            fetchVersion();
             showSuccess(response.msg);
           }
 
@@ -532,7 +528,6 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
   };
 
   const updatedNodeConfig = (config) => {
-    console.log(config, "config");
     setNodeConfig({ ...nodeConfig, ...config });
   };
 
@@ -543,15 +538,19 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
       applicationDetails?.artifacts,
       version
     );
-    console.log(response, "version response");
-      if( response && response.result?.edge && response.result?.node && response?.config){
-        setNodeConfig(response?.config)
-        setEdges(response?.result?.edge);
-        setNodes(response?.result?.node);
-      }else{
-        showError('No Record Found')
-      }
+    if (
+      response &&
+      response.result?.edge &&
+      response.result?.node &&
+      response?.config
+    ) {
+      setNodeConfig(response?.config);
+      setEdges(response?.result?.edge);
+      setNodes(response?.result?.node);
+    } else {
+      showError("No Record Found");
     }
+  };
 
   const controlPolicyApi = (type) => {
     const configControlpolicy = config_controlpolicy[type];

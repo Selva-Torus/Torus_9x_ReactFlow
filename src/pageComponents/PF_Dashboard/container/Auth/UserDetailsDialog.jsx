@@ -18,14 +18,11 @@ const UserDetailsDialog = ({ setIsAdmin, setT, setAG, setA }) => {
   useEffect(() => {
     (async () => {
       const res = await getTenantDetails();
-      console.log("tenant details -->", res.saveOptions);
-
       setTenant(res.saveOptions);
     })();
   }, []);
 
   const onTenantchange = (e) => {
-    console.log(e, e.value, "Tenantdata");
     setSelectedTenant(e.value);
     setT(e.value);
     const appGroup = [];

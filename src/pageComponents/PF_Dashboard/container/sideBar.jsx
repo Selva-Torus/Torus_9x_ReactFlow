@@ -31,7 +31,6 @@ const SideBar = ({
             }}
           >
             <label>Role</label>
-            {console.log("dropDwon-->", selectedRole)}
             <Dropdown
               value={selectedRole}
               onChange={(e) => changeProperty({ role: e.target.value })}

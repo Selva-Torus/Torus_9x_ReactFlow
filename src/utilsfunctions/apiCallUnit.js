@@ -27,7 +27,6 @@ export async function createRedisFiles(obj, currentPath = '', interator) {
           let arr = newPath.split(':');
           arr.shift();
           const kes = arr.join(':');
-          console.log(kes, 'key');
           await redis.call('JSON.SET', kes, '$', JSON.stringify(obj[key]));
         }
       }
@@ -395,7 +394,6 @@ export const saveaWorkFlow  = async (
     if (type === 'create') {
       const res = await readReddis(tenant);
 
-      console.log(res , 'response');
       const applications = await JSON.parse(res);
 
       if (
@@ -406,9 +404,7 @@ export const saveaWorkFlow  = async (
         typeof applications === 'object' 
         // && Object.keys(applications[tenant][appGroup][app]).length
       ) {
-        console.log('inside');
         const application = { ...applications };
-        console.log('version --->', applications[tenant]);
 
         if (
           application[tenant].hasOwnProperty(
@@ -459,11 +455,7 @@ export const saveaWorkFlow  = async (
               },
             };
           }
-          console.log(
-            'application exists-->',
-            JSON.stringify(application),
-            tenant,
-          );
+         
           await writeReddis(tenant, application);
           const versions = Object.keys(
             application[tenant][req.applicationName][
@@ -495,11 +487,7 @@ export const saveaWorkFlow  = async (
               },
             },
           };
-          console.log(
-            'application exists-->',
-            JSON.stringify(application),
-            tenant,
-          );
+          
           await writeReddis(tenant, application);
 
           const versions = Object.keys(
@@ -520,14 +508,7 @@ export const saveaWorkFlow  = async (
       } else {
         const res = await readReddis(tenant);
         let application = { ...(await JSON.parse(res)) };
-        console.log('workflow', workFlows, processflowapi);
-        console.log(
-          application,
-          'outside',
-          tenant,
-          req.applicationName,
-          req.processFlow,
-        );
+        
         let appl = JSON.parse(JSON.stringify(application));
         const version = `v1`;
         if (!appl.hasOwnProperty(tenant)) {
@@ -562,7 +543,6 @@ export const saveaWorkFlow  = async (
           },
         };
 
-        console.log('application created-->', appl, tenant);
         await writeReddis(tenant, appl);
         const versions = Object.keys(
           appl[tenant][req.applicationName][req.processFlow],
@@ -580,7 +560,6 @@ export const saveaWorkFlow  = async (
     } else if (type === 'update') {
       const res = await readReddis(tenant);
       const applications = await JSON.parse(res);
-      console.log('redis-->', JSON.stringify(applications), tenant);
       const application = { ...applications };
 
       applications[tenant][req.applicationName][
@@ -602,11 +581,7 @@ export const saveaWorkFlow  = async (
           ...req.configuration,
         },
       };
-      console.log(
-        'application exists-->',
-        JSON.stringify(application),
-        tenant,
-      );
+     
       await writeReddis(tenant, application);
 
       const appw = JSON.parse(JSON.stringify(application));
@@ -641,10 +616,10 @@ export const versionServer = async(DF , app, af , version)  => {
   let result = obj.processFlow;
   let config ={};
   Object.keys(obj).forEach((key)=>{
-    if(key === 'processFlow' || key === 'processFlowSummary') {
-      return true;
-    }else{
+    if(key !== 'processFlow' || key !== 'processFlowSummary') {
       config[key] = obj[key];
+    }else{
+      return true;
     }
   })
   return {result , config};
@@ -656,7 +631,6 @@ export const fileSyncer = async(DF)  => {
   const applications = await JSON.parse(res);
   if (applications && Object.keys(applications).length) {
     let keys = await getPathsAndCreateFolders(applications, '', 1);
-    // console.log(keys, 'klklklkl');
     return applications;
   }
 }

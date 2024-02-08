@@ -16,7 +16,6 @@ export default function Side({ json, toggle, setToggle, func, path, setjs }) {
   const [selected, setSelected] = useState(null);
   const [type, setType] = useState(null);
   const addFunction = (key, option, value, path) => {
-    console.log(key, option, value, path);
 
     _.update(json, path, function (n) {
       if (Array.isArray(n)) {
