@@ -125,7 +125,7 @@ export default function ContextMenu({
       } else {
         setToggle(!toggle);
 
-        setNewJson(entity);
+        setNewJson({});
       }
     }
     if (flowType === "CP") {

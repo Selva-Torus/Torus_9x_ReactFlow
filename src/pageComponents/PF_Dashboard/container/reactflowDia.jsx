@@ -49,7 +49,8 @@ const ReactFlowDia = ({
   showSuccess,
   showError,
   onEdgeUpdateStart,
-  onEdgeUpdateEnd
+  onEdgeUpdateEnd,
+  uniqueNames
 }) => {
   const proOptions = { hideAttribution: true };
   const { darkmode, toggleDarkmode } = useContext(DarkmodeContext);
@@ -118,6 +119,7 @@ const ReactFlowDia = ({
             changeProperty={changeProperty}
             userRoleDetails={userRoleDetails}
             selectedRole={selectedRole}
+            uniqueNames={uniqueNames}
           />
           <Controls />
           {/* <MiniMap/> */}
@@ -135,6 +137,7 @@ const ReactFlowDia = ({
               controlPolicyApi={controlPolicyApi}
               showerror={showError}
               showsuccess={showSuccess}
+
             />
           )}
           <Background
