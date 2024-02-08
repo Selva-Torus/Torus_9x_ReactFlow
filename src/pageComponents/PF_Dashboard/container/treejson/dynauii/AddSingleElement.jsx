@@ -4,7 +4,8 @@ import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { InputNumber } from "primereact/inputnumber";
 import { ToggleButton } from "primereact/togglebutton";
-
+import { FaCheck } from "react-icons/fa";
+import Image from "next/image";
 const AddSingleElement = ({ json, getjson, setShowsidebar  , showsidebar , options}) => {
   const [selected, setSelected] = useState(null);
   const [key, setKey] = useState(null);
@@ -32,7 +33,6 @@ const[leveloption , setLeveloption]= useState(options)
             :"",
       };
       getjson(js);
-      console.log(js, "jsss");
       setKey("");
       setValue("");
       setShowsidebar(null);
@@ -133,11 +133,9 @@ const[leveloption , setLeveloption]= useState(options)
           className="model-buttons"
         >
           <span className="save-btns" style={{padding:"9px 16px"}}    onClick={handleclicked}>
-            <i
-              class="fa-solid fa-check model-check-btn-size"
+       
 
-           
-            ></i>
+            <FaCheck color="white" />
           </span>
         </div>
       </div>

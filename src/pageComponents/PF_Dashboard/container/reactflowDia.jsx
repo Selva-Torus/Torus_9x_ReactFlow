@@ -48,6 +48,11 @@ const ReactFlowDia = ({
   connectionLine,
   showSuccess,
   showError,
+  onEdgeUpdateStart,
+  onEdgeUpdateEnd,
+  uniqueNames,
+  applicationDetails,
+  
 }) => {
   const proOptions = { hideAttribution: true };
   const { darkmode, toggleDarkmode } = useContext(DarkmodeContext);
@@ -83,6 +88,8 @@ const ReactFlowDia = ({
           onEdgeContextMenu={onNodeContextMenu}
           proOptions={proOptions}
           connectionLineComponent={connectionLine}
+          onEdgeUpdateStart={onEdgeUpdateStart}
+          onEdgeUpdateEnd={onEdgeUpdateEnd}
         >
           <p
             style={{
@@ -101,9 +108,12 @@ const ReactFlowDia = ({
                 fontWeight: "600",
                 zIndex: "9999",
               }}
-       
             >
-              
+              <span>
+                {applicationDetails?.application}/
+                {applicationDetails?.artifacts}
+             
+              </span>
             </span>
           </p>
           <SideBar
@@ -113,6 +123,7 @@ const ReactFlowDia = ({
             changeProperty={changeProperty}
             userRoleDetails={userRoleDetails}
             selectedRole={selectedRole}
+            uniqueNames={uniqueNames}
           />
           <Controls />
           {/* <MiniMap/> */}
@@ -135,7 +146,7 @@ const ReactFlowDia = ({
           <Background
             variant="dots"
             color={darkmode ? "white" : "black"}
-            gap={12}
+            gap={25}
             size={1}
           />
         </ReactFlow>

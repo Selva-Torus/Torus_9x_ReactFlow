@@ -8,7 +8,6 @@ import Dashboard from "../pageComponents/PF_Dashboard/Dashboard";
 import TopBar from "../pageComponents/TopNav/TopNavBar";
 import { DarkmodeProvider } from "../pageComponents/PF_Dashboard/context/DarkmodeContext";
 import { options } from "../utilsfunctions/getterJsOptions";
-import MenuDetailsComponent from "../pageComponents/PF_Dashboard/layout/PF_nodeMenu";
 
 export default function Home() {
   const { data: session, status } = useSession({
@@ -18,11 +17,7 @@ export default function Home() {
       signIn();
     },
   });
-  // console.log(session, status);
   const [state, setState] = useState("");
-
-  console.log(state);
-
   const [getterJS, getJS] = useState(options);
   const [setterJS, setJS] = useState({});
 

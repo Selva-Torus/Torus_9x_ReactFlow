@@ -5,8 +5,14 @@ import AddElements from "./AddElemnts";
 import bracket from "../assets/dynicons/bracket.png";
 import check from "../assets/dynicons/checked.png";
 import "../../treejson/tree.css";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import Image from "next/image";
+import { FaCheck } from "react-icons/fa";
 
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 export default function Dyn({
   data,
   collapse,
@@ -50,7 +56,6 @@ export default function Dyn({
     setOptions(totalOptions[depth]?.options);
     setCurrentJson(data);
 
-    console.log(totalColors, "data");
   }, [data, totalOptions, depth, totalColors]);
   return (
     <>
@@ -135,7 +140,7 @@ export default function Dyn({
                           } else setContextMenu(true);
                         }}
                       >
-                        <i class="fa-solid fa-ellipsis caret-down"></i>
+                        <HiDotsVertical />
                       </span>
                     )}
                   </span>
@@ -148,7 +153,7 @@ export default function Dyn({
                         className="second-add-btn"
                         onClick={() => setFunc("add")}
                       >
-                        <i class="fa-solid fa-plus second-add-btn-img"> </i>
+                       <IoMdAdd className="second-add-btn-img" />
                       </span>
                       <span
                         style={{
@@ -158,7 +163,7 @@ export default function Dyn({
                         onClick={(e) => setSelected(`${path}.${title}`)}
                         className="second-add-btn"
                       >
-                        <i class="fa-regular fa-pen-to-square second-add-btn-img"></i>
+                        <FiEdit className="second-add-btn-img" />
                       </span>
                       <span
                         style={{
@@ -170,7 +175,7 @@ export default function Dyn({
                           functionality("delete", `${path}.${title}`)
                         }
                       >
-                        <i class="fa-solid fa-trash second-add-btn-img"></i>
+                        <RiDeleteBin6Line className="second-add-btn-img" />
                       </span>
                     </div>
                   )}

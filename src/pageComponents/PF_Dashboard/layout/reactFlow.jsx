@@ -45,7 +45,6 @@ const Reactflow = ({
     rolesColor,
     roles
   ) => {
-    console.log(event);
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("application/name", nodeName);
     event.dataTransfer.setData("application/roleColor", rolesColor);

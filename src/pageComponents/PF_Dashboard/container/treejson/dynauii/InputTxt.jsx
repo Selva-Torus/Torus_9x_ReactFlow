@@ -1,5 +1,12 @@
 import React, { useState } from "react";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
+import { FaCheck } from "react-icons/fa";
+
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 import "../../treejson/tree.css";
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
@@ -29,7 +36,6 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
               <input
                 type="text"
                 defaultValue={keys}
-              
                 onChange={(e) => {
                   handlekey(e);
                 }}
@@ -44,10 +50,10 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                       setSelectedkey(null);
                     }}
                   >
-                    <i class="fa-solid fa-check model-check-btn-size"></i>
+                    <FaCheck color="white" />
                   </span>
                   <span onClick={() => setSelectedkey(null)}>
-                    <i class="fa-solid fa-xmark closebtns-tname"></i>
+                    <IoCloseSharp color="white" />
                   </span>
                 </span>
               </div>
@@ -64,7 +70,7 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                 }}
                 onClick={() => setSelectedkey(keys)}
               >
-                <i class="fa-regular fa-pen-to-square  first-add-btn-title"></i>
+                <FiEdit size={15} color="rgba(0,0,0,0.5)" />
               </span>
             </div>
           </>
@@ -97,10 +103,10 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                       setSelectedinput(null);
                     }}
                   >
-                    <i class="fa-solid fa-check check-btn-size"></i>
+                    <FaCheck color="white" />
                   </span>
                   <span onClick={() => setSelectedinput(null)}>
-                    <i class="fa-solid fa-xmark closebtns-tname"></i>
+                    <IoCloseSharp color="white" />
                   </span>
                 </div>
               </div>
@@ -129,10 +135,10 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                       setSelectedinput(null);
                     }}
                   >
-                    <i class="fa-solid fa-check check-btn-size"></i>
+                    <FaCheck color="white" />
                   </span>
                   <span onClick={() => setSelectedinput(null)}>
-                    <i class="fa-solid fa-xmark closebtns-tname"></i>
+                    <IoCloseSharp color="white" />
                   </span>
                 </div>
               </div>
@@ -165,7 +171,7 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                   }}
                   onClick={(e) => setSelectedinput(obj[keys])}
                 >
-                  <i class="fa-regular fa-pen-to-square  first-add-btn-title"></i>
+                  <FiEdit size={15} color="rgba(0,0,0,0.5)" />
                 </span>
 
                 <span
@@ -185,7 +191,7 @@ function InputTxt({ keys, obj, functionality, isAdmin }) {
                     );
                   }}
                 >
-                  <i class="fa-solid fa-trash first-add-btn-delete"></i>
+                  <RiDeleteBin6Line size={16} color="rgba(0,0,0,0.4)" />
                 </span>
               </>
             )}

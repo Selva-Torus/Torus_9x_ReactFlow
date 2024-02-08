@@ -3,7 +3,14 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputNumber } from "primereact/inputnumber";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
+import { FaCheck } from "react-icons/fa";
+
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 
 
 import { Button } from "primereact/button";
@@ -65,13 +72,7 @@ const AddElements = ({
 
         {selected === "string" && (
           <>
-            <InputText
-              id="key"
-              onChange={(e) => setKey(e.target.value)}
-              placeholder="key"
-              className={`${!keys && "p-invalid"}`}
-              style={{ width: "140px" }}
-            />
+          
             <InputText
               id="value"
               onChange={(e) => setValue(e.target.value)}
@@ -95,23 +96,7 @@ const AddElements = ({
         )}
 
         {selected == "boolean" && <></>}
-        {selected == "string" && type == "object" && (
-          <>
-            <ToggleButton
-              id="toggle"
-              onLabel=""
-              offLabel=""
-              onIcon="pi pi-check"
-              offIcon="pi pi-times"
-              checked={checked}
-              onChange={(e) => setChecked(e.value)}
-              style={{ width: "28px", height: "28px" }}
-            />
-            <span htmlFor="toggle" className="heading-primary">
-              IsHeader
-            </span>
-          </>
-        )}
+       
         <div className="model-buttons">
           <span
             className="save-btns"
@@ -122,17 +107,7 @@ const AddElements = ({
                   options: selected,
                   value: selected=="string"? keys: value,
                 });
-                if (checked) {
-                  functionality(
-                    "add",
-                    json.path == "" ? `.${keys}` : json.path,
-                    {
-                      key: "isHeader",
-                      options: "string",
-                      value: keys,
-                    }
-                  );
-                }
+              
                 setFunc(null);
               }
               if (
@@ -171,10 +146,10 @@ const AddElements = ({
               }
             }}
           >
-            <i class="fa-solid fa-check model-check-btn-size"></i>
+            <FaCheck color="white"/>
           </span>
           <span onClick={() => setFunc(null)}>
-            <i class="fa-solid fa-xmark closebtns-model"></i>
+            <IoCloseSharp size={25} color="#CCC"/>
           </span>
         </div>
       </div>

@@ -1,24 +1,28 @@
 import React from "react";
-
+import { MdOutlineExpand } from "react-icons/md";
 import { useState } from "react";
 import { useEffect } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import Dyn from "./dynauii/dyn";
 import DynObj from "./dynauii/DynObj";
 import { useRef } from "react";
-
 import TreeView from "./dynauii/TreeView";
 import Side from "./dynauii/Side";
 import _ from "lodash";
 import curly from "./assets/dynicons/curly-brackets.png";
 import arrow from "./assets/dynicons/arrow.png";
 import "../treejson/tree.css";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Image from "next/image";
+import { FaCheck } from "react-icons/fa";
 
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 import SingleObj from "./dynauii/SIngleObj";
 import { Toast } from "primereact/toast";
-import Image from "next/image";
 
 export default function Builder({
   keys,
@@ -104,18 +108,15 @@ export default function Builder({
         result.shift();
         result = result.join(".");
         const updatedselectedJs = _.get(copiedObject, result);
-        console.log(updatedselectedJs, "checkType");
         setSelectedjson(updatedselectedJs);
       }
 
-      console.log(copiedObject, "copiedObject");
       setDupJson(copiedObject);
       updatedNodeConfig(js);
       setPath(null);
     })();
   };
   const addFunction = (key, option, value, path) => {
-    console.log(key, option, value, path, "add");
     let js = json;
     _.update(js, path, function (n) {
       if (Array.isArray(n)) {
@@ -153,27 +154,21 @@ export default function Builder({
       }
       return n;
     });
-    console.log(js, "js");
     settJson(js);
   };
-  console.log(selectedjson, "Selsctedjson");
   const functionality = (func, path, value = null) => {
     let result;
-    console.log(func, path, value, "func");
     result = path.split(".");
     result.shift();
     result = result.join(".");
-    console.log(result, "result");
 
     setPath(result);
     if (func == "add") {
-      console.log(value, "vae");
       if (value) {
         addFunction(value.key, value.options, value.value, result);
       }
     }
     if (func == "edit") {
-      console.log(value, "vae");
       if (value) {
         let path = _.toPath(result);
         let nestedObj = json;
@@ -185,22 +180,18 @@ export default function Builder({
 
         delete nestedObj[path[path.length - 1]];
 
-        console.log(json, "json123");
         settJson(json);
       }
     }
     if (func == "update") {
       if (value) {
         const js = json;
-        console.log(value, "result");
 
         _.update(js, result, (n) => {
           if (Array.isArray(n)) {
-            console.log(n, "nArray");
             n.splice(value.key, 1, value.value);
             return n;
           }
-          console.log(n, "nObject");
           n[value.key] = value.value;
           return n;
         });
@@ -210,7 +201,6 @@ export default function Builder({
     if (func == "delete") {
       let js = json;
       let path = _.toPath(result);
-      console.log(path, "path123");
       for (let i = 0; i < path.length - 1; i++) {
         js = js[path[i]];
       }
@@ -255,22 +245,14 @@ export default function Builder({
       }
     }
 
-    // console.log(table.Entities[3].methods[4].conditionparams)
   }
   const onDropdownChange = (e) => {
-    console.log(e.value);
     setSelectedOption(e.value);
   };
   const updjs = (e) => {
-    console.log(e);
   };
   const getSelectedJson = (js, parentType, key) => {
-    console.log("🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ key:", key);
-    console.log(
-      "🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ parentType:",
-      parentType
-    );
-    console.log(js, "sdd");
+    
     setParentType(parentType);
     setTitle(key);
     setSelectedjson(js);
@@ -285,7 +267,6 @@ export default function Builder({
     title,
     single = null
   ) => {
-    console.log(totalco, "cycleop");
     if (single) {
       return (
         <div>
@@ -358,13 +339,11 @@ export default function Builder({
         });
       }
       setTotalColors(totalColor);
-      console.log(totalColors, "totalColors");
     }
   }, [colorPolicy]);
 
   useEffect(() => {
     let totalOption = [];
-    console.log(controlPolicy, "controlPolicy");
     if (Object.keys(controlPolicy).length == 0) {
       return setTotalOptions([]);
     } else {
@@ -386,7 +365,6 @@ export default function Builder({
 
   useEffect(() => {
     setJson(defaultJSOn);
-    console.log(json, "effectjson");
   }, [defaultJSOn]);
 
   useEffect(() => {
@@ -420,9 +398,15 @@ export default function Builder({
                       class="circle"
                       style={{ backgroundColor: `${totalColors[0]?.color}` }}
                     >
-                      <i
-                        class={`fa-solid fa-number fa-${totalOptions[0]?.L}`}
-                      ></i>
+                      <span
+                        style={{
+                          color: "white",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {totalOptions[0]?.L}
+                      </span>
                     </div>
 
                     <Image
@@ -439,9 +423,7 @@ export default function Builder({
                     ref={iRef}
                     style={{
                       display:
-                        isAdmin?.canAdd || isAdmin?.canDelete
-                          ? "inline"
-                          : "none",
+                        isAdmin?.canAdd || isAdmin?.canDelete ? "flex" : "none",
                     }}
                     onClick={(e) => {
                       if (contextMenu) {
@@ -449,7 +431,7 @@ export default function Builder({
                       } else setContextMenu(true);
                     }}
                   >
-                    <BsThreeDotsVertical />
+                    <HiDotsVertical />
                   </span>
 
                   {contextMenu &&
@@ -463,7 +445,7 @@ export default function Builder({
                           onClick={() => {
                             setFunc("add");
                           }}
-                          className="first-add-btn"
+                         
                         >
                           <span
                             onClick={(e) => {
@@ -472,22 +454,24 @@ export default function Builder({
                               } else setFunc("add");
                             }}
                           >
-                            <i class="fa-solid fa-plus first-add-btn-img"></i>
+                            <IoMdAdd  className="first-add-btn" size={25} />
                           </span>
                         </span>
 
                         <span
                           style={{
-                            display: isAdmin?.canDelete ? "inline" : "none",
+                            display: isAdmin?.canDelete ? "flex" : "none",
                           }}
                           htmlFor=""
                           onClick={() => {
                             setJson({});
                             setSelectedjson(null);
                           }}
-                          className="first-add-btn trash-color"
                         >
-                          <i class="fa-solid fa-trash first-add-btn-img"></i>
+                          <RiDeleteBin6Line
+                            className="first-add-btn trash-color"
+                            size={25}
+                          />
                         </span>
                       </div>
                     )}
@@ -534,6 +518,11 @@ export default function Builder({
                         selected && (
                           <div className="check-btn">
                             <span
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
                               onClick={() => {
                                 settJson({
                                   ...json,
@@ -548,16 +537,20 @@ export default function Builder({
                                 setSelected(null);
                               }}
                             >
-                              <i class="fa-solid fa-check"></i>
+                              <FaCheck color="white" />
                             </span>
                           </div>
                         )}
                       <div className="check-btn close-btn">
-                        <span onClick={() => setFunc(null)}>
-                          <i
-                            class="fa-solid fa-xmark"
-                            style={{ color: "white" }}
-                          ></i>
+                        <span
+                          onClick={() => setFunc(null)}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IoCloseSharp color="white" size={18} />
                         </span>
                       </div>
                     </div>
@@ -600,7 +593,7 @@ export default function Builder({
                   setCollapse(!collapse);
                 }}
               >
-                <i class="fa-solid fa-arrows-left-right-to-line caret-down"></i>
+                  <MdOutlineExpand />
               </span>
             </div>
             {Object.keys(json).length && (

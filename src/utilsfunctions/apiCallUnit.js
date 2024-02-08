@@ -1,161 +1,6 @@
 "use server"
 import redis from "@/lib/redis";
-
-const {
-  tenant_details,
-  roles,
-  app_pfd_path,
-  read_only,
-  developer,
-  admin,
-  user_type,
-  save_options,
-  workflow_controlpolicy,
-  config_controlpolicy,
-  workflow_colorpolicy,
-  config_colorpolicy,
-} = require('./environment');
-
-const BASE_URL = "http://localhost:3001";
-export const initialCall = async (
-  application,
-  version,
-  processFlow,
-  tenant,
- 
-) => {
-  try {
-    return await fetch(
-      `${BASE_URL}/?applicationName=${application}&version=${version}&processFlow=${processFlow}&tenant=${tenant}`,
-      {
-        method: "GET",
-      }
-    ).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-export const getApplicationName = async (tenant) => {
-  try {
-    return await fetch(
-      `${BASE_URL}/applicationName?tenant=${tenant}`,
-      {
-        method: "GET",
-      }
-    ).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-export const deleteApplication = async (
-  applicationName,
-  tenant,
- 
-) => {
-  try {
-    return await fetch(
-      `${BASE_URL}/deleteApplication?applicationName=${applicationName}&tenant=${tenant}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-export const initailApiCall = async (tenant) => {
-  try {
-    return Promise.all([
-      fetch(`${BASE_URL}/applicationName?tenant=${tenant}`, {
-        method: "GET",
-      }).then((res) => res.json()),
-      fetch(`${BASE_URL}/applicationDetails`, {
-        method: "GET",
-      }).then((res) => res.json()),
-    ]).then((res) => res);
-    // return await fetch(`${BASE_URL}/applicationName`, {
-    //   method: "GET",
-    // }).then((res) => res.json());
-  } catch (error) {
-    console.log(error, "ERROR");
-    throw error;
-  }
-};
- 
-export const getRoleDetails = async (roleId) => {
-  try {
-    return await fetch(`${BASE_URL}/userRole?roleId=${roleId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-export const getTenantDetails = async () => {
-  try {
-    return await fetch(`${BASE_URL}/tenantDetails`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-export const syncFileSystem = async (tenant) => {
-  try {
-    return await fetch(`${BASE_URL}/sync?tenant=${tenant}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-  } catch (error) {
-    throw error;
-  }
-};
- 
-// export const getControlPolicy = async (nodeType) => {
-//   try {
-//     return await fetch(`${BASE_URL}/controlpolicy?nodeType=${nodeType}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }).then((res) => res.json());
-//   } catch (error) {
-//     throw error;
-//   }
-// }
- 
- 
-// export const getColorPolicy = async (nodeType) => {
-//   try{
-//     return await fetch(`${BASE_URL}/colorpolicy?nodeType=${nodeType}`,{
-//       method:"GET",
-//       headers:{
-//         "Content-Type":"application/json",
-//       },
-//     }).then((res) => res.json());
- 
-//   }
-//   catch(error){
-//     throw error;
-//   }
-// }
-
+const fs = require('fs');
 
 export async function readReddis(tenant) {
   return await redis.call('JSON.GET', tenant);
@@ -182,12 +27,44 @@ export async function createRedisFiles(obj, currentPath = '', interator) {
           let arr = newPath.split(':');
           arr.shift();
           const kes = arr.join(':');
-          console.log(kes, 'key');
           await redis.call('JSON.SET', kes, '$', JSON.stringify(obj[key]));
         }
       }
     }
   }
+}
+
+export async function getPathsAndCreateFolders(obj, currentPath = '', interator) {
+  let paths = [];
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newPath = `${currentPath}/${key}`;
+      paths.push(newPath);
+
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (interator <= 4) {
+          if (interator === 1 && fs.existsSync(`./${newPath}`)) {
+            await fs.rmSync(`./${newPath}`, {
+              recursive: true,
+              force: true,
+            });
+          }
+          fs.mkdirSync(`./${newPath}`);
+          paths = paths.concat(
+            await getPathsAndCreateFolders(
+              obj[key],
+              newPath,
+              interator + 1,
+            ),
+          );
+        } else {
+          fs.writeFileSync(`./${newPath}.json`, JSON.stringify(obj[key]));
+        }
+      }
+    }
+  }
+  return paths;
 }
 
 export async function newCreatePrcessFlow(edges, node) {
@@ -517,7 +394,6 @@ export const saveaWorkFlow  = async (
     if (type === 'create') {
       const res = await readReddis(tenant);
 
-      console.log(res , 'response');
       const applications = await JSON.parse(res);
 
       if (
@@ -528,9 +404,7 @@ export const saveaWorkFlow  = async (
         typeof applications === 'object' 
         // && Object.keys(applications[tenant][appGroup][app]).length
       ) {
-        console.log('inside');
         const application = { ...applications };
-        console.log('version --->', applications[tenant]);
 
         if (
           application[tenant].hasOwnProperty(
@@ -581,11 +455,7 @@ export const saveaWorkFlow  = async (
               },
             };
           }
-          console.log(
-            'application exists-->',
-            JSON.stringify(application),
-            tenant,
-          );
+         
           await writeReddis(tenant, application);
           const versions = Object.keys(
             application[tenant][req.applicationName][
@@ -617,11 +487,7 @@ export const saveaWorkFlow  = async (
               },
             },
           };
-          console.log(
-            'application exists-->',
-            JSON.stringify(application),
-            tenant,
-          );
+          
           await writeReddis(tenant, application);
 
           const versions = Object.keys(
@@ -642,14 +508,7 @@ export const saveaWorkFlow  = async (
       } else {
         const res = await readReddis(tenant);
         let application = { ...(await JSON.parse(res)) };
-        console.log('workflow', workFlows, processflowapi);
-        console.log(
-          application,
-          'outside',
-          tenant,
-          req.applicationName,
-          req.processFlow,
-        );
+        
         let appl = JSON.parse(JSON.stringify(application));
         const version = `v1`;
         if (!appl.hasOwnProperty(tenant)) {
@@ -684,7 +543,6 @@ export const saveaWorkFlow  = async (
           },
         };
 
-        console.log('application created-->', appl, tenant);
         await writeReddis(tenant, appl);
         const versions = Object.keys(
           appl[tenant][req.applicationName][req.processFlow],
@@ -702,7 +560,6 @@ export const saveaWorkFlow  = async (
     } else if (type === 'update') {
       const res = await readReddis(tenant);
       const applications = await JSON.parse(res);
-      console.log('redis-->', JSON.stringify(applications), tenant);
       const application = { ...applications };
 
       applications[tenant][req.applicationName][
@@ -724,11 +581,7 @@ export const saveaWorkFlow  = async (
           ...req.configuration,
         },
       };
-      console.log(
-        'application exists-->',
-        JSON.stringify(application),
-        tenant,
-      );
+     
       await writeReddis(tenant, application);
 
       const appw = JSON.parse(JSON.stringify(application));
@@ -747,6 +600,37 @@ export const saveaWorkFlow  = async (
 export const versionController = async(tenant , app ='App1' , af = 'Artifacts1')  => {
   const res = await readReddis(tenant);
   const applications = await JSON.parse(res);
-  const versions = Object.keys(applications[tenant][app][af]);
+  let versions=[]
+  if(applications && applications.hasOwnProperty(tenant) && applications[tenant].hasOwnProperty(app) && applications[tenant][app].hasOwnProperty(af)) {
+     versions = Object.keys(applications[tenant][app][af]);
+  }
   return versions;  
+}
+
+
+//version server
+export const versionServer = async(DF , app, af , version)  => {
+  const res = await readReddis(DF);
+  const applications = await JSON.parse(res);
+  const obj = applications[DF][app][af][version];
+  let result = obj.processFlow;
+  let config ={};
+  Object.keys(obj).forEach((key)=>{
+    if(key !== 'processFlow' || key !== 'processFlowSummary') {
+      config[key] = obj[key];
+    }else{
+      return true;
+    }
+  })
+  return {result , config};
+}
+
+//file Syncer
+export const fileSyncer = async(DF)  => {
+  const res = await readReddis(DF);
+  const applications = await JSON.parse(res);
+  if (applications && Object.keys(applications).length) {
+    let keys = await getPathsAndCreateFolders(applications, '', 1);
+    return applications;
+  }
 }

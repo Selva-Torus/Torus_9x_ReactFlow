@@ -2,7 +2,14 @@ import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import Dyn from "./dyn";
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Image from "next/image";
+import { FaCheck } from "react-icons/fa";
 
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 import InputTxt from "./InputTxt";
 
 import AddElements from "./AddElemnts";
@@ -10,7 +17,6 @@ import AddElements from "./AddElemnts";
 import object from "../assets/dynicons/curly-brackets.png";
 import arrow from "../assets/dynicons/arrow.png";
 import "../../treejson/tree.css";
-import Image from "next/image";
 
 export default function DynObj({
   title,
@@ -49,7 +55,6 @@ export default function DynObj({
     if (json) {
       setObj(json);
       setOptions(totalOptions[depth]?.options);
-      console.log(parentType, "objcolors");
       return () => {
         setFunc(null);
       };
@@ -115,7 +120,7 @@ export default function DynObj({
                           } else setContextMenu(true);
                         }}
                       >
-                        <i class="fa-solid fa-ellipsis caret-down"></i>
+                       <HiDotsVertical />
                       </span>
                     )}
                   </div>
@@ -131,7 +136,7 @@ export default function DynObj({
                           e.preventDefault();
                         }}
                       >
-                        <i class="fa-solid fa-plus first-add-btn-img"> </i>
+                        <IoMdAdd className="first-add-btn-img" />
                       </span>
 
                       <span
@@ -142,7 +147,7 @@ export default function DynObj({
                         className="first-add-btn trash-color"
                         onClick={() => functionality("delete", json.path)}
                       >
-                        <i class="fa-solid fa-trash first-add-btn-img"></i>
+                        <RiDeleteBin6Line className="first-add-btn-img" />
                       </span>
                     </div>
                   )}

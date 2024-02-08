@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import { Checkbox } from "primereact/checkbox";
-
+import { IoMdAdd } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 import { Ripple } from "primereact/ripple";
 import { Button } from "primereact/button";
+import Image from "next/image";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
+import { FaCheck } from "react-icons/fa";
 
+import { FiEdit } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 import AddSingleElement from "./AddSingleElement";
 
-
 import check from "../assets/dynicons/checked.png";
-
 
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import "../../treejson/tree.css";
 import { Dialog } from "primereact/dialog";
-import Image from "next/image";
 
 const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
   const [json, setJson] = useState({});
@@ -33,7 +38,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
 
   const handlekey = (e) => {
     setKeyvalue(e.target.value);
-    console.log(keyvalue, "key");
   };
 
   useEffect(() => {
@@ -51,7 +55,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
 
   const handleselectkey = (e) => {
     setSelectedkey(e);
-    console.log(selectedkey, "skk");
   };
 
   const handleselectvalue = (e) => {
@@ -70,7 +73,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
     updateSinglejs(js);
   };
   const handlearray = (e, element, index) => {
-    console.log(e.target.value, element, index, "arrayedit");
     let js = json;
     js[element].splice(index, 1, e.target.value);
     setJson(js);
@@ -92,7 +94,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
       ...json,
       [element]: json[element].filter((_, i) => i !== index),
     };
-    console.log(js);
     setJson(js);
     updateSinglejs(js);
   };
@@ -118,7 +119,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
   };
 
   const handledelete = (key) => {
-    console.log("delete", key);
     let deljs = { ...json };
     delete deljs[key];
     setJson(deljs);
@@ -194,8 +194,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
         >
           <div className="summary-title" style={{ padding: "10px" }}>
             <div className="heading-primary form-title">
-          
-
               {json.hasOwnProperty("isHeader") &&
                 json["isHeader"].toUpperCase()}
             </div>
@@ -206,7 +204,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
               className="first-add-btn postion-class"
               onClick={handlesidebar}
             >
-              <i class="fa-solid fa-plus first-add-btn-img"> </i>
+              <IoMdAdd size={15} />
             </span>
           </div>
           <div className="scrollbar">
@@ -254,22 +252,22 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                               className="save-btns"
                               onClick={() => handleEditkey(element)}
                             >
-                              <i class="fa-solid fa-check model-check-btn-size"></i>
+                           <FaCheck color="white" />
                             </span>
                           </div>
                         ) : (
                           <>
-                            <span className="label-names">
+                            <span
+                              className="label-names"
+                              style={{
+                                display: isAdmin?.canAdd ? "inline" : "none",
+                              }}
+                              onClick={() => {
+                                handleselectkey(element);
+                              }}
+                            >
                               {element}:
-                              <i
-                                style={{
-                                  display: isAdmin?.canAdd ? "inline" : "none",
-                                }}
-                                class="fa-regular fa-pen-to-square first-add-btn-img"
-                                onClick={() => {
-                                  handleselectkey(element);
-                                }}
-                              ></i>
+                              <FaEdit size={15} />
                             </span>
                           </>
                         )}
@@ -309,7 +307,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                   handledelete(element);
                                 }}
                               >
-                                <i class="fa-solid fa-trash first-add-btn-delete"></i>
+                                <MdDelete size={15} />
                               </span>
                             </>
                           )}
@@ -343,22 +341,22 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                               className="save-btns"
                               onClick={() => handleEditkey(element)}
                             >
-                              <i class="fa-solid fa-check model-check-btn-size"></i>
+                              <FaCheck class="fa-solid fa-check model-check-btn-size"></FaCheck>
                             </span>
                           </div>
                         ) : (
                           <>
-                            <span className="label-names">
+                            <span
+                              className="label-names"
+                              style={{
+                                display: isAdmin?.canAdd ? "inline" : "none",
+                              }}
+                              onClick={() => {
+                                handleselectkey(element);
+                              }}
+                            >
                               {element}:
-                              <i
-                                style={{
-                                  display: isAdmin?.canAdd ? "inline" : "none",
-                                }}
-                                class="fa-regular fa-pen-to-square first-add-btn-img"
-                                onClick={() => {
-                                  handleselectkey(element);
-                                }}
-                              ></i>
+                              <IoMdAdd size={15} />
                             </span>
                           </>
                         )}
@@ -383,7 +381,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                   handledelete(element);
                                 }}
                               >
-                                <i class="fa-solid fa-trash first-add-btn-delete"></i>
+                                <MdDelete size={15} />
                               </span>
                             </span>
                           </span>
@@ -418,7 +416,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                               className="save-btns"
                               onClick={() => handleEditkey(element)}
                             >
-                              <i class="fa-solid fa-check model-check-btn-size"></i>
+                              <FaCheck class="model-check-btn-size"></FaCheck>
                             </span>
                           </div>
                         ) : (
@@ -433,7 +431,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                   handleselectkey(element);
                                 }}
                               >
-                                <i class="fa-regular fa-pen-to-square first-add-btn-img"></i>
+                                <IoMdAdd size={15} />
                               </span>
                             </span>
                           </>
@@ -466,7 +464,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                     handledelete(element);
                                   }}
                                 >
-                                  <i class="fa-solid fa-trash first-add-btn-delete"></i>
+                                  <MdDelete size={15} />
                                 </span>
                               </div>
                             </span>
@@ -498,7 +496,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                   }}
                                   className="second-add-btn"
                                 >
-                                  <i class="fa-solid fa-plus second-add-btn-img"></i>
+                                  <IoMdAdd size={15} />
                                 </span>
                               )}
                             </span>
@@ -551,18 +549,17 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                           className="inputs"
                                         />
                                       </td>
-                                      <td>
-                                        <i
-                                          style={{
-                                            display: isAdmin?.canDelete
-                                              ? "inline"
-                                              : "none",
-                                          }}
-                                          class="fa-solid fa-trash first-add-btn-delete"
-                                          onClick={() => {
-                                            handlearraydelete(element, index);
-                                          }}
-                                        ></i>
+                                      <td
+                                        style={{
+                                          display: isAdmin?.canDelete
+                                            ? "inline"
+                                            : "none",
+                                        }}
+                                        onClick={() => {
+                                          handlearraydelete(element, index);
+                                        }}
+                                      >
+                                        <MdDelete size={15} />
                                       </td>
                                     </tr>
                                   </tbody>
@@ -614,19 +611,19 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                 </div>
                               ) : (
                                 <>
-                                  <span className="label-names">
+                                  <span
+                                    className="label-names"
+                                    style={{
+                                      display: isAdmin?.canAdd
+                                        ? "inline"
+                                        : "none",
+                                    }}
+                                    onClick={() => {
+                                      handleselectkey(ele);
+                                    }}
+                                  >
                                     {ele}:
-                                    <i
-                                      style={{
-                                        display: isAdmin?.canAdd
-                                          ? "inline"
-                                          : "none",
-                                      }}
-                                      class="fa-regular fa-pen-to-square first-add-btn-img"
-                                      onClick={() => {
-                                        handleselectkey(ele);
-                                      }}
-                                    ></i>
+                                    <IoMdAdd size={15} />
                                   </span>
                                 </>
                               )}
@@ -672,7 +669,7 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
                                         handledeletejson(element, ele);
                                       }}
                                     >
-                                      <i class="fa-solid fa-trash first-add-btn-delete"></i>
+                                      <MdDelete size={15} />
                                     </span>
                                   </>
                                 )}
