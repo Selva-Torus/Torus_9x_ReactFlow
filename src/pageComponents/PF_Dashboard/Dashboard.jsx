@@ -62,6 +62,7 @@ const edgeTypes = {
   floatEdge: FloatingEdge,
 };
 const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
+  const [uniqueNames, setUniqueNames] = useState([]);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const reactFlowWrapper = useRef(null);
@@ -366,13 +367,13 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         position,
         parentId: [],
         data: {
-          label: `${name}`,
+          label: nodeDetails=="startNode" || nodeDetails=="endNode"?name:"",
 
           nodeColor: rolesColor,
           role: roles,
         },
         property: {
-          name: `${name}`,
+          name: "",
           description: "",
           nodeType: nodeDetails,
         },
@@ -462,7 +463,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
     processFlow = applicationDetails?.artifacts ?? "Artifacts1"
   ) => {
     try {
-      if (nodes.length && edges.length) {
+      if (nodes.length && edges.length && uniqueNames.length == nodes.length) {
         let checkNode = nodes.findIndex((ele) => ele.type == "startNode");
         let checkendnode = nodes.findIndex((ele) => ele.type == "endNode");
         if (checkNode !== -1 && checkendnode !== -1) {
@@ -519,14 +520,28 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           );
         }
       } else {
-        showError("Create Workflow");
+        showError(
+          "Please add nodes and edges also provide names for all nodes"
+        );
       }
     } catch (error) {
       showError(error.message);
       console.error(error.message);
     }
   };
-
+  useEffect(() => {
+    if (nodes.length > 0) {
+      let uniqueName = [];
+      for (let i = 0; i < nodes.length; i++) {
+        if (
+          !uniqueName.includes(nodes[i].property.name.toLowerCase()) &&
+          nodes[i]?.property?.name !== ""
+        )
+          uniqueName.push(nodes[i].property.name.toLowerCase());
+      }
+      setUniqueNames(uniqueName);
+    }
+  }, [nodes]);
   const updatedNodeConfig = (config) => {
     setNodeConfig({ ...nodeConfig, ...config });
   };
@@ -628,6 +643,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         controlPolicyApi={controlPolicyApi}
         onEdgeUpdateStart={onEdgeUpdateStart}
         onEdgeUpdateEnd={onEdgeUpdateEnd}
+        uniqueNames={uniqueNames}
       />
       <Dialog
         visible={isUserDetailsDialog}
