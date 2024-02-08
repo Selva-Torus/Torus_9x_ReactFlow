@@ -55,7 +55,6 @@ export default function DynObj({
     if (json) {
       setObj(json);
       setOptions(totalOptions[depth]?.options);
-      console.log(parentType, "objcolors");
       return () => {
         setFunc(null);
       };

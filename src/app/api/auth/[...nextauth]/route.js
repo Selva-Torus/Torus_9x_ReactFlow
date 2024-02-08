@@ -54,7 +54,6 @@ const authOptions = {
     }),
     GithubProviders({
       profile(profile) {
-        console.log("Your GitHub profile : ", profile);
         const jwtToken = sign(
           { email: profile.email },
           process.env.JWT_SECRET,
@@ -62,7 +61,6 @@ const authOptions = {
             expiresIn: "3m",
           }
         );
-        console.log("My jwt token for github is : ", jwtToken);
         let userRole = "GitHub User";
         if (profile?.email == "amrishs@torus.tech") {
           userRole = "admin";
@@ -79,7 +77,6 @@ const authOptions = {
     }),
     GoogleProviders({
       profile(profile) {
-        // console.log("Your Google profile : ", profile);
         const jwtToken = sign(
           { email: profile.email },
           process.env.JWT_SECRET,
@@ -87,7 +84,6 @@ const authOptions = {
             expiresIn: "3m",
           }
         );
-        console.log("My jwt token for google is : ", jwtToken);
         let userRole = "Google User";
         user = {
           ...profile,

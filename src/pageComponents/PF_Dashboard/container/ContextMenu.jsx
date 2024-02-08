@@ -96,13 +96,11 @@ export default function ContextMenu({
 
   const getConfig = (jsons) => {
     setJson(jsons);
-    console.log(jsons, "jsons");
   };
   useEffect(() => {
     (async () => {
       if (!node) return;
       const result = controlPolicyApi(node.type);
-      console.log(result, "result");
       setControlPolicy(result);
     })();
     return () => {
