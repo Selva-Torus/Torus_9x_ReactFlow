@@ -38,7 +38,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
 
   const handlekey = (e) => {
     setKeyvalue(e.target.value);
-    console.log(keyvalue, "key");
   };
 
   useEffect(() => {
@@ -56,7 +55,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
 
   const handleselectkey = (e) => {
     setSelectedkey(e);
-    console.log(selectedkey, "skk");
   };
 
   const handleselectvalue = (e) => {
@@ -75,7 +73,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
     updateSinglejs(js);
   };
   const handlearray = (e, element, index) => {
-    console.log(e.target.value, element, index, "arrayedit");
     let js = json;
     js[element].splice(index, 1, e.target.value);
     setJson(js);
@@ -97,7 +94,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
       ...json,
       [element]: json[element].filter((_, i) => i !== index),
     };
-    console.log(js);
     setJson(js);
     updateSinglejs(js);
   };
@@ -123,7 +119,6 @@ const SingleObj = ({ singlejson, options, updateSinglejs, isAdmin }) => {
   };
 
   const handledelete = (key) => {
-    console.log("delete", key);
     let deljs = { ...json };
     delete deljs[key];
     setJson(deljs);

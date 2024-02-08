@@ -96,13 +96,11 @@ export default function ContextMenu({
 
   const getConfig = (jsons) => {
     setJson(jsons);
-    console.log(jsons, "jsons");
   };
   useEffect(() => {
     (async () => {
       if (!node) return;
       const result = controlPolicyApi(node.type);
-      console.log(result, "result");
       setControlPolicy(result);
     })();
     return () => {
@@ -120,9 +118,9 @@ export default function ContextMenu({
         setNewJson(nodeConfig[`workflow.${node.id}`]);
         setToggle(!toggle);
       } else if (
-        nodeConfig.hasOwnProperty(`${node.id}.${node.property.name}.WF`)
+        nodeConfig.hasOwnProperty(`${node.property.name}.WF`)
       ) {
-        setNewJson(nodeConfig[`${node.id}.${node.property.name}.WF`]);
+        setNewJson(nodeConfig[`${node.property.name}.WF`]);
         setToggle(!toggle);
       } else {
         setToggle(!toggle);
@@ -135,9 +133,9 @@ export default function ContextMenu({
         setJson(nodeConfig[`config.${node.id}`]);
         setVisible(!visible);
       } else if (
-        nodeConfig.hasOwnProperty(`${node.id}.${node.property.name}.config`)
+        nodeConfig.hasOwnProperty(`${node.property.name}.config`)
       ) {
-        setJson(nodeConfig[`${node.id}.${node.property.name}.config`]);
+        setJson(nodeConfig[`${node.property.name}.config`]);
         setVisible(!visible);
       } else {
         setVisible(!visible);
