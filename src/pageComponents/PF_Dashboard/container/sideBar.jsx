@@ -2,6 +2,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Sidebar } from "primereact/sidebar";
+import { useState } from "react";
 
 const SideBar = ({
   toogle,
@@ -10,7 +11,26 @@ const SideBar = ({
   changeProperty,
   userRoleDetails,
   selectedRole,
+  uniqueNames
+  
 }) => {
+  const [err, setErr] = useState(false);
+  const handleNames = (e, key) => {
+    if (key === "name") {
+      if (uniqueNames.includes(e.target.value.toLowerCase())) {
+        if (
+          e.target.value.toLowerCase() ==
+          sideBarData.property.name.toLowerCase()
+        ) {
+          return;
+        }
+        setErr(true);
+      } else {
+        setErr(false);
+        changeProperty({ [key]: e.target.value });
+      }
+    } else changeProperty({ [key]: e.target.value });
+  };
   return (
     <>
       <Sidebar
@@ -71,7 +91,7 @@ const SideBar = ({
                       </label>
                     </div>
                   );
-                } else if ( key !== "role") {
+                } else if (key !== "role") {
                   return (
                     <div
                       style={{
@@ -86,13 +106,33 @@ const SideBar = ({
                         {key}
                       </label>
                       {key !== "description" ? (
-                        <InputText
-                          defaultValue={sideBarData.property[key]}
-                          onChange={(e) =>
-                            changeProperty({ [key]: e.target.value })
-                          }
-                          style={{ marginLeft: "10px" }}
-                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            flexDirection: "column",
+                            width: "68%",
+                          }}
+                        >
+                          <InputText
+                            defaultValue={sideBarData.property[key]}
+                            onChange={(e) => handleNames(e, key)}
+                            style={{ marginLeft: "10px" }}
+                            className={err && key === "name" ? "p-invalid" : ""}
+                            aria-describedby="username-help"
+                          />
+                          <small
+                            id="username-help"
+                            className="p-error"
+                            style={{
+                              marginLeft: "10px",
+                              visibility:
+                                err && key === "name" ? "visible" : "hidden",
+                            }}
+                          >
+                            Node name already exists
+                          </small>
+                        </div>
                       ) : (
                         <InputTextarea
                           defaultValue={sideBarData.property[key]}
@@ -103,7 +143,6 @@ const SideBar = ({
                           cols={30}
                         />
                       )}
-
                     </div>
                   );
                 }
