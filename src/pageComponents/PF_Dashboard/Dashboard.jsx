@@ -373,7 +373,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
           role: roles,
         },
         property: {
-          name: "",
+          name: nodeDetails=="startNode" || nodeDetails=="endNode"?name:"",
           description: "",
           nodeType: nodeDetails,
         },
@@ -644,6 +644,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         onEdgeUpdateStart={onEdgeUpdateStart}
         onEdgeUpdateEnd={onEdgeUpdateEnd}
         uniqueNames={uniqueNames}
+        applicationDetails={applicationDetails}
       />
       <Dialog
         visible={isUserDetailsDialog}
