@@ -3,7 +3,7 @@ import { useCallback, useContext, useState } from "react";
 import kafka from "../../img/kafka-icon.svg";
 import { DarkmodeContext } from "../../context/DarkmodeContext";
 
-
+import 'primeflex/primeflex.css';
 
 export function ApiNode({ data, isConnectable }) {
   const  {darkmode , toggleDarkmode} = useContext(DarkmodeContext);

@@ -101,6 +101,8 @@ details[open] {
       justify-content: center;
 }
 .expand-btns {
+      display: flex;
+      justify-content: end;
       text-align: end;
 }
 .fa-arrows-left-right-to-line {

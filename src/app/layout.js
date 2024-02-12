@@ -3,12 +3,12 @@ import "./globals.css";
 import Head from "next/head";
 import SessionProvider from "../utilsfunctions/sessionProvider";
 
-import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'; 
-import 'primereact/resources/themes/lara-light-indigo/theme.css'; 
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
-
+import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
+import Provider from "../utilsfunctions/Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -29,7 +29,9 @@ export default function RootLayout({ children }) {
         />
       </Head> */}
       <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+        <Provider>
+          <SessionProvider>{children}</SessionProvider>
+        </Provider>
       </body>
     </html>
   );
