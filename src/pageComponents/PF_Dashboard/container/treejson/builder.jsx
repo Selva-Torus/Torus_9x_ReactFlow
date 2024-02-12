@@ -12,7 +12,7 @@ import Side from "./dynauii/Side";
 import _ from "lodash";
 import curly from "./assets/dynicons/curly-brackets.png";
 import arrow from "./assets/dynicons/arrow.png";
-import "../treejson/tree.css";
+import "./tree.css";
 import { IoMdAdd } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
