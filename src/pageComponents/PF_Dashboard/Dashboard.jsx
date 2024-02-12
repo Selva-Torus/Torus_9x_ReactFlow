@@ -11,7 +11,7 @@ import "reactflow/dist/style.css";
 import ReactFlowDia from "./container/reactflowDia";
 import dagre from "dagre";
 import FloatingEdge from "./container/customEdge/FloatEdge";
-
+import 'primeflex/primeflex.css';
 import {
   StartNode,
   EndNode,

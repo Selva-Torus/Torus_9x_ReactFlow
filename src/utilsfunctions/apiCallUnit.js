@@ -569,9 +569,9 @@ export const saveaWorkFlow  = async (
           req.processFlow
         ],
         [version]: {
-          ...applications[tenant][req.applicationName][
-            req.processFlow
-          ][version],
+          // ...applications[tenant][req.applicationName][
+          //   req.processFlow
+          // ][version],
           processFlow: {
             ...workFlows,
             ProcessFlow: [...processflowapi],
