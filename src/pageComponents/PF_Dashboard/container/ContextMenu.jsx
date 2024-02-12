@@ -3,7 +3,7 @@ import { useReactFlow } from "reactflow";
 import editSVG from "../img/edit.png";
 import deleteSVG from "../img/delete.png";
 import settingPNG from "../img/settings.png";
-
+import _ from "lodash";
 import { Dialog } from "primereact/dialog";
 
 // import Editor, { useMonaco, Monaco } from "@monaco-editor/react";
@@ -46,6 +46,8 @@ export default function ContextMenu({
   const [controlPolicy, setControlPolicy] = useState(null);
   const editorRef = useRef(null);
   const monaRef = useRef(null);
+  const [intialNewJson, setIntialNewJson] = useState({});
+  const [intialJson, setIntialJson] = useState({});
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
     monaRef.current = monaco;
@@ -59,19 +61,19 @@ export default function ContextMenu({
   //   provideCompletionItems: function (model, position) {
   //     // Extract the last token
   //     var lastToken = tokens[tokens.length - 1];
-  
+
   //     // Check if the last token is an identifier
   //     if (lastToken && lastToken.length > 0 && lastToken[0].type === 'identifier.js') {
   //       // Provide autocomplete suggestions based on a predefined list of keywords
   //       var completions = [
   //         'if', 'else', 'while', 'function', 'var', 'const', 'let', 'console', 'log', // Add more keywords
   //       ];
-  
+
   //       // Filter completions based on the current token
   //       var filteredCompletions = completions.filter(function (completion) {
   //         return completion.startsWith(lastToken[0].value);
   //       });
-  
+
   //       // Transform filtered completions into Monaco completion items
   //       var completionItems = filteredCompletions.map(function (completion) {
   //         return {
@@ -81,10 +83,10 @@ export default function ContextMenu({
   //           range: new monaRef.current.Range(position.lineNumber, lastToken[0].offset + 1, position.lineNumber, position.column),
   //         };
   //       });
-  
+
   //       return completionItems;
   //     }
-  
+
   //     // Return an empty array if no completions are found
   //     return [];
   //   }
@@ -96,13 +98,11 @@ export default function ContextMenu({
 
   const getConfig = (jsons) => {
     setJson(jsons);
-    console.log(jsons, "jsons");
   };
   useEffect(() => {
     (async () => {
       if (!node) return;
       const result = controlPolicyApi(node.type);
-      console.log(result, "result");
       setControlPolicy(result);
     })();
     return () => {
@@ -114,35 +114,53 @@ export default function ContextMenu({
     setvsdialog(true);
   };
 
+  const handleValidation = (data, type) => {
+    if (type === "WF") {
+      if (!_.isEqual(data, intialNewJson)) {
+        updatedNodeConfig(
+          { [`workflow.${node?.id}`]: { ...data } },
+          "workflow"
+        );
+      }
+    }
+    if (type === "CP") {
+      if (!_.isEqual(data, intialJson)) {
+        updatedNodeConfig({ [`config.${node?.id}`]: { ...data } }, "config");
+      }
+    }
+  };
+
   const handleDropDown = (controlpolicy, flowType) => {
     if (flowType === "WF") {
       if (nodeConfig.hasOwnProperty(`workflow.${node.id}`)) {
         setNewJson(nodeConfig[`workflow.${node.id}`]);
+        setIntialNewJson(nodeConfig[`workflow.${node.id}`]);
         setToggle(!toggle);
-      } else if (
-        nodeConfig.hasOwnProperty(`${node.property.name}.WF`)
-      ) {
+      } else if (nodeConfig.hasOwnProperty(`${node.property.name}.WF`)) {
         setNewJson(nodeConfig[`${node.property.name}.WF`]);
+        setIntialNewJson(nodeConfig[`${node.property.name}.WF`]);
         setToggle(!toggle);
       } else {
         setToggle(!toggle);
 
-        setNewJson(entity);
+        setNewJson({});
+        setIntialNewJson({});
       }
     }
     if (flowType === "CP") {
       if (nodeConfig.hasOwnProperty(`config.${node.id}`)) {
         setJson(nodeConfig[`config.${node.id}`]);
+        setIntialJson(nodeConfig[`config.${node.id}`]);
         setVisible(!visible);
-      } else if (
-        nodeConfig.hasOwnProperty(`${node.property.name}.config`)
-      ) {
+      } else if (nodeConfig.hasOwnProperty(`${node.property.name}.config`)) {
         setJson(nodeConfig[`${node.property.name}.config`]);
+        setIntialJson(nodeConfig[`${node.property.name}.config`]);
         setVisible(!visible);
       } else {
         setVisible(!visible);
 
         setJson({});
+        setIntialJson({});
       }
     }
     if (flowType === "CC") {
@@ -178,10 +196,11 @@ export default function ContextMenu({
                     onHide={() => {
                       setVisible(!visible);
                       setMenu(null);
-                      updatedNodeConfig(
-                        { [`config.${node?.id}`]: { ...json } },
-                        "config"
-                      );
+                      handleValidation(json, "CP");
+                      // updatedNodeConfig(
+                      //   { [`config.${node?.id}`]: { ...json } },
+                      //   "config"
+                      // );
                     }}
                     maximizable
                     header={`${node?.property.name}`}
@@ -206,7 +225,6 @@ export default function ContextMenu({
                   </Dialog>
                 )}
 
-
               {controlPolicy && (
                 <>
                   <Dialog
@@ -215,10 +233,11 @@ export default function ContextMenu({
                     onHide={() => {
                       setToggle(!toggle);
                       setMenu(null);
-                      updatedNodeConfig(
-                        { [`workflow.${node?.id}`]: { ...newJson } },
-                        "workflow"
-                      );
+                      handleValidation(newJson, "WF");
+                      // updatedNodeConfig(
+                      //   { [`workflow.${node?.id}`]: { ...newJson } },
+                      //   "workflow"
+                      // );
                     }}
                     maximizable
                     header={`${node?.property.name}`}
@@ -290,7 +309,6 @@ export default function ContextMenu({
                           WorkFlow
                         </button>
                       </div>
-              
 
                       <div
                         className="context-menu-button-div"

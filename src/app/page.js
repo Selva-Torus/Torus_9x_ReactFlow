@@ -8,7 +8,8 @@ import Dashboard from "../pageComponents/PF_Dashboard/Dashboard";
 import TopBar from "../pageComponents/TopNav/TopNavBar";
 import { DarkmodeProvider } from "../pageComponents/PF_Dashboard/context/DarkmodeContext";
 import { options } from "../utilsfunctions/getterJsOptions";
-import MenuDetailsComponent from "../pageComponents/PF_Dashboard/layout/PF_nodeMenu";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const { data: session, status } = useSession({
@@ -18,14 +19,9 @@ export default function Home() {
       signIn();
     },
   });
-  // console.log(session, status);
   const [state, setState] = useState("");
-
-  console.log(state);
-
   const [getterJS, getJS] = useState(options);
   const [setterJS, setJS] = useState({});
-
 
   if (status == "authenticated" && session) {
     const token = session?.user?.token;
@@ -35,39 +31,40 @@ export default function Home() {
   }
 
   return (
-    <main>  
+    <main>
       {status !== "loading" && (
         <>
-        <DarkmodeProvider>
-          <TopBar state={state} />
-          <div className="flex">
-            <SideNavAccordian state={state} setState={setState} />
+          <DarkmodeProvider>
+            <TopBar state={state} />
+            <div className="flex">
+              <SideNavAccordian state={state} setState={setState} />
 
-            {state == "Process" ? (
-              <div className="ml-[60px]  w-[90vw]">
-                <Dashboard
-                  admin={{ canAdd: true, canDelete: true, canEdit: true }}
-                  roleObbj={[
-                    { role: "supervisor", color: "#aebbff" },
-                    { role: "admin", color: "#92b2ff" },
-                    { role: "testing", color: "#8ad3ff" },
-                  ]}
-                  getJS={getterJS}
-                  setJS={setJS}
-                />
-              </div>
-            ) : state ? (
-              <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
-                <div>You are @ {state}</div>
-              </div>
-            ) : (
-              <div className="flex justify-center items-center w-full">
-                <div>Select something</div>
-              </div>
-            )}
-          </div>
-          <Footer />
+              {state == "Process" ? (
+                <div className="ml-[60px]  w-[90vw]">
+                  <Dashboard
+                    admin={{ canAdd: true, canDelete: true, canEdit: true }}
+                    roleObbj={[
+                      { role: "supervisor", color: "#aebbff" },
+                      { role: "admin", color: "#92b2ff" },
+                      { role: "testing", color: "#8ad3ff" },
+                    ]}
+                    getJS={getterJS}
+                    setJS={setJS}
+                  />
+                </div>
+              ) : state ? (
+                <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
+                  <div>You are @ {state}</div>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center w-full">
+                  <div>Select something</div>
+                </div>
+              )}
+            </div>
+            <Footer />
           </DarkmodeProvider>
+          <ToastContainer />
         </>
       )}
     </main>

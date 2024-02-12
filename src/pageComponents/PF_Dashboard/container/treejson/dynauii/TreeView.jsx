@@ -437,7 +437,6 @@ const TreeView = ({
 
   useEffect(() => {
     setJsondata(json);
-    console.log(json, "json");
     setOptions(totalOptions[depth]?.options);
   }, [json]);
   return <>{jsondata && renderTree(jsondata)}</>;

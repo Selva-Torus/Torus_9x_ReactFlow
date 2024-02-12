@@ -56,7 +56,6 @@ export default function Dyn({
     setOptions(totalOptions[depth]?.options);
     setCurrentJson(data);
 
-    console.log(totalColors, "data");
   }, [data, totalOptions, depth, totalColors]);
   return (
     <>

@@ -1,13 +1,21 @@
 import { Button, Input } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const PF_AppDetail = ({
   setIsUserDetailsDialog,
   setApplicationDetails,
   applicationDetails,
 }) => {
+  const appName = useSelector((state) => state.counter.appName);
+
   const [error, setError] = useState("");
   const handleClick = () => {
+    setApplicationDetails((prev) => ({
+      ...prev,
+      application: appName,
+    }));
+
     if (
       applicationDetails?.application == "" ||
       applicationDetails?.artifacts == "" ||
@@ -15,7 +23,6 @@ const PF_AppDetail = ({
     ) {
       setError("Please Enter Application Details ");
     } else {
-
       console.log(applicationDetails);
 
       setIsUserDetailsDialog(false);
@@ -33,7 +40,8 @@ const PF_AppDetail = ({
     <div className="flex flex-col gap-2 items-center">
       <Input
         className="w-full border-none outline-none p-4"
-        onChange={handleChange}
+        // onChange={handleChange}
+        value={appName}
         name="application"
         type="text"
         placeholder="Enter Application name"

@@ -9,6 +9,7 @@ import { GrDocumentConfig } from "react-icons/gr";
 // import api from "@/dashboard/assets/sidebarImg/api.png";
 // import decisionTree from "@/dashboard/assets/sidebarImg/decision-tree.png";
 // import end from "@/dashboard/assets/sidebarImg/end.png";
+import { toast } from "react-toastify";
 import {
   Accordion,
   AccordionContent,
@@ -18,7 +19,8 @@ import {
 import Image from "next/image";
 import MenuDetailsComponent from "../PF_Dashboard/layout/PF_nodeMenu";
 
-
+import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const Icons = [
   {
@@ -66,7 +68,7 @@ const Icons = [
   {
     id: 3,
     icon: IoDocumentsOutline,
-    title: "Application",
+    title: "User",
     data: [
       {
         id: 31,
@@ -147,6 +149,14 @@ const Icons = [
 ];
 
 export default function SideNavAccordian({ state, setState }) {
+  const [sideNavBar, setSideNavBar] = useState(Icons.slice(0, 3));
+  const appName = useSelector((state) => state.counter.appName);
+  const isTorusControl = useSelector((state) => state.counter.isTorusControl);
+
+  React.useEffect(() => {
+    isTorusControl && setSideNavBar(Icons);
+  }, [isTorusControl]);
+
   const onDragStart = (
     event,
     nodeType,
@@ -161,15 +171,24 @@ export default function SideNavAccordian({ state, setState }) {
     event.dataTransfer.effectAllowed = "move";
   };
 
+  const handlechange = (e) => {
+    if (appName) {
+      setState(e);
+    } else {
+      toast.error("Please select appName");
+    }
+    // console.log(e);
+  };
+
   return (
     <Accordion
       value={state}
-      onValueChange={setState}
+      onValueChange={handlechange}
       type="single"
       collapsible
       className="h-[88vh] w-[70px] bg-gray-200 flex flex-col justify-evenly "
     >
-      {Icons.map((item) => (
+      {sideNavBar.map((item) => (
         <AccordionItem value={item.title} className="w-[70px]" key={item.id}>
           <AccordionTrigger className="hover:no-underline">
             <div className="flex flex-col items-center w-[70px] ">
