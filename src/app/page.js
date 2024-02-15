@@ -10,6 +10,8 @@ import { DarkmodeProvider } from "../pageComponents/PF_Dashboard/context/Darkmod
 import { options } from "../utilsfunctions/getterJsOptions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Index from "@/pageComponents/TorusNodeResource/Index";
+import NodeHeader from "@/pageComponents/NodeHeader/nodeheader";
 
 export default function Home() {
   const { data: session, status } = useSession({
@@ -22,6 +24,8 @@ export default function Home() {
   const [state, setState] = useState("");
   const [getterJS, getJS] = useState(options);
   const [setterJS, setJS] = useState({});
+  const [haksd, setHaksd] = useState({});
+  const [json, setJson] = useState({ nodes: [], nodeConfig: {} });
 
   if (status == "authenticated" && session) {
     const token = session?.user?.token;
@@ -51,6 +55,11 @@ export default function Home() {
                     getJS={getterJS}
                     setJS={setJS}
                   />
+                </div>
+              ) : state == "Documents" ? (
+                <div className="ml-[60px]  w-[90vw]">
+                  <NodeHeader haksd={haksd} setJson={setJson}/>
+                  <Index sendDataToParent={setHaksd} getDataFromParent={json} />
                 </div>
               ) : state ? (
                 <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">

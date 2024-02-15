@@ -7,7 +7,7 @@ export async function readReddis(tenant) {
 }
 
 export async function writeReddis(key, json) {
-  await redis.call('JSON.SET', key, '$', JSON.stringify(json));
+  return await redis.call('JSON.SET', key, '$', JSON.stringify(json));
 }
 
 export async function createRedisFiles(obj, currentPath = '', interator) {
