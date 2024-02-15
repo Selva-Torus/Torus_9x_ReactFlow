@@ -47,7 +47,7 @@ const ModuleDetails = ({
     return (
       <div className="flex  align-items-center justify-content-between" >
         <div>{option.application}</div>
-        <img
+        <Image
           alt={option}
           src={deleteIcon}
           style={{ width: "18px" }}

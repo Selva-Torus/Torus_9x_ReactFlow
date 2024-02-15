@@ -1,0 +1,30 @@
+.custom-node {
+    /* border: 1px solid rgba(0, 0, 0, 0.50); */
+    border-radius: 15px;
+    /* box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25); */
+    height: 70px;
+    width: 70px;
+    /* backdrop-filter: blur(15px); */
+    /* padding: 5px 10px 5px 10px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transition: transform 0.3s;
+  }
+  
+  .custom-node:hover {
+    transform: scale(1.05);
+  }
+  
+  .custom-node:active {
+    transform: scale(.5);
+  }
+  .custom-node-handle {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .custom-node:hover .custom-node-handle {
+    opacity: 1;
+  }

@@ -1,0 +1,97 @@
+.context-menu {
+    background: rgb(255, 255, 255);
+    border: 1px solid #adb5bd;
+  
+    height: 170px;
+    width: 170px;
+    padding: 5px;
+    gap: 5px;
+    border-radius: 10px;
+    color: #495057;
+    box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%);
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-bottom: solid #adb5bd;
+    transition: 0.6s ease-in-out;
+  }
+  
+  /* .context-menu:hover{
+  
+    transition: height 230px 2s;
+  } */
+  input:user-invalid{
+    border-color: red;
+  }
+  .context-menu-header {
+    border-bottom: solid #adb5bd;
+  }
+  
+  .context-menu-header p {
+    margin: 1em;
+  }
+  
+  .context-menu-div {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 5px;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .context-menu-button-div {
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background: white;
+    animation: fadeIn 0.8s;
+  }
+  /* .context-menu-button-div:hover{
+    background-color: rgb(203, 205, 207);
+    
+  } */
+  .context-menu-button-div-div {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .context-menu-button-div-div:hover {
+    background-color: rgb(203, 205, 207);
+    transition: 0.3s ease-in-out;
+  
+    border-radius: 10px;
+  }
+  
+  .context-menu-button-div img {
+    height: 1.5em;
+    width: 1.5em;
+    margin: auto;
+  }
+  
+  .context-menu-button-div button {
+    border: none;
+    text-align: left;
+    width: 80%;
+    background: white;
+    color: #495057;
+  }
+  
+  .context-menu-button-div button:hover {
+    background-color: transparent;
+    color: black;
+    font-weight: 300;
+    transition: 0.3s ease-in-out;
+  }
