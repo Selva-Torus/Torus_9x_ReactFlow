@@ -10,10 +10,14 @@ import { Dialog } from "primereact/dialog";
 
 import Builder from "./treejson/builder.jsx";
 
-import { getControlPolicy } from "../../../utilsfunctions/apiCallUnit.js";
+import {
+  getControlPolicy,
+  readReddis,
+} from "../../../utilsfunctions/apiCallUnit.js";
 import entity from "../../../utilsfunctions/entity.json";
 import vs from "../img/vs.png";
 import Image from "next/image.js";
+import { useSelector } from "react-redux";
 
 export default function ContextMenu({
   sideT,
@@ -48,6 +52,8 @@ export default function ContextMenu({
   const monaRef = useRef(null);
   const [intialNewJson, setIntialNewJson] = useState({});
   const [intialJson, setIntialJson] = useState({});
+  const appName = useSelector((state) => state.counter.appName);
+
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
     monaRef.current = monaco;
@@ -142,7 +148,21 @@ export default function ContextMenu({
         setToggle(!toggle);
       } else {
         setToggle(!toggle);
-
+        readReddis(appName + ":defaultJson").then((res) => {
+          if (res) {
+            const nodeConfig = JSON.parse(res).nodeConfig;
+            if (Object.keys(nodeConfig).includes(node.type + ".workflow")) {
+              setNewJson(nodeConfig[node.type + ".workflow"]);
+              setIntialNewJson(nodeConfig[node.type + ".workflow"]);
+            } else {
+              setNewJson({});
+              setIntialNewJson({});
+            }
+          } else {
+            setNewJson({});
+            setIntialNewJson({});
+          }
+        });
         setNewJson({});
         setIntialNewJson({});
       }
