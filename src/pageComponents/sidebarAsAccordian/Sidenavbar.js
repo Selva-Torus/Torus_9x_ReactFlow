@@ -26,7 +26,7 @@ const Icons = [
   {
     id: 1,
     icon: CgComponents,
-    title: "Data",
+    title: "DF",
     data: [
       {
         id: 21,
@@ -45,7 +45,7 @@ const Icons = [
   {
     id: 2,
     icon: FcStart,
-    title: "Process",
+    title: "PF",
     data: [
       // {
       //   id: 21,
@@ -68,7 +68,7 @@ const Icons = [
   {
     id: 3,
     icon: IoDocumentsOutline,
-    title: "User",
+    title: "UF",
     data: [
       {
         id: 31,
@@ -95,7 +95,7 @@ const Icons = [
   {
     id: 4,
     icon: MdOutlineDocumentScanner,
-    title: "Documents",
+    title: "TRN",
     data: [
       {
         id: 41,
@@ -197,7 +197,7 @@ export default function SideNavAccordian({ state, setState }) {
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
-            {state === "Process" || state === "Documents" ? (
+            {state === "PF" || state === "TRN" ? (
               <MenuDetailsComponent />
             ) : (
               item.data.map((subContent) => (
