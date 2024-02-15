@@ -196,7 +196,7 @@ export default function Index({ sendDataToParent, getDataFromParent }) {
   return (
     <div
       className="TNR-main"
-      style={{ height: "100%", width: "100%", backgroundColor: "black" }}
+      style={{ height: "90%", width: "100%", backgroundColor: "black" }}
     >
       <Toast ref={toast} />
       <ReactFlow

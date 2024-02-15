@@ -197,7 +197,7 @@ export default function SideNavAccordian({ state, setState }) {
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
-            {state === "Process" || "Documents" ? (
+            {state === "Process" || state === "Documents" ? (
               <MenuDetailsComponent />
             ) : (
               item.data.map((subContent) => (
