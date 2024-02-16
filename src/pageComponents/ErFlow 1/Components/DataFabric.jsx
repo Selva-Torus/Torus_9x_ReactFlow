@@ -102,19 +102,15 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
     []
   );
   useEffect(() => {
-    if (getDataFromParent) {
-      setEdges(getDataFromParent.edges);
-      setNodes(getDataFromParent.nodes);
+    setEdges(getDataFromParent.edges);
+    setNodes(getDataFromParent.nodes);
 
-      const result = RelationshipFlow(
-        getDataFromParent.edges,
-        getDataFromParent.nodes
-      );
-      setRelationShipData(result);
-    }
+    const result = RelationshipFlow(
+      getDataFromParent.edges,
+      getDataFromParent.nodes
+    );
+    setRelationShipData(result);
   }, [getDataFromParent]);
-
-
 
   useEffect(() => {
     if (nodes.length) {
@@ -132,8 +128,6 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
       });
     }
   }, [relationShipData]);
-
-
 
   //Edge Update Function
   const onEdgeUpdateStart = useCallback(() => {
@@ -499,7 +493,6 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
 
         {/* Navbar */}
 
-
         {/* ReactFlow Component */}
         <div
           style={{
@@ -507,7 +500,7 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            position : 'relative'
+            position: "relative",
           }}
         >
           <Sidebar />

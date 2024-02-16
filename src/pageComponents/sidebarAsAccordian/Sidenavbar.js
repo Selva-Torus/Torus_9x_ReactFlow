@@ -173,7 +173,7 @@ export default function SideNavAccordian({ state, setState }) {
   };
 
   const handlechange = (e) => {
-    if (appName) {
+    if (appName || isTorusControl) {
       setState(e);
     } else {
       toast.error("Please select appName");

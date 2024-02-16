@@ -58,6 +58,7 @@ export default function DynObj({
     if (JSON.stringify(json) !== JSON.stringify(obj)) {
       setObj(json);
     }
+    setExpanded(collapse);
     setOptions(totalOptions[depth]?.options);
     return () => {
       setFunc(null);
@@ -70,7 +71,7 @@ export default function DynObj({
       {totalOptions.length > depth && (
         <div className="obj-container">
           <details
-            open={collapse}
+            open={expanded}
             className=" obj-box"
             onToggle={(e) => setExpanded(e.currentTarget.open)}
           >
@@ -167,7 +168,7 @@ export default function DynObj({
                 />
               )}
             </div>
-            {obj && (expanded || collapse) && (
+            {obj && (
               <>
                 <div style={{ marginBottom: "10px" }}>
                   {Object.keys(obj).map((key) => {
