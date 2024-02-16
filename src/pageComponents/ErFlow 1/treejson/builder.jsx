@@ -62,7 +62,7 @@ export default function Builder({
   const [title, setTitle] = useState(null);
   const [files, setFiles] = useState(null);
   const toast = useRef(null);
-  
+
   function checkForNull(jsonData) {
     if (typeof jsonData === "object" && jsonData !== null) {
       if (Array.isArray(jsonData)) {
@@ -127,6 +127,7 @@ export default function Builder({
       setJson(js);
 
       const copiedObject = JSON.parse(JSON.stringify(js));
+      // await objectToPaths(copiedObject);
 
       if (selectedjson !== null && selectedjsonPath !== null) {
         let result = selectedjsonPath.path;
@@ -157,7 +158,7 @@ export default function Builder({
         : {};
     let js = json;
     const upjs = _.set(js, path + "." + key, updateValue);
- 
+
     settJson(upjs);
   };
   console.log(selectedjson, "Selsctedjson");
@@ -169,7 +170,7 @@ export default function Builder({
       result.shift();
       result = result.join(".");
       console.log(result, "result");
- 
+
       setPath(result);
       if (func == "add") {
         console.log(value, "vae");
@@ -179,18 +180,16 @@ export default function Builder({
       }
       if (func == "edit") {
         let path = _.toPath(result);
-        let lastKey = path[path.length - 1];
-        console.log(lastKey, "lastKey");
-        path.pop();
+
         let jsr = json;
         console.log(path.join("."), "pathsss");
- 
+
         if (path.length > 0) {
           let js = _.get(jsr, path.join("."));
           let gs;
           Object.keys(js).map((key) => {
-            if (key == lastKey) {
-              gs = { ...gs, [value]: js[key] };
+            if (key == value.oldKey) {
+              gs = { ...gs, [value.newKey]: js[key] };
             } else {
               gs = { ...gs, [key]: js[key] };
             }
@@ -200,8 +199,8 @@ export default function Builder({
         } else {
           let gss;
           Object.keys(jsr).map((key) => {
-            if (key == lastKey) {
-              gss = { ...gss, [value]: jsr[key] };
+            if (key == value.oldKey) {
+              gss = { ...gss, [value.newKey]: jsr[key] };
             } else {
               gss = { ...gss, [key]: jsr[key] };
             }
@@ -213,14 +212,14 @@ export default function Builder({
         if (value) {
           const js = json;
           console.log(value, "result");
- 
+
           _.update(js, result, (n) => {
             // if (Array.isArray(n)) {
             //   console.log(n, "nArray");
             //   n.splice(value.key, 1, value.value);
             //   return n;
             // }
- 
+
             n = value.value;
             console.log("n", typeof n);
             return n;
@@ -242,32 +241,23 @@ export default function Builder({
         } else if (typeof js === "object") {
           delete js[lastKey];
         }
- 
+
         settJson(json);
       }
     } else {
-      console.log("func", func, "path", path, "value", value);
       let js = json;
       if (func == "add") {
-        let updateValue =
-          value.options === "string" || value.options === "number"
-            ? value.value
-            : value.options === "array"
-            ? []
-            : value.options === "boolean"
-            ? false
-            : {};
         js = {
           ...js,
-          [value.key]: updateValue,
+          [value.key]: value.value,
         };
         settJson(js);
       }
       if (func == "edit") {
         let gs;
         Object.keys(js).map((key) => {
-          if (key == value) {
-            gs = { ...gs, [value]: js[key] };
+          if (key == value.oldKey) {
+            gs = { ...gs, [value.newKey]: js[key] };
           } else {
             gs = { ...gs, [key]: js[key] };
           }
@@ -329,6 +319,11 @@ export default function Builder({
     console.log(e);
   };
   const getSelectedJson = (js, parentType, key) => {
+    console.log("🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ key:", key);
+    console.log(
+      "🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ parentType:",
+      parentType
+    );
     console.log(js, "sdd");
     setParentType(parentType);
     setTitle(key);
@@ -344,6 +339,7 @@ export default function Builder({
     title,
     single = null
   ) => {
+    console.log(totalco, "cycleop");
     if (single) {
       return (
         <div>
@@ -357,7 +353,7 @@ export default function Builder({
             totalOptions={totalOp}
             totalColors={totalco}
             parentType={parentType}
-            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
+            path={selectedjsonPath !== null ? "." + title : ""}
           />
         </div>
       );
@@ -376,7 +372,7 @@ export default function Builder({
             settJson={settJson}
             totalColors={totalco}
             parentType={parentType}
-            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
+            path={selectedjsonPath ? selectedjsonPath.path : ""}
           />
         </div>
       );
@@ -390,7 +386,7 @@ export default function Builder({
             data={json}
             className="col"
             collapse={collapse}
-            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
+            path={selectedjsonPath ? selectedjsonPath.path : ""}
             functionality={functionality}
             depth={dp}
             totalOptions={totalOp}
@@ -406,9 +402,6 @@ export default function Builder({
       const error = checkForNull(JSON.parse(files));
       if (!error) {
         setJson(JSON.parse(files));
-        setDupJson(JSON.parse(files));
-        setSelectedjson(null);
-        setSelectedjsonPath(null);
         updatedNodeConfig(JSON.parse(files));
       } else {
         showError("key should not be null or undefined");
@@ -682,7 +675,7 @@ export default function Builder({
           </div>
 
           <div className="panel-view">
-            <div className="expand-btns ">
+            <div className="expand-btns">
               <span
                 className="expand-btn"
                 onClick={() => {
@@ -715,8 +708,15 @@ export default function Builder({
                       parentType,
                       title
                     )}
-                  {!render &&
-                    cycleObj(dupJson, totalOptions, gDepth, totalColors)}
+                  {(totalOptions.length <= 2 || !render) &&
+                    cycleObj(
+                      dupJson,
+                      totalOptions,
+                      gDepth,
+                      totalColors,
+                      "",
+                      ""
+                    )}
                 </div>
               </div>
             )}

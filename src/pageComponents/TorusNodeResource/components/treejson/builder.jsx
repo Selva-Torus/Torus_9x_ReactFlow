@@ -37,7 +37,7 @@ export default function Builder({
 }) {
   const [gDepth, setGDepth] = useState(0);
   const op = useRef(null);
-  const [render, setRender] = useState(true);
+  const [render, setRender] = useState(false);
 
   const [totalOptions, setTotalOptions] = useState([]);
   const [options, setOptions] = useState([]);
