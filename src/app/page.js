@@ -43,7 +43,7 @@ export default function Home() {
             <div className="flex">
               <SideNavAccordian state={state} setState={setState} />
 
-              {state == "Process" ? (
+              {state == "PF" ? (
                 <div className="ml-[60px]  w-[90vw]">
                   <Dashboard
                     admin={{ canAdd: true, canDelete: true, canEdit: true }}
@@ -56,7 +56,7 @@ export default function Home() {
                     setJS={setJS}
                   />
                 </div>
-              ) : state == "Documents" ? (
+              ) : state == "TRN" ? (
                 <div className="ml-[60px]  w-[90vw]">
                   <NodeHeader haksd={haksd} setJson={setJson}/>
                   <Index sendDataToParent={setHaksd} getDataFromParent={json} />
