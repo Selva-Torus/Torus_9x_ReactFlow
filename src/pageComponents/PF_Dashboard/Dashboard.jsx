@@ -182,6 +182,34 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
 
   const changeNodeProperty = (values) => {
     const key = Object.keys(values);
+    if (key == "name") {
+      if (
+        Object.keys(nodeConfig).includes(`${nodeData.property.name}.config`) ||
+        Object.keys(nodeConfig).includes(`${nodeData.property.name}.WF`)
+      ) {
+        let nodeDatas = {};
+        Object.keys(nodeConfig).map((keys) => {
+          if (keys === `${nodeData.property.name}.config`) {
+            nodeDatas = {
+              ...nodeDatas,
+              [`${values["name"]}.config`]: nodeConfig[keys],
+            };
+          }
+ 
+          if (keys === `${nodeData.property.name}.WF`) {
+            nodeDatas = {
+              ...nodeDatas,
+              [`${values["name"]}.WF`]: nodeConfig[keys],
+            };
+          }
+          nodeDatas = {
+            ...nodeDatas,
+            [keys]: nodeConfig[keys],
+          };
+        });
+        setNodeConfig(nodeDatas);
+      }
+    }
     const nds = nodes.map((nodes) => {
       if (nodes.id === nodeData.id) {
         if (key[0] === "role") {

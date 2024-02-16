@@ -55,7 +55,7 @@ export default function Home() {
               <SideNavAccordian state={state} setState={setState} />
 
               {state == "PF" ? (
-                <div className="ml-[60px]  w-[90vw]">
+                <div className="ml-[50px]  w-[90vw]">
                   <Dashboard
                     admin={{ canAdd: true, canDelete: true, canEdit: true }}
                     roleObbj={[
@@ -68,7 +68,7 @@ export default function Home() {
                   />
                 </div>
               ) : state == "TRN" ? (
-                <div className="ml-[60px]  w-[90vw]">
+                <div className="ml-[50px]  w-[90vw]">
                   <NodeHeader haksd={haksd} setJson={setJson} />
                   <Index sendDataToParent={setHaksd} getDataFromParent={json} />
                 </div>
@@ -78,7 +78,7 @@ export default function Home() {
                   <DataFabric getDataFromParent ={getDataFromParent} postDataToParent={setPostedData} />
                 </div>
               ) : state ? (
-                <div className="ml-[60px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
+                <div className="ml-[50px] h-[89vh] w-[90vw] bg-gray-400 flex justify-center items-center">
                   <div>You are @ {state}</div>
                 </div>
               ) : (

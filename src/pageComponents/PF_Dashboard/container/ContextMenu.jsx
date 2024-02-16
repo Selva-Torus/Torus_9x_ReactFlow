@@ -236,11 +236,11 @@ console.log(fabrics);
                     onHide={() => {
                       setVisible(!visible);
                       setMenu(null);
-                      handleValidation(json, "CP");
-                      // updatedNodeConfig(
-                      //   { [`config.${node?.id}`]: { ...json } },
-                      //   "config"
-                      // );
+                      // handleValidation(json, "CP");
+                      updatedNodeConfig(
+                        { [`config.${node?.id}`]: { ...json } },
+                        "config"
+                      );
                     }}
                     maximizable
                     header={`${node?.property.name}`}
@@ -273,11 +273,11 @@ console.log(fabrics);
                     onHide={() => {
                       setToggle(!toggle);
                       setMenu(null);
-                      handleValidation(newJson, "WF");
-                      // updatedNodeConfig(
-                      //   { [`workflow.${node?.id}`]: { ...newJson } },
-                      //   "workflow"
-                      // );
+                      // handleValidation(newJson, "WF");
+                      updatedNodeConfig(
+                        { [`workflow.${node?.id}`]: { ...newJson } },
+                        "workflow"
+                      );
                     }}
                     maximizable
                     header={`${node?.property.name}`}
