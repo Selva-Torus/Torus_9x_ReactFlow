@@ -168,7 +168,7 @@ export default function DynObj({
                 />
               )}
             </div>
-            {obj && (expanded || collapse) && (
+            {obj &&  (
               <>
                 <div style={{ marginBottom: "10px" }}>
                   {Object.keys(obj).map((key) => {

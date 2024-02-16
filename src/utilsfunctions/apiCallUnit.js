@@ -634,3 +634,29 @@ export const fileSyncer = async(DF)  => {
     return applications;
   }
 }
+
+export const SaveDefaultConfigVersion = async(key , value) => {
+  const fabrics = await readReddis(key);
+  if(!fabrics){
+    const res = await writeReddis(key, {v1 : value});
+    return res;
+  }else{
+   const version =`v${Object.keys(JSON.parse(fabrics)).length + 1}`;
+   const res = await writeReddis(key , {...JSON.parse(fabrics) , [version] : value});
+   return res;
+  }
+}
+
+export const fetchDefaultConfigVersion = async(key , version) => {
+  
+}
+
+export const versionServerDefaultConfig = async(key) => {
+  try{
+    const fabrics = await readReddis(key);
+    return Object.keys(JSON.parse(fabrics));
+  }catch(err){
+    return [];
+  }
+  
+}

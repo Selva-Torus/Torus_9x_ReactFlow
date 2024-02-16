@@ -5,6 +5,8 @@ interface ConterState {
   appName: string;
   artfactName: string;
   isTorusControl: boolean;
+  fabrics:string;
+  TRSVersion: string;
 }
 
 const initialState: ConterState = {
@@ -12,6 +14,8 @@ const initialState: ConterState = {
   appName: "",
   artfactName: "",
   isTorusControl: false,
+  fabrics:"",
+  TRSVersion: "",
 };
 
 const counterSlice = createSlice({
@@ -30,10 +34,16 @@ const counterSlice = createSlice({
     setTorusControl: (state, action: PayloadAction<boolean>) => {
       state.isTorusControl = action.payload;
     },
+    selectFabrics: (state, action: PayloadAction<string>) => {
+      state.fabrics = action.payload;
+    },
+    setTRSVersion : (state, action: PayloadAction<string>) => {
+      state.TRSVersion = action.payload;
+    }
   },
 });
 
-export const { getServer, selectApp, selectArtifact, setTorusControl } =
+export const { getServer, selectApp, selectFabrics , selectArtifact, setTorusControl , setTRSVersion } =
   counterSlice.actions;
 
 export default counterSlice.reducer;
