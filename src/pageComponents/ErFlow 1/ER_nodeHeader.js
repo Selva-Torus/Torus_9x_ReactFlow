@@ -1,4 +1,4 @@
-import { saveERDiagram, serverDataForERD, updateDiagram, versionServerERD } from "@/utilsfunctions/apiCallUnit";
+import { saveERDiagram, serveDataForERD, updateDiagram, versionServerERD } from "@/utilsfunctions/apiCallUnit";
 import { Dropdown } from "primereact/dropdown";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,9 +8,10 @@ const NodeHeaderER = ({ setDataFromParent, postedData }) => {
   const [versions , setVersions] = useState([]);
   const [version , setVersion] = useState('');
   const appName = useSelector((state) => state.counter.appName);
+  const artifacts = useSelector((state) => state.counter.ER_Artifacts);
   const [refetch , setRefetch] = useState(false);
   const fetchVersions = async() => {
-   const res = await versionServerERD("DF" , appName);
+   const res = await versionServerERD("DF" , appName , artifacts);
    if(res){
     setVersions(res);
    }else{
@@ -19,7 +20,7 @@ const NodeHeaderER = ({ setDataFromParent, postedData }) => {
   }
 
   const fetchData = async() => {
-    const res = await serverDataForERD("DF" , appName , version);
+    const res = await serveDataForERD("DF" , appName , artifacts ,  version);
     if(res){
       setDataFromParent(res);
     }else{
@@ -32,7 +33,7 @@ const NodeHeaderER = ({ setDataFromParent, postedData }) => {
     if(version && version !== ''){
       fetchData();
     }
-  },[version , refetch , appName])
+  },[version , refetch , appName , artifacts])
   
 
   const handleVersionChange = (e) => {
@@ -40,7 +41,7 @@ const NodeHeaderER = ({ setDataFromParent, postedData }) => {
   }
   
   const handleSave = async () => {
-    const res = await saveERDiagram("DF" , appName , JSON.stringify(postedData));
+    const res = await saveERDiagram("DF" , appName , artifacts , JSON.stringify(postedData));
     if(res){
       setRefetch((prev)=> !prev);
       toast.success('new version saved');
@@ -50,7 +51,7 @@ const NodeHeaderER = ({ setDataFromParent, postedData }) => {
   }
 
   const handleUpdate = async () => {
-    const res = await updateDiagram("DF" , appName ,version , JSON.stringify(postedData))
+    const res = await updateDiagram("DF" , appName , artifacts ,version , JSON.stringify(postedData))
     if(res){
       setRefetch((prev)=> !prev);
       toast.success('version updated');

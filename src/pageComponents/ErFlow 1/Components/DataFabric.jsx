@@ -46,6 +46,8 @@ import { CustomTableNode } from "./DynamicNodes.jsx";
 import { Toast } from "primereact/toast";
 
 import ResizeRotateNode from "./ResizeRotateNode";
+import { Dialog } from "primereact/dialog";
+import DF_AppDetail from "../DF_AppDetail";
 
 //BASIC URLS
 const WORKFLOW_API_URL = "http://localhost:4000/Workflow";
@@ -78,6 +80,7 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
   const [nodeConfig, setnodeConfig] = useState({});
   const [uniqueNames, setUniqueNames] = useState([]);
   const [reactFlowInstance, setreactflowinstance] = useState(null);
+  const [isUserDetailsDialog, setIsUserDetailsDialog] = useState(true);
   const toast = useRef(null);
   console.log(relationShipData, "relationShipData");
 
@@ -547,6 +550,20 @@ export default function DataFabric({ getDataFromParent, postDataToParent }) {
             </ReactFlow>
           </ReactFlowProvider>
         </div>
+        <Dialog
+        visible={isUserDetailsDialog}
+        style={{ width: "40vw" }}
+        onHide={() => {
+          setIsUserDetailsDialog(!isUserDetailsDialog);
+        }}
+        header="Application Details"
+        headerStyle={{ textAlign: "center" }}
+        closable={false}
+      >
+        <DF_AppDetail
+          setIsUserDetailsDialog={setIsUserDetailsDialog}
+        />
+      </Dialog>
       </div>
     </uniQueNameContext.Provider>
   );
