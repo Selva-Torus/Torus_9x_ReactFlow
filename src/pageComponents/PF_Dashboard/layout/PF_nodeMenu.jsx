@@ -143,7 +143,7 @@ roles
             )}
           </span>
 
-          <div style={{ marginTop: "20px" }}>
+          {/* <div style={{ marginTop: "20px" }}>
             <Tooltip title="GSS">
               <a href="https://www.gsstechgroup.com/">
                 <Image
@@ -156,7 +156,7 @@ roles
                 />
               </a>
             </Tooltip>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

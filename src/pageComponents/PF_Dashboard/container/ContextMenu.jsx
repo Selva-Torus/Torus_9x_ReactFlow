@@ -10,10 +10,14 @@ import { Dialog } from "primereact/dialog";
 
 import Builder from "./treejson/builder.jsx";
 
-import { getControlPolicy } from "../../../utilsfunctions/apiCallUnit.js";
+import {
+  getControlPolicy,
+  readReddis,
+} from "../../../utilsfunctions/apiCallUnit.js";
 import entity from "../../../utilsfunctions/entity.json";
 import vs from "../img/vs.png";
 import Image from "next/image.js";
+import { useSelector } from "react-redux";
 
 export default function ContextMenu({
   sideT,
@@ -48,6 +52,11 @@ export default function ContextMenu({
   const monaRef = useRef(null);
   const [intialNewJson, setIntialNewJson] = useState({});
   const [intialJson, setIntialJson] = useState({});
+  const appName = useSelector((state) => state.counter.appName);
+  const fabrics = useSelector((state) => state.counter.fabrics);
+  const TRSVersion = useSelector((state) => state.counter.TRSVersion);
+
+
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
     monaRef.current = monaco;
@@ -142,7 +151,22 @@ export default function ContextMenu({
         setToggle(!toggle);
       } else {
         setToggle(!toggle);
-
+        readReddis(fabrics + ":defaultJson").then((res) => {
+          console.log(res , 'new versioned json');
+          if (res) {
+            const nodeConfig = JSON.parse(res)[TRSVersion].nodeConfig;
+            if (Object.keys(nodeConfig).includes(node.type + ".workflow")) {
+              setNewJson(nodeConfig[node.type + ".workflow"]);
+              setIntialNewJson(nodeConfig[node.type + ".workflow"]);
+            } else {
+              setNewJson({});
+              setIntialNewJson({});
+            }
+          } else {
+            setNewJson({});
+            setIntialNewJson({});
+          }
+        });
         setNewJson({});
         setIntialNewJson({});
       }
@@ -158,6 +182,22 @@ export default function ContextMenu({
         setVisible(!visible);
       } else {
         setVisible(!visible);
+        readReddis(fabrics + ":defaultJson").then((res) => {
+          console.log(res , 'new versioned json');
+          if (res) {
+            const nodeConfig = JSON.parse(res)[TRSVersion].nodeConfig;
+            if (Object.keys(nodeConfig).includes(node.type + ".config")) {
+              setJson(nodeConfig[node.type + ".config"]);
+              setIntialJson(nodeConfig[node.type + ".config"]);
+            } else {
+              setJson({});
+              setIntialJson({});
+            }
+          } else {
+            setJson({});
+            setIntialJson({});
+          }
+        });
 
         setJson({});
         setIntialJson({});
@@ -179,7 +219,7 @@ export default function ContextMenu({
       }
     }
   };
-
+console.log(fabrics);
   return (
     <>
       {node && (
@@ -196,11 +236,11 @@ export default function ContextMenu({
                     onHide={() => {
                       setVisible(!visible);
                       setMenu(null);
-                      handleValidation(json, "CP");
-                      // updatedNodeConfig(
-                      //   { [`config.${node?.id}`]: { ...json } },
-                      //   "config"
-                      // );
+                      // handleValidation(json, "CP");
+                      updatedNodeConfig(
+                        { [`config.${node?.id}`]: { ...json } },
+                        "config"
+                      );
                     }}
                     maximizable
                     header={`${node?.property.name}`}
@@ -233,11 +273,11 @@ export default function ContextMenu({
                     onHide={() => {
                       setToggle(!toggle);
                       setMenu(null);
-                      handleValidation(newJson, "WF");
-                      // updatedNodeConfig(
-                      //   { [`workflow.${node?.id}`]: { ...newJson } },
-                      //   "workflow"
-                      // );
+                      // handleValidation(newJson, "WF");
+                      updatedNodeConfig(
+                        { [`workflow.${node?.id}`]: { ...newJson } },
+                        "workflow"
+                      );
                     }}
                     maximizable
                     header={`${node?.property.name}`}

@@ -12,17 +12,19 @@ import Side from "./dynauii/Side";
 import _ from "lodash";
 import curly from "./assets/dynicons/curly-brackets.png";
 import arrow from "./assets/dynicons/arrow.png";
-import "./tree.css";
+import "../treejson/tree.css";
 import { IoMdAdd } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Image from "next/image";
+
 import { FaCheck } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
 import SingleObj from "./dynauii/SIngleObj";
 import { Toast } from "primereact/toast";
+import { Upload } from "./dynauii/UploadJson";
 
 export default function Builder({
   keys,
@@ -58,8 +60,21 @@ export default function Builder({
   const iRef = useRef(null);
   const [parentType, setParentType] = useState(null);
   const [title, setTitle] = useState(null);
-
+  const [files, setFiles] = useState(null);
   const toast = useRef(null);
+  
+  function checkForNull(jsonData) {
+    if (typeof jsonData === "object" && jsonData !== null) {
+      if (Array.isArray(jsonData)) {
+        jsonData.forEach((item) => checkForNull(item));
+      } else {
+        Object.values(jsonData).forEach((value) => checkForNull(value));
+      }
+    } else if (jsonData === null || jsonData === undefined) {
+      return true;
+    }
+    return false;
+  }
 
   const showError = (type) => {
     toast.current.show({
@@ -95,124 +110,183 @@ export default function Builder({
     updatedNodeConfig(js);
   };
 
+  useEffect(() => {
+    console.log(
+      "🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ selectedjson:",
+      selectedjsonPath
+    );
+  }, [selectedjsonPath]);
+
+  console.log(
+    "🚀 ~ file: builder.jsx:261 ~ getSelectedJson ~ js:",
+    selectedjson
+  );
+
   const settJson = (js, value = null) => {
     (async function () {
       setJson(js);
 
       const copiedObject = JSON.parse(JSON.stringify(js));
-      await objectToPaths(copiedObject);
 
-      if (selectedjson) {
-        let result = selectedjsonPath.path.split(".");
+      if (selectedjson !== null && selectedjsonPath !== null) {
+        let result = selectedjsonPath.path;
 
+        result = result.split(".");
         result.shift();
         result = result.join(".");
         const updatedselectedJs = _.get(copiedObject, result);
+        console.log(updatedselectedJs, "checkType");
         setSelectedjson(updatedselectedJs);
       }
 
+      console.log(copiedObject, "copiedObject");
       setDupJson(copiedObject);
       updatedNodeConfig(js);
       setPath(null);
     })();
   };
   const addFunction = (key, option, value, path) => {
+    console.log(key, option, value, path, "add");
+    let updateValue =
+      option === "string" || option === "number"
+        ? value
+        : option === "array"
+        ? []
+        : option === "boolean"
+        ? false
+        : {};
     let js = json;
-    _.update(js, path, function (n) {
-      if (Array.isArray(n)) {
-        let updateValue =
-          option === "string" || option === "number"
-            ? value
-            : option === "array"
-            ? []
-            : option === "boolean"
-            ? false
-            : {};
-
-        let arr = [...n];
-        arr.push(updateValue);
-        n = arr;
-      } else {
-        if (typeof n == "object") {
-          let updateValue = {
-            key: key,
-            value:
-              option === "string" || option === "number"
-                ? value
-                : option === "array"
-                ? []
-                : option === "boolean"
-                ? false
-                : {},
-          };
-
-          n[updateValue.key] = updateValue.value;
-        } else {
-          let updateValue = value;
-          n[key] = updateValue;
-        }
-      }
-      return n;
-    });
-    settJson(js);
+    const upjs = _.set(js, path + "." + key, updateValue);
+ 
+    settJson(upjs);
   };
+  console.log(selectedjson, "Selsctedjson");
   const functionality = (func, path, value = null) => {
-    let result;
-    result = path.split(".");
-    result.shift();
-    result = result.join(".");
-
-    setPath(result);
-    if (func == "add") {
-      if (value) {
-        addFunction(value.key, value.options, value.value, result);
-      }
-    }
-    if (func == "edit") {
-      if (value) {
-        let path = _.toPath(result);
-        let nestedObj = json;
-        for (let i = 0; i < path.length - 1; i++) {
-          nestedObj = nestedObj[path[i]];
+    if (path !== "") {
+      let result;
+      console.log(func, path, value, "func");
+      result = path.split(".");
+      result.shift();
+      result = result.join(".");
+      console.log(result, "result");
+ 
+      setPath(result);
+      if (func == "add") {
+        console.log(value, "vae");
+        if (value) {
+          addFunction(value.key, value.options, value.value, result);
         }
-
-        nestedObj[value] = nestedObj[path[path.length - 1]];
-
-        delete nestedObj[path[path.length - 1]];
-
+      }
+      if (func == "edit") {
+        let path = _.toPath(result);
+        let lastKey = path[path.length - 1];
+        console.log(lastKey, "lastKey");
+        path.pop();
+        let jsr = json;
+        console.log(path.join("."), "pathsss");
+ 
+        if (path.length > 0) {
+          let js = _.get(jsr, path.join("."));
+          let gs;
+          Object.keys(js).map((key) => {
+            if (key == lastKey) {
+              gs = { ...gs, [value]: js[key] };
+            } else {
+              gs = { ...gs, [key]: js[key] };
+            }
+          });
+          _.set(jsr, path.join("."), gs);
+          settJson(jsr);
+        } else {
+          let gss;
+          Object.keys(jsr).map((key) => {
+            if (key == lastKey) {
+              gss = { ...gss, [value]: jsr[key] };
+            } else {
+              gss = { ...gss, [key]: jsr[key] };
+            }
+          });
+          settJson(gss);
+        }
+      }
+      if (func == "update") {
+        if (value) {
+          const js = json;
+          console.log(value, "result");
+ 
+          _.update(js, result, (n) => {
+            // if (Array.isArray(n)) {
+            //   console.log(n, "nArray");
+            //   n.splice(value.key, 1, value.value);
+            //   return n;
+            // }
+ 
+            n = value.value;
+            console.log("n", typeof n);
+            return n;
+          });
+          settJson(js);
+        }
+      }
+      if (func == "delete") {
+        let js = json;
+        let path = _.toPath(result);
+        console.log(path, "path123");
+        for (let i = 0; i < path.length - 1; i++) {
+          js = js[path[i]];
+        }
+        const indexToDelete = path[path.length - 1];
+        const lastKey = path[path.length - 1];
+        if (Array.isArray(js)) {
+          js.splice(indexToDelete, 1);
+        } else if (typeof js === "object") {
+          delete js[lastKey];
+        }
+ 
         settJson(json);
       }
-    }
-    if (func == "update") {
-      if (value) {
-        const js = json;
-
-        _.update(js, result, (n) => {
-          if (Array.isArray(n)) {
-            n.splice(value.key, 1, value.value);
-            return n;
+    } else {
+      console.log("func", func, "path", path, "value", value);
+      let js = json;
+      if (func == "add") {
+        let updateValue =
+          value.options === "string" || value.options === "number"
+            ? value.value
+            : value.options === "array"
+            ? []
+            : value.options === "boolean"
+            ? false
+            : {};
+        js = {
+          ...js,
+          [value.key]: updateValue,
+        };
+        settJson(js);
+      }
+      if (func == "edit") {
+        let gs;
+        Object.keys(js).map((key) => {
+          if (key == value) {
+            gs = { ...gs, [value]: js[key] };
+          } else {
+            gs = { ...gs, [key]: js[key] };
           }
-          n[value.key] = value.value;
-          return n;
+          settJson(gs);
+        });
+      }
+      if (func == "update") {
+        Object.keys(js).map((key) => {
+          if (key == value.key) {
+            return (js[key] = value.value);
+          }
+          return js[key];
         });
         settJson(js);
       }
-    }
-    if (func == "delete") {
-      let js = json;
-      let path = _.toPath(result);
-      for (let i = 0; i < path.length - 1; i++) {
-        js = js[path[i]];
+      if (func == "delete") {
+        js = {};
+        settJson(js);
       }
-      const indexToDelete = path[path.length - 1];
-      const lastKey = path[path.length - 1];
-      if (Array.isArray(js)) {
-        js.splice(indexToDelete, 1);
-      } else if (typeof js === "object") {
-        delete js[lastKey];
-      }
-
-      settJson(json);
     }
   };
 
@@ -245,14 +319,17 @@ export default function Builder({
       }
     }
 
+    // console.log(table.Entities[3].methods[4].conditionparams)
   }
   const onDropdownChange = (e) => {
+    console.log(e.value);
     setSelectedOption(e.value);
   };
   const updjs = (e) => {
+    console.log(e);
   };
   const getSelectedJson = (js, parentType, key) => {
-    
+    console.log(js, "sdd");
     setParentType(parentType);
     setTitle(key);
     setSelectedjson(js);
@@ -271,7 +348,7 @@ export default function Builder({
       return (
         <div>
           <DynObj
-            title={title}
+            title={selectedjsonPath !== null ? title : ""}
             isAdmin={isAdmin}
             json={json}
             collapse={collapse}
@@ -280,6 +357,7 @@ export default function Builder({
             totalOptions={totalOp}
             totalColors={totalco}
             parentType={parentType}
+            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
           />
         </div>
       );
@@ -288,7 +366,7 @@ export default function Builder({
       return (
         <div style={{ width: "100%", maxHeight: "60vh" }}>
           <DynObj
-            title={title}
+            title={selectedjsonPath !== null ? title : ""}
             isAdmin={isAdmin}
             json={json}
             collapse={collapse}
@@ -298,6 +376,7 @@ export default function Builder({
             settJson={settJson}
             totalColors={totalco}
             parentType={parentType}
+            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
           />
         </div>
       );
@@ -306,12 +385,12 @@ export default function Builder({
       return (
         <div style={{ width: "75%" }}>
           <Dyn
-            title={title}
+            title={selectedjsonPath !== null ? title : ""}
             isAdmin={isAdmin}
             data={json}
             className="col"
             collapse={collapse}
-            path={selectedjsonPath.path}
+            path={selectedjsonPath !== null ? selectedjsonPath.path : ""}
             functionality={functionality}
             depth={dp}
             totalOptions={totalOp}
@@ -321,6 +400,22 @@ export default function Builder({
       );
     }
   };
+  useEffect(() => {
+    console.log(files);
+    if (files) {
+      const error = checkForNull(JSON.parse(files));
+      if (!error) {
+        setJson(JSON.parse(files));
+        setDupJson(JSON.parse(files));
+        setSelectedjson(null);
+        setSelectedjsonPath(null);
+        updatedNodeConfig(JSON.parse(files));
+      } else {
+        showError("key should not be null or undefined");
+      }
+      setFiles(null);
+    }
+  }, [files]);
 
   useEffect(() => {
     let totalColor = [];
@@ -339,11 +434,13 @@ export default function Builder({
         });
       }
       setTotalColors(totalColor);
+      console.log(totalColors, "totalColors");
     }
   }, [colorPolicy]);
 
   useEffect(() => {
     let totalOption = [];
+    console.log(controlPolicy, "controlPolicy");
     if (Object.keys(controlPolicy).length == 0) {
       return setTotalOptions([]);
     } else {
@@ -365,12 +462,13 @@ export default function Builder({
 
   useEffect(() => {
     setJson(defaultJSOn);
+    console.log(json, "effectjson");
   }, [defaultJSOn]);
 
   useEffect(() => {
     (async function () {
       const copiedObject = JSON.parse(JSON.stringify(json));
-      await objectToPaths(copiedObject);
+      // await objectToPaths(copiedObject);
 
       setDupJson(copiedObject);
     })();
@@ -445,7 +543,6 @@ export default function Builder({
                           onClick={() => {
                             setFunc("add");
                           }}
-                         
                         >
                           <span
                             onClick={(e) => {
@@ -454,7 +551,7 @@ export default function Builder({
                               } else setFunc("add");
                             }}
                           >
-                            <IoMdAdd  className="first-add-btn" size={25} />
+                            <IoMdAdd className="first-add-btn" size={25} />
                           </span>
                         </span>
 
@@ -465,7 +562,9 @@ export default function Builder({
                           htmlFor=""
                           onClick={() => {
                             setJson({});
-                            setSelectedjson(null);
+                            setSelectedjson({});
+                            setDupJson({});
+                            setFunc(null);
                           }}
                         >
                           <RiDeleteBin6Line
@@ -556,12 +655,8 @@ export default function Builder({
                     </div>
                   </div>
                 )}
-                {Object.values(dupJson).map((element, index) => {
-                  if (
-                    typeof element !== "object" &&
-                    !Array.isArray(element) &&
-                    render
-                  ) {
+                {Object.keys(dupJson).map((element, index) => {
+                  if (typeof dupJson[element] !== "object" && render) {
                     setRender(false);
                   }
                 })}
@@ -579,6 +674,7 @@ export default function Builder({
                     depth={1}
                     setDepth={setGDepth}
                     totalColors={totalColors.length > 0 && totalColors}
+                    path={""}
                   />
                 )}
               </div>
@@ -586,37 +682,42 @@ export default function Builder({
           </div>
 
           <div className="panel-view">
-            <div className="expand-btns">
+            <div className="expand-btns ">
               <span
                 className="expand-btn"
                 onClick={() => {
                   setCollapse(!collapse);
                 }}
               >
-                  <MdOutlineExpand />
+                <MdOutlineExpand />
+              </span>
+              <span>
+                {!Object.keys(json).length && (
+                  <span className="fileUpload">
+                    <Upload setFiles={setFiles} />
+                  </span>
+                )}
               </span>
             </div>
             {Object.keys(json).length && (
               <div className="json-viewer">
-                {selectedjson && (
-                  <div
-                    style={{ width: "90%" }}
-                    className="flex flex-column align-items-center gap-2  border-round p-3  overflow-y-scroll"
-                  >
-                    {totalColors.length > 2 &&
-                      cycleObj(
-                        selectedjson,
-                        totalOptions,
-                        gDepth,
-                        totalColors,
-                        parentType,
-                        title
-                      )}
-                  </div>
-                )}
-
-                {totalOptions.length <= 2 &&
-                  cycleObj(dupJson, totalOptions, gDepth, totalColors)}
+                <div
+                  style={{ width: "90%" }}
+                  className="flex flex-column align-items-center gap-2  border-round p-3  overflow-y-scroll"
+                >
+                  {totalColors.length > 2 &&
+                    selectedjson &&
+                    cycleObj(
+                      selectedjson,
+                      totalOptions,
+                      gDepth,
+                      totalColors,
+                      parentType,
+                      title
+                    )}
+                  {!render &&
+                    cycleObj(dupJson, totalOptions, gDepth, totalColors)}
+                </div>
               </div>
             )}
           </div>

@@ -83,6 +83,7 @@ details[open] {
 .tree-view {
       min-width: 15%;
       min-height: 90vh;
+   
 }
 .panel-view {
       display: flex;
@@ -101,9 +102,8 @@ details[open] {
       justify-content: center;
 }
 .expand-btns {
-      display: flex;
-      justify-content: end;
       text-align: end;
+      /* justify-items: end; */
 }
 .fa-arrows-left-right-to-line {
       font-size: 1rem;

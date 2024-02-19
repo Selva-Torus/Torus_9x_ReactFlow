@@ -6,6 +6,7 @@ import { IoMdAdd } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Image from "next/image";
+
 import { FaCheck } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
@@ -17,6 +18,7 @@ import AddElements from "./AddElemnts";
 import object from "../assets/dynicons/curly-brackets.png";
 import arrow from "../assets/dynicons/arrow.png";
 import "../../treejson/tree.css";
+import { Dropdown } from "./Dropdown";
 
 export default function DynObj({
   title,
@@ -29,8 +31,9 @@ export default function DynObj({
   isAdmin,
   totalColors,
   parentType,
+  path,
 }) {
-  const [obj, setObj] = useState();
+  const [obj, setObj] = useState(null);
   const [func, setFunc] = useState(null);
   const [options, setOptions] = useState([]);
   const [contextMenu, setContextMenu] = useState(null);
@@ -51,15 +54,18 @@ export default function DynObj({
     };
   }, []);
 
+
   useEffect(() => {
-    if (json) {
+    if (JSON.stringify(json) !== JSON.stringify(obj)) {
       setObj(json);
-      setOptions(totalOptions[depth]?.options);
-      return () => {
-        setFunc(null);
-      };
     }
-  }, [json, collapse, depth, totalOptions, totalColors]);
+    setOptions(totalOptions[depth]?.options);
+    return () => {
+      setFunc(null);
+      setOptions([]);
+      setObj(null);
+    };
+  }, [json, collapse, depth, totalOptions]);
   return (
     <>
       {totalOptions.length > depth && (
@@ -84,11 +90,7 @@ export default function DynObj({
                   <span class="text">{totalOptions[depth]?.L}</span>
                 </div>
 
-                {parentType == "object"
-                  ? title
-                  : json.hasOwnProperty("isHeader")
-                  ? json[json["isHeader"]]
-                  : title}
+                {title}
 
                 <Image
                   src={object}
@@ -120,7 +122,7 @@ export default function DynObj({
                           } else setContextMenu(true);
                         }}
                       >
-                       <HiDotsVertical />
+                        <HiDotsVertical />
                       </span>
                     )}
                   </div>
@@ -145,7 +147,7 @@ export default function DynObj({
                         }}
                         htmlFor=""
                         className="first-add-btn trash-color"
-                        onClick={() => functionality("delete", json.path)}
+                        onClick={() => functionality("delete", path)}
                       >
                         <RiDeleteBin6Line className="first-add-btn-img" />
                       </span>
@@ -162,14 +164,21 @@ export default function DynObj({
                   setFunc={setFunc}
                   json={json}
                   options={options}
+                  path={path}
                 />
               )}
             </div>
-            {obj && (
+            {obj &&  (
               <>
                 <div style={{ marginBottom: "10px" }}>
                   {Object.keys(obj).map((key) => {
-                    if (key !== "isHeader" && key !== "path") {
+                    console.log(obj[key], "typee");
+                    if (
+                      key !== "isHeader" &&
+                      key !== "path" &&
+                      key !== "dropdownlabel" &&
+                      key !== "dropdownvalue"
+                    ) {
                       if (typeof obj[key] !== "object") {
                         return (
                           <div
@@ -180,6 +189,7 @@ export default function DynObj({
                               key={obj.path}
                               keys={key}
                               obj={obj}
+                              path={path}
                               functionality={functionality}
                             />
                           </div>
@@ -189,36 +199,53 @@ export default function DynObj({
                   })}
                 </div>
                 <div className="home-page-view" style={{ overflow: "scroll" }}>
-                  {Object.keys(obj).map((key) => {
+                  {Object.keys(obj).map((key, index) => {
                     if (key !== "isHeader" && key !== "path") {
                       if (
                         !Array.isArray(obj[key]) &&
                         typeof obj[key] === "object"
                       ) {
                         return (
-                          <div style={{ flexGrow: 1 }}>
-                            <DynObj
-                              title={key}
-                              json={obj[key]}
-                              collapse={collapse}
-                              functionality={functionality}
-                              totalOptions={totalOptions}
-                              depth={depth + 1}
-                              isAdmin={isAdmin}
-                              totalColors={totalColors}
-                              parentType={"object"}
-                            />
-                          </div>
+                          <> 
+                            {
+                            obj[key]?.hasOwnProperty("dropdownlabel") ? (
+                              <Dropdown
+                                isAdmin={isAdmin}
+                                key={obj.path}
+                                keys={key}
+                                obj={obj}
+                                path={path}
+                                functionality={functionality}
+                              />
+                            ) : (
+                              <div style={{ flexGrow: 1 }}>
+                                <DynObj
+                                  key={path + "." + key}
+                                  title={key}
+                                  json={obj[key]}
+                                  collapse={collapse}
+                                  functionality={functionality}
+                                  totalOptions={totalOptions}
+                                  depth={depth + 1} 
+                                  isAdmin={isAdmin}
+                                  totalColors={totalColors}
+                                  parentType={"object"}
+                                  path={path + "." + key}
+                                />
+                              </div>
+                            )}
+                          </>
                         );
                       }
-                      if (Array.isArray(obj[key])) {
+                      if (Array.isArray(obj[key]) && key !== "dropdownvalue" && key !== "dropdownlabel") {
                         return (
                           <tr>
                             <Dyn
+                              key={path + "." + key}
                               data={obj[key]}
                               title={key}
                               collapse={collapse}
-                              path={obj.path == "" ? key : obj.path}
+                              path={path + "." + key}
                               functionality={functionality}
                               depth={depth + 1}
                               totalOptions={totalOptions}
