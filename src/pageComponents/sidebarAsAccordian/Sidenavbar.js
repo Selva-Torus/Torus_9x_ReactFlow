@@ -191,14 +191,14 @@ export default function SideNavAccordian({ state, setState }) {
     >
       {sideNavBar.map((item) => (
         <AccordionItem value={item.title} className="w-[70px]" key={item.id}>
-          <AccordionTrigger className="hover:no-underline">
-            <div className="flex flex-col items-center w-[70px] ">
+          <AccordionTrigger className={`hover:no-underline ${state == item.title ? `bg-gray-300` : null}`}>
+            <div className={`flex flex-col items-center w-[70px]`}>
               {item.icon == TorusImg ? (
                 <Image src={TorusImg} alt="Torus" width={20} height={20} />
               ) : (
                 React.createElement(item.icon, { size: 20 })
               )}
-              <div className="text-[10px] ">{item.title}</div>
+              <div className="text-[10px]">{item.title}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
