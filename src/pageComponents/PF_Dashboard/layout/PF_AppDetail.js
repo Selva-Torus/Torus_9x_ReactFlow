@@ -1,6 +1,6 @@
 import { setTRSVersion } from "@/redux/reducer/CounterSlice";
 import { versionServerDefaultConfig } from "@/utilsfunctions/apiCallUnit";
-import { Button, Input } from "@mui/material";
+import { Button, FormLabel, Input } from "@mui/material";
 import { Dropdown } from "primereact/dropdown";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,7 +84,7 @@ const PF_AppDetail = ({
           onChange={handleVersionChange}
           options={versions}
           // optionLabel="Select Tourus Resource Nodes"
-          placeholder="Version"
+          placeholder="Select Tourus Resource Nodes"
           className=" flex align-items-center w-full my-3"
           style={{ height: "35px", width: "150px" }}
           // disabled={versions.length ? false : true}

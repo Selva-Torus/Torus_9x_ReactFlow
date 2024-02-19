@@ -680,7 +680,7 @@ const Dashboard = ({ ten, admin, roleObbj, getJS, setJS }) => {
         onHide={() => {
           setIsUserDetailsDialog(!isUserDetailsDialog);
         }}
-        header="Login"
+        header="Application Details"
         headerStyle={{ textAlign: "center" }}
         closable={false}
       >
