@@ -5,13 +5,13 @@ import Dyn from "./dyn";
 import { IoMdAdd } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Image from "next/image";
 
 import { FaCheck } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
 import InputTxt from "./InputTxt";
+import Image from "next/image";
 
 import AddElements from "./AddElemnts";
 
@@ -54,11 +54,11 @@ export default function DynObj({
     };
   }, []);
 
-
   useEffect(() => {
     if (JSON.stringify(json) !== JSON.stringify(obj)) {
       setObj(json);
     }
+    setExpanded(collapse);
     setOptions(totalOptions[depth]?.options);
     return () => {
       setFunc(null);
@@ -71,7 +71,7 @@ export default function DynObj({
       {totalOptions.length > depth && (
         <div className="obj-container">
           <details
-            open={collapse}
+            open={expanded}
             className=" obj-box"
             onToggle={(e) => setExpanded(e.currentTarget.open)}
           >
@@ -168,7 +168,7 @@ export default function DynObj({
                 />
               )}
             </div>
-            {obj  && (
+            {obj && (
               <>
                 <div style={{ marginBottom: "10px" }}>
                   {Object.keys(obj).map((key) => {

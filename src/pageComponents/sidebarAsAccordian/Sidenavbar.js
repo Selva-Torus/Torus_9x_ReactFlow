@@ -3,7 +3,8 @@ import * as React from "react";
 import { FcStart } from "react-icons/fc";
 import { CgComponents } from "react-icons/cg";
 import { IoDocumentsOutline } from "react-icons/io5";
-import { MdOutlineDocumentScanner } from "react-icons/md";
+// import { MdOutlineDocumentScanner } from "react-icons/md";
+import TorusImg from "../PF_Dashboard/img/torus.png";
 import { GrDocumentConfig } from "react-icons/gr";
 // import start from "../PF_Dashboard/assets/sidebarImg/start-button.png";
 // import api from "@/dashboard/assets/sidebarImg/api.png";
@@ -94,7 +95,7 @@ const Icons = [
   },
   {
     id: 4,
-    icon: MdOutlineDocumentScanner,
+    icon: TorusImg,
     title: "TRN",
     data: [
       {
@@ -172,7 +173,7 @@ export default function SideNavAccordian({ state, setState }) {
   };
 
   const handlechange = (e) => {
-    if (appName) {
+    if (appName || isTorusControl) {
       setState(e);
     } else {
       toast.error("Please select appName");
@@ -192,14 +193,18 @@ export default function SideNavAccordian({ state, setState }) {
         <AccordionItem value={item.title} className="w-[70px]" key={item.id}>
           <AccordionTrigger className="hover:no-underline">
             <div className="flex flex-col items-center w-[70px] ">
-              {React.createElement(item.icon, { size: 20 })}
+              {item.icon == TorusImg ? (
+                <Image src={TorusImg} alt="Torus" width={20} height={20} />
+              ) : (
+                React.createElement(item.icon, { size: 20 })
+              )}
               <div className="text-[10px] ">{item.title}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent className=" absolute left-[70px] top-[40px] flex flex-col justify-start gap-3 bg-gray-200 h-[90vh] pt-[3%]">
             {state === "PF" || state === "TRN" ? (
               <MenuDetailsComponent />
-            ) : (
+            ) : state === "DF" ? null : (
               item.data.map((subContent) => (
                 <div
                   key={subContent.id}

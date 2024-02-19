@@ -634,3 +634,88 @@ export const fileSyncer = async(DF)  => {
     return applications;
   }
 }
+
+export const SaveDefaultConfigVersion = async(key , value) => {
+  const fabrics = await readReddis(key);
+  if(!fabrics){
+    const res = await writeReddis(key, {v1 : value});
+    return res;
+  }else{
+   const version =`v${Object.keys(JSON.parse(fabrics)).length + 1}`;
+   const res = await writeReddis(key , {...JSON.parse(fabrics) , [version] : value});
+   return res;
+  }
+}
+
+export const versionServerDefaultConfig = async(key) => {
+  try{
+    const fabrics = await readReddis(key);
+    return Object.keys(JSON.parse(fabrics));
+  }catch(err){
+    return [];
+  } 
+}
+
+export const saveERDiagram = async(key , appName , value) => {
+  const fabrics = await readReddis(key);
+  if(!fabrics){
+    const res = await writeReddis(key, {[appName]:{v1 : JSON.parse(value)}});
+    return res;
+  }else{
+    const fab = JSON.parse(fabrics);
+    if(Object.keys(fab).includes(appName)){
+     const version = `v${Object.keys(fab[appName]).length + 1}`;
+     const file = {...fab[appName] , [version] : JSON.parse(value)};
+     const res = await writeReddis(key , {...fab , [appName]:file});
+     return res;
+    }else{
+      const fab = JSON.parse(fabrics);
+      const res = await writeReddis(key , {...fab , [appName]:{v1 : JSON.parse(value)}});
+      return res;
+    }
+  }
+}
+
+export const updateDiagram = async(key , appName , version , value) => {
+  try{
+  const fabrics = await readReddis(key);
+  const fab = JSON.parse(fabrics);
+  if(fabrics && fab.hasOwnProperty(appName) && fab[appName].hasOwnProperty(version) && fab[appName][version]){
+    const file = {...fab[appName] , [version] : JSON.parse(value)};
+    const res = await writeReddis(key , {...fab , [appName]:file});
+    return res;
+  }else{
+    return {key : 'else'};
+  }
+}catch(err){
+  return {key : 'err'};
+}
+}
+
+export const versionServerERD = async(key , appName) => {
+  try{
+    const fabrics = await readReddis(key);
+    const fab = JSON.parse(fabrics);
+    if(fabrics && Object.keys(fab).includes(appName)){
+      return Object.keys(fab[appName]);
+    }else{
+      return [];
+    }
+  }catch(err){
+    return [];
+  }
+}
+
+export const serverDataForERD = async(key , appName , version) => {
+  try{
+    const fabrics = await readReddis(key);
+    const fab = JSON.parse(fabrics);
+    if(fabrics && Object.keys(fab).includes(appName) && Object.keys(fab[appName]).includes(version)){
+      return fab[appName][version];
+    }else{
+      return {};
+    }
+  }catch(err){
+    return {};
+  }
+}
