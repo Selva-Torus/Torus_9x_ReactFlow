@@ -58,17 +58,17 @@ const TopBar = ({ state }) => {
         <logo className="text-[16px] font-bold">TORUS</logo>
       </Link>
       <NavigationMenuList className="flex gap-5 pr-4 py-2 items-center text-[15px] font-bold">
-        <Button
+       {appName =="" ? <Button
           onClick={() => {
             setApp(true);
           }}
         >
           Select Application : {appName}
-        </Button>
+        </Button> : <Button> Application : {appName}</Button>}
         <Button onClick={() => dispatch(setTorusControl(true))}>
           Torus Control
         </Button>
-        <NavigationMenuItem>
+        {/* <NavigationMenuItem>
           <NavigationMenuLink className="font-semibold" href="/dashboard">
             Dashboard
           </NavigationMenuLink>
@@ -83,7 +83,7 @@ const TopBar = ({ state }) => {
           <NavigationMenuLink className="font-semibold" href="/Projects">
             Projects
           </NavigationMenuLink>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
         <NavigationMenuItem>
           <NavigationMenuLink className="font-semibold" href="/Calendar">
             Calendar
