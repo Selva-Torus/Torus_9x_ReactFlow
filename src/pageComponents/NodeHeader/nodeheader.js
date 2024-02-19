@@ -63,7 +63,14 @@ const NodeHeader = ({ haksd, setJson }) => {
   return (
     <div className="flex justify-end px-4">
       <div className="flex justify-between py-2 gap-4">
+       
         <Dropdown
+          value={fabrics}
+          onChange={handleOptionsChange}
+          options={opt}
+          placeholder="Select an option"
+        />
+         <Dropdown
           value={version}
           onChange={handleVersionChange}
           options={versions}
@@ -72,12 +79,6 @@ const NodeHeader = ({ haksd, setJson }) => {
           className=" flex align-items-center"
           style={{ height: "35px", width: "150px" }}
           // disabled={versions.length ? false : true}
-        />
-        <Dropdown
-          value={fabrics}
-          onChange={handleOptionsChange}
-          options={opt}
-          placeholder="Select an option"
         />
         <button onClick={handleSave} className="p-1 bg-gray-200 rounded">
           Save

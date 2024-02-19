@@ -261,8 +261,8 @@ export default function Builder({
           } else {
             gs = { ...gs, [key]: js[key] };
           }
-          settJson(gs);
         });
+        settJson(gs);
       }
       if (func == "update") {
         Object.keys(js).map((key) => {
@@ -676,14 +676,14 @@ export default function Builder({
 
           <div className="panel-view">
             <div className="expand-btns">
-              <span
+              {/* <span
                 className="expand-btn"
                 onClick={() => {
                   setCollapse(!collapse);
                 }}
               >
                 <MdOutlineExpand />
-              </span>
+              </span> */}
               <span>
                 {!Object.keys(json).length && (
                   <span className="fileUpload">
@@ -710,7 +710,7 @@ export default function Builder({
                     )}
                   {(totalOptions.length <= 2 || !render) &&
                     cycleObj(
-                      dupJson,
+                      json,
                       totalOptions,
                       gDepth,
                       totalColors,

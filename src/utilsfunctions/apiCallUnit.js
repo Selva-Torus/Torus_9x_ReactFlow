@@ -1,16 +1,16 @@
-"use server"
+"use server";
 import redis from "@/lib/redis";
-const fs = require('fs');
+const fs = require("fs");
 
 export async function readReddis(tenant) {
-  return await redis.call('JSON.GET', tenant);
+  return await redis.call("JSON.GET", tenant);
 }
 
 export async function writeReddis(key, json) {
-  return await redis.call('JSON.SET', key, '$', JSON.stringify(json));
+  return await redis.call("JSON.SET", key, "$", JSON.stringify(json));
 }
 
-export async function createRedisFiles(obj, currentPath = '', interator) {
+export async function createRedisFiles(obj, currentPath = "", interator) {
   let path = [];
 
   for (const key in obj) {
@@ -18,23 +18,27 @@ export async function createRedisFiles(obj, currentPath = '', interator) {
       const newPath = `${currentPath}:${key}`;
       path.push(newPath);
 
-      if (typeof obj[key] == 'object' && obj[key] !== null) {
+      if (typeof obj[key] == "object" && obj[key] !== null) {
         if (interator <= 4) {
           path = path.concat(
-            await createRedisFiles(obj[key], newPath, interator + 1),
+            await createRedisFiles(obj[key], newPath, interator + 1)
           );
         } else {
-          let arr = newPath.split(':');
+          let arr = newPath.split(":");
           arr.shift();
-          const kes = arr.join(':');
-          await redis.call('JSON.SET', kes, '$', JSON.stringify(obj[key]));
+          const kes = arr.join(":");
+          await redis.call("JSON.SET", kes, "$", JSON.stringify(obj[key]));
         }
       }
     }
   }
 }
 
-export async function getPathsAndCreateFolders(obj, currentPath = '', interator) {
+export async function getPathsAndCreateFolders(
+  obj,
+  currentPath = "",
+  interator
+) {
   let paths = [];
 
   for (const key in obj) {
@@ -42,7 +46,7 @@ export async function getPathsAndCreateFolders(obj, currentPath = '', interator)
       const newPath = `${currentPath}/${key}`;
       paths.push(newPath);
 
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
         if (interator <= 4) {
           if (interator === 1 && fs.existsSync(`./${newPath}`)) {
             await fs.rmSync(`./${newPath}`, {
@@ -52,11 +56,7 @@ export async function getPathsAndCreateFolders(obj, currentPath = '', interator)
           }
           fs.mkdirSync(`./${newPath}`);
           paths = paths.concat(
-            await getPathsAndCreateFolders(
-              obj[key],
-              newPath,
-              interator + 1,
-            ),
+            await getPathsAndCreateFolders(obj[key], newPath, interator + 1)
           );
         } else {
           fs.writeFileSync(`./${newPath}.json`, JSON.stringify(obj[key]));
@@ -75,12 +75,12 @@ export async function newCreatePrcessFlow(edges, node) {
     item.role = element.data.role;
 
     item.nodeType =
-      element.property.nodeType == 'defaultNode'
+      element.property.nodeType == "defaultNode"
         ? element.type
         : element.property.nodeType;
 
     item.nodeId = element.id;
-    if (typeof element?.parentId === 'object') {
+    if (typeof element?.parentId === "object") {
       item.parentId = [...element?.parentId];
     } else {
       item.parentId = element?.parentId;
@@ -107,23 +107,23 @@ export async function newCreatePrcessFlow(edges, node) {
     let array = [];
 
     let removeFields = [
-      'source',
+      "source",
 
-      'label',
+      "label",
 
-      'sourceHandle',
+      "sourceHandle",
 
-      'selected',
+      "selected",
 
-      'targetHandle',
+      "targetHandle",
 
-      'target',
+      "target",
 
-      'type',
+      "type",
 
-      'markerEnd',
+      "markerEnd",
 
-      'id',
+      "id",
     ];
 
     edge.map((edges) => {
@@ -142,20 +142,20 @@ export async function newCreatePrcessFlow(edges, node) {
       }
 
       if (obj.label) {
-        initRouteObj['conditionResult'] = obj.label;
+        initRouteObj["conditionResult"] = obj.label;
       }
 
-      initRouteObj['nodeName'] = nodes.find(
-        (node) => node.id == target,
+      initRouteObj["nodeName"] = nodes.find(
+        (node) => node.id == target
       ).data.label;
 
-      initRouteObj['nodeId'] = target;
+      initRouteObj["nodeId"] = target;
 
       routeArray.push(initRouteObj);
 
       if (resultObj[source]?.routeArray?.length > 0) {
         let check = resultObj[source].routeArray.findIndex(
-          (index) => obj.nodeId == source,
+          (index) => obj.nodeId == source
         );
 
         if (check >= 0) {
@@ -176,7 +176,7 @@ export async function newCreatePrcessFlow(edges, node) {
 
     const updatedArray = Object.values(resultObj);
 
-    let endNodeElement = nodes.find((node) => node.type == 'endNode');
+    let endNodeElement = nodes.find((node) => node.type == "endNode");
 
     let item = initElement({}, endNodeElement);
 
@@ -207,10 +207,10 @@ export async function sortProcessFlow(processFlow) {
   };
 
   const startNodeIds = processFlow
-    .filter((node) => node.nodeType === 'startNode')
+    .filter((node) => node.nodeType === "startNode")
     .map((node) => node.nodeId);
   const endNodeIds = processFlow
-    .filter((node) => node.nodeType === 'endNode')
+    .filter((node) => node.nodeType === "endNode")
     .map((node) => node.nodeId);
 
   processFlow.sort((a, b) => {
@@ -264,7 +264,7 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
     endNode,
     visited = new Set(),
     currentRoute = [],
-    allRoutes = [],
+    allRoutes = []
   ) => {
     visited.add(startNode);
     let getNode = nodes.find((node) => node.id == startNode);
@@ -286,7 +286,7 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
     }
     visited.delete(startNode);
     currentRoute.pop();
-  }
+  };
 
   const findAllRoutesWithFormatAndDecisionResults = (nodes, edges) => {
     const graph = {};
@@ -319,7 +319,7 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
       }
     };
     nodes.forEach((node) => {
-      if (node.type === 'startNode') {
+      if (node.type === "startNode") {
         const startNodeId = node.id;
         dfs(startNodeId, [{ nodeId: startNodeId, label: null }]);
       }
@@ -335,7 +335,7 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
         }
         let routes = {
           nodeType:
-            sourceNode.property.nodeType == 'defaultNode'
+            sourceNode.property.nodeType == "defaultNode"
               ? sourceNode.type
               : sourceNode.property.nodeType,
           NodeId: sourceNode.id,
@@ -343,7 +343,7 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
           source: routeItem.sourcenodeid,
         };
         if (currentConditionResult) {
-          routes['conditionResult'] = currentConditionResult;
+          routes["conditionResult"] = currentConditionResult;
         }
         return routes;
       });
@@ -370,28 +370,20 @@ export async function findAllRoutesWithFormatAndDecision(node, edges) {
   return summeryRoutes;
 }
 
-
-export const saveaWorkFlow  = async (
-  req,
-  type,
-  version,
-  tenant,
-  
-) => {
+export const saveaWorkFlow = async (req, type, version, tenant) => {
   try {
     const workFlows = JSON.parse(JSON.stringify(req.workFlow));
     const nodes = JSON.parse(JSON.stringify(req.workFlow.node));
     const edges = JSON.parse(JSON.stringify(req.workFlow.edge));
     const processFlowSummary = await findAllRoutesWithFormatAndDecision(
       nodes,
-      edges,
+      edges
     );
 
-    
-    const result = await newCreatePrcessFlow(edges, nodes);    
+    const result = await newCreatePrcessFlow(edges, nodes);
     const processflowapi = await sortProcessFlow(result);
 
-    if (type === 'create') {
+    if (type === "create") {
       const res = await readReddis(tenant);
 
       const applications = await JSON.parse(res);
@@ -401,34 +393,24 @@ export const saveaWorkFlow  = async (
         applications.hasOwnProperty(tenant) &&
         // applications[tenant].hasOwnProperty(appGroup) &&
         // applications[tenant][appGroup].hasOwnProperty(app) &&
-        typeof applications === 'object' 
+        typeof applications === "object"
         // && Object.keys(applications[tenant][appGroup][app]).length
       ) {
         const application = { ...applications };
 
-        if (
-          application[tenant].hasOwnProperty(
-            req.applicationName,
-          )
-        ) {
+        if (application[tenant].hasOwnProperty(req.applicationName)) {
           if (
-            application[tenant][
-              req.applicationName
-            ].hasOwnProperty(req.processFlow)
+            application[tenant][req.applicationName].hasOwnProperty(
+              req.processFlow
+            )
           ) {
             const version = `v${
               Object.keys(
-                applications[tenant][req.applicationName][
-                  req.processFlow
-                ],
+                applications[tenant][req.applicationName][req.processFlow]
               ).length + 1
             }`;
-            applications[tenant][req.applicationName][
-              req.processFlow
-            ] = {
-              ...applications[tenant][req.applicationName][
-                req.processFlow
-              ],
+            applications[tenant][req.applicationName][req.processFlow] = {
+              ...applications[tenant][req.applicationName][req.processFlow],
               [version]: {
                 processFlow: {
                   ...workFlows,
@@ -455,19 +437,17 @@ export const saveaWorkFlow  = async (
               },
             };
           }
-         
+
           await writeReddis(tenant, application);
           const versions = Object.keys(
-            application[tenant][req.applicationName][
-              req.processFlow
-            ],
+            application[tenant][req.applicationName][req.processFlow]
           );
 
           const appw = JSON.parse(JSON.stringify(application));
 
-          await createRedisFiles(appw, '', 1);
+          await createRedisFiles(appw, "", 1);
           return {
-            msg: 'New Application Created',
+            msg: "New Application Created",
             versions: versions,
             code: 200,
           };
@@ -487,20 +467,18 @@ export const saveaWorkFlow  = async (
               },
             },
           };
-          
+
           await writeReddis(tenant, application);
 
           const versions = Object.keys(
-            application[tenant][req.applicationName][
-              req.processFlow
-            ],
+            application[tenant][req.applicationName][req.processFlow]
           );
 
           const appw = JSON.parse(JSON.stringify(application));
 
-          await createRedisFiles(appw, '', 1);
+          await createRedisFiles(appw, "", 1);
           return {
-            msg: 'New Version Created',
+            msg: "New Version Created",
             versions: versions,
             code: 200,
           };
@@ -508,7 +486,7 @@ export const saveaWorkFlow  = async (
       } else {
         const res = await readReddis(tenant);
         let application = { ...(await JSON.parse(res)) };
-        
+
         let appl = JSON.parse(JSON.stringify(application));
         const version = `v1`;
         if (!appl.hasOwnProperty(tenant)) {
@@ -545,29 +523,25 @@ export const saveaWorkFlow  = async (
 
         await writeReddis(tenant, appl);
         const versions = Object.keys(
-          appl[tenant][req.applicationName][req.processFlow],
+          appl[tenant][req.applicationName][req.processFlow]
         );
         const appw = JSON.parse(JSON.stringify(appl));
 
-        await createRedisFiles(appw, '', 1);
-       
+        await createRedisFiles(appw, "", 1);
+
         return {
-          msg: 'New Application Created',
+          msg: "New Application Created",
           versions: versions,
           code: 200,
         };
       }
-    } else if (type === 'update') {
+    } else if (type === "update") {
       const res = await readReddis(tenant);
       const applications = await JSON.parse(res);
       const application = { ...applications };
 
-      applications[tenant][req.applicationName][
-        req.processFlow
-      ] = {
-        ...applications[tenant][req.applicationName][
-          req.processFlow
-        ],
+      applications[tenant][req.applicationName][req.processFlow] = {
+        ...applications[tenant][req.applicationName][req.processFlow],
         [version]: {
           // ...applications[tenant][req.applicationName][
           //   req.processFlow
@@ -581,82 +555,178 @@ export const saveaWorkFlow  = async (
           ...req.configuration,
         },
       };
-     
+
       await writeReddis(tenant, application);
 
       const appw = JSON.parse(JSON.stringify(application));
 
-      await createRedisFiles(appw, '', 1);
+      await createRedisFiles(appw, "", 1);
 
       return { msg: `${version} Updated`, code: 201 };
     }
   } catch (error) {
     return error;
   }
-}
-
+};
 
 //version controller
-export const versionController = async(tenant , app ='App1' , af = 'Artifacts1')  => {
+export const versionController = async (
+  tenant,
+  app = "App1",
+  af = "Artifacts1"
+) => {
   const res = await readReddis(tenant);
   const applications = await JSON.parse(res);
-  let versions=[]
-  if(applications && applications.hasOwnProperty(tenant) && applications[tenant].hasOwnProperty(app) && applications[tenant][app].hasOwnProperty(af)) {
-     versions = Object.keys(applications[tenant][app][af]);
+  let versions = [];
+  if (
+    applications &&
+    applications.hasOwnProperty(tenant) &&
+    applications[tenant].hasOwnProperty(app) &&
+    applications[tenant][app].hasOwnProperty(af)
+  ) {
+    versions = Object.keys(applications[tenant][app][af]);
   }
-  return versions;  
-}
-
+  return versions;
+};
 
 //version server
-export const versionServer = async(DF , app, af , version)  => {
+export const versionServer = async (DF, app, af, version) => {
   const res = await readReddis(DF);
   const applications = await JSON.parse(res);
   const obj = applications[DF][app][af][version];
   let result = obj.processFlow;
-  let config ={};
-  Object.keys(obj).forEach((key)=>{
-    if(key !== 'processFlow' || key !== 'processFlowSummary') {
+  let config = {};
+  Object.keys(obj).forEach((key) => {
+    if (key !== "processFlow" || key !== "processFlowSummary") {
       config[key] = obj[key];
-    }else{
+    } else {
       return true;
     }
-  })
-  return {result , config};
-}
+  });
+  return { result, config };
+};
 
 //file Syncer
-export const fileSyncer = async(DF)  => {
+export const fileSyncer = async (DF) => {
   const res = await readReddis(DF);
   const applications = await JSON.parse(res);
   if (applications && Object.keys(applications).length) {
-    let keys = await getPathsAndCreateFolders(applications, '', 1);
+    let keys = await getPathsAndCreateFolders(applications, "", 1);
     return applications;
   }
-}
+};
 
-export const SaveDefaultConfigVersion = async(key , value) => {
+
+//SaveDefaultsForProcessFabrics
+export const SaveDefaultConfigVersion = async (key, value) => {
   const fabrics = await readReddis(key);
-  if(!fabrics){
-    const res = await writeReddis(key, {v1 : value});
+  if (!fabrics) {
+    const res = await writeReddis(key, { v1: value });
     return res;
-  }else{
-   const version =`v${Object.keys(JSON.parse(fabrics)).length + 1}`;
-   const res = await writeReddis(key , {...JSON.parse(fabrics) , [version] : value});
-   return res;
+  } else {
+    const version = `v${Object.keys(JSON.parse(fabrics)).length + 1}`;
+    const res = await writeReddis(key, {
+      ...JSON.parse(fabrics),
+      [version]: value,
+    });
+    return res;
   }
-}
+};
 
-export const fetchDefaultConfigVersion = async(key , version) => {
-  
-}
-
-export const versionServerDefaultConfig = async(key) => {
-  try{
+export const versionServerDefaultConfig = async (key) => {
+  try {
     const fabrics = await readReddis(key);
     return Object.keys(JSON.parse(fabrics));
-  }catch(err){
+  } catch (err) {
     return [];
   }
-  
-}
+};
+
+//Currently for saving ERD diagram and can be reused in further additions
+export const saveERDiagram = async (key, appName, artifacts , value) => {
+  const fabrics = await readReddis(key);
+  if (!fabrics) {
+    const res = await writeReddis(key, {
+      [key]: {[appName]: {[artifacts] :{v1: JSON.parse(value)}}},
+    });
+    return res;
+  } else {
+    const fab = JSON.parse(fabrics);
+    if (fab.hasOwnProperty(key) && Object.keys(fab[key]).includes(appName) && fab[key][appName].hasOwnProperty(artifacts)) {
+      const version = `v${Object.keys(fab[key][appName][artifacts]).length + 1}`;
+      const file = { ...fab[key][appName][artifacts], [version]: JSON.parse(value) };
+      fab[key][appName][artifacts] = file;
+      const res = await writeReddis(key, fab);
+      return res;
+    } else {
+      const fab = JSON.parse(fabrics);
+      const file = {...fab[key][appName] , [artifacts]: {v1: JSON.parse(value) }}
+      fab[key][appName] = file;
+      const res = await writeReddis(key, fab);
+      return res;
+    }
+  }
+};
+
+export const updateDiagram = async (key, appName, artifacts , version, value) => {
+  try {
+    const fabrics = await readReddis(key);
+    const fab = JSON.parse(fabrics);
+    if (
+      fabrics &&
+      fab.hasOwnProperty(key) &&
+      fab[key].hasOwnProperty(appName) &&
+      fab[key][appName].hasOwnProperty(artifacts) &&
+      fab[key][appName][artifacts].hasOwnProperty(version) &&
+      fab[key][appName][artifacts][version]
+    ) {
+      const file = { ...fab[key][appName][artifacts], [version]: JSON.parse(value) };
+      fab[key][appName][artifacts] = file;
+      const res = await writeReddis(key, fab);
+      return res;
+    } else {
+      return { key: "else" };
+    }
+  } catch (err) {
+    return { key: "err" };
+  }
+};
+
+export const versionServerERD = async (key, appName , artifacts) => {
+  try {
+    const fabrics = await readReddis(key);
+    const fab = JSON.parse(fabrics);
+    if (
+      fabrics &&
+      fab.hasOwnProperty(key) &&
+      Object.keys(fab[key]).includes(appName) && 
+      Object.keys(fab[key][appName]).includes(artifacts)
+    ) {
+      return Object.keys(fab[key][appName][artifacts]);
+    } else {
+      return [];
+    }
+  } catch (err) {
+    return [];
+  }
+};
+
+export const serveDataForERD = async (key, appName, artifacts ,  version) => {
+  try {
+    const fabrics = await readReddis(key);
+    const fab = JSON.parse(fabrics);
+    if (
+      fabrics &&
+      fab.hasOwnProperty(key) &&
+      Object.keys(fab[key]).includes(appName) &&
+      Object.keys(fab[key][appName]).includes(artifacts) &&
+      Object.keys(fab[key][appName][artifacts]).includes(version)
+    ) {
+      return fab[key][appName][artifacts][version];
+    } else {
+      return {};
+    }
+  } catch (err) {
+    return {};
+  }
+};
