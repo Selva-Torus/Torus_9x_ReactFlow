@@ -11,8 +11,8 @@ export const Dropdown = ({ keys, obj, functionality, isAdmin, path }) => {
   const handleopts = (e) => {
     setSelected(e.target.value);
     setisopen(true);
-    functionality("update", path + "." + keys + ".dropdownlabel", {
-      key: "dropdownlabel",
+    functionality("update", path + "." + keys + ".selectedValue", {
+      key: "selectedValue",
       value: e.target.value,
     })
     console.log(Selectedjson, isopen, "open");
@@ -22,8 +22,8 @@ export const Dropdown = ({ keys, obj, functionality, isAdmin, path }) => {
      {!isopen && <span>
 
       <h8 style={{fontSize:"13px",color:"black"}}> {keys}</h8> :
-      <select onChange={handleopts} value={obj[keys]?.dropdownlabel}>
-        {obj[keys]?.dropdownvalue.map((values, index) => (
+      <select onChange={handleopts} value={obj[keys]?.selectedValue}>
+        {obj[keys]?.selectionList.map((values, index) => (
           <option key={index} value={values}>
             {values}
           </option>
@@ -35,7 +35,7 @@ export const Dropdown = ({ keys, obj, functionality, isAdmin, path }) => {
 
       {isopen && (
         <div>
-          dropdownlabel: {obj[keys]?.dropdownlabel}
+          selectedValue: {obj[keys]?.selectedValue}
           <span
                   onClick={(e) => {
                     setisopen(false)
@@ -52,7 +52,7 @@ export const Dropdown = ({ keys, obj, functionality, isAdmin, path }) => {
                       path + "." + keys,
                       {
                         key: keys,
-                        value:obj[keys]?.dropdownlabel,
+                        value:obj[keys]?.selectedValue,
                       }
                     );
                   }}

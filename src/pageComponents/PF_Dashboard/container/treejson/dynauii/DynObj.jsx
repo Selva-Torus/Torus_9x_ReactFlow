@@ -176,8 +176,8 @@ export default function DynObj({
                     if (
                       key !== "isHeader" &&
                       key !== "path" &&
-                      key !== "dropdownlabel" &&
-                      key !== "dropdownvalue"
+                      key !== "selectedValue" &&
+                      key !== "selectionList"
                     ) {
                       if (typeof obj[key] !== "object") {
                         return (
@@ -208,7 +208,7 @@ export default function DynObj({
                         return (
                           <> 
                             {
-                            obj[key]?.hasOwnProperty("dropdownlabel") ? (
+                            obj[key]?.hasOwnProperty("selectedValue") ? (
                               <Dropdown
                                 isAdmin={isAdmin}
                                 key={obj.path}
@@ -237,7 +237,7 @@ export default function DynObj({
                           </>
                         );
                       }
-                      if (Array.isArray(obj[key]) && key !== "dropdownvalue" && key !== "dropdownlabel") {
+                      if (Array.isArray(obj[key]) && key !== "selectionList" && key !== "selectedValue") {
                         return (
                           <tr>
                             <Dyn
