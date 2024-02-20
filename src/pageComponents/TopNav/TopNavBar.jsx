@@ -28,14 +28,15 @@ import { useState, useEffect } from "react";
 import { readReddis } from "@/utilsfunctions/apiCallUnit";
 // import {RootState} from '../../redux/store'
 import { useDispatch, useSelector } from "react-redux";
-
+import { IoIosAddCircle } from "react-icons/io";
 import { selectApp, setTorusControl } from "../../redux/reducer/CounterSlice";
 
 const TopBar = ({ state }) => {
   const appName = useSelector((state) => state.counter.appName);
   const dispatch = useDispatch();
-
   const [app, setApp] = useState(false);
+  const [application, setApplication] = useState('');
+  const [appInput, setAppInput] = useState(false);
   const [LoginApplication, setLoginApplication] = useState([]);
 
   const GetJson = async () => {
@@ -47,6 +48,11 @@ const TopBar = ({ state }) => {
       setLoginApplication(Object.keys(response.Datafabrics));
     } catch (err) {}
   };
+
+  const handleSetApplication = () => {
+    dispatch(selectApp(application));
+    setApp(false);
+  }
 
   useEffect(() => {
     GetJson();
@@ -111,14 +117,14 @@ const TopBar = ({ state }) => {
       </NavigationMenuList>
       <Dialog
         visible={app}
-        style={{ width: "40vw" }}
+        style={{ width: "30vw" }}
         onHide={() => {
           setApp(false);
         }}
         headerStyle={{ textAlign: "center" }}
         closable={false}
       >
-        <div className="flex justify-center gap-5">
+        <div className="flex flex-col justify-center items-center gap-4">
           {LoginApplication.map((ele, id) => {
             return (
               <button
@@ -132,6 +138,12 @@ const TopBar = ({ state }) => {
               </button>
             );
           })}
+            {appInput ? <div className="flex flex-col gap-2">
+            <input type='text' onChange={(e)=>setApplication(e.target.value)} className="border-2"/>
+            <button className="bg-green-500 text-white rounded px-3" onClick={handleSetApplication}>Create Application</button>
+            </div> : 
+            <IoIosAddCircle fill="green" size={20} onClick={()=>setAppInput(true)}/>
+            }
         </div>
         <br />
         {/* <Button onClick={() => setApp(false)}>close</Button> */}
