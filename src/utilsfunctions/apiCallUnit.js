@@ -607,15 +607,14 @@ export const versionServer = async (DF, app, af, version) => {
 };
 
 //file Syncer
-export const fileSyncer = async (DF) => {
-  const res = await readReddis(DF);
+export const fileSyncer = async (key) => {
+  const res = await readReddis(key);
   const applications = await JSON.parse(res);
   if (applications && Object.keys(applications).length) {
     let keys = await getPathsAndCreateFolders(applications, "", 1);
     return applications;
   }
 };
-
 
 //SaveDefaultsForProcessFabrics
 export const SaveDefaultConfigVersion = async (key, value) => {
@@ -643,32 +642,61 @@ export const versionServerDefaultConfig = async (key) => {
 };
 
 //Currently for saving ERD diagram and can be reused in further additions
-export const saveERDiagram = async (key, appName, artifacts , value) => {
+export const saveERDiagram = async (key, appName, artifacts, value) => {
   const fabrics = await readReddis(key);
   if (!fabrics) {
     const res = await writeReddis(key, {
-      [key]: {[appName]: {[artifacts] :{v1: JSON.parse(value)}}},
+      [key]: { [appName]: { [artifacts]: { v1: JSON.parse(value) } } },
     });
+
+    await createRedisFiles(
+      {
+        [key]: { [appName]: { [artifacts]: { v1: JSON.parse(value) } } },
+      },
+      "",
+      1
+    );
+
     return res;
   } else {
     const fab = JSON.parse(fabrics);
-    if (fab.hasOwnProperty(key) && Object.keys(fab[key]).includes(appName) && fab[key][appName].hasOwnProperty(artifacts)) {
-      const version = `v${Object.keys(fab[key][appName][artifacts]).length + 1}`;
-      const file = { ...fab[key][appName][artifacts], [version]: JSON.parse(value) };
+    if (
+      fab.hasOwnProperty(key) &&
+      Object.keys(fab[key]).includes(appName) &&
+      fab[key][appName].hasOwnProperty(artifacts)
+    ) {
+      const version = `v${
+        Object.keys(fab[key][appName][artifacts]).length + 1
+      }`;
+      const file = {
+        ...fab[key][appName][artifacts],
+        [version]: JSON.parse(value),
+      };
       fab[key][appName][artifacts] = file;
       const res = await writeReddis(key, fab);
+      await createRedisFiles(fab, "", 1);
       return res;
     } else {
       const fab = JSON.parse(fabrics);
-      const file = {...fab[key][appName] , [artifacts]: {v1: JSON.parse(value) }}
+      const file = {
+        ...fab[key][appName],
+        [artifacts]: { v1: JSON.parse(value) },
+      };
       fab[key][appName] = file;
       const res = await writeReddis(key, fab);
+      await createRedisFiles(fab, "", 1);
       return res;
     }
   }
 };
 
-export const updateDiagram = async (key, appName, artifacts , version, value) => {
+export const updateDiagram = async (
+  key,
+  appName,
+  artifacts,
+  version,
+  value
+) => {
   try {
     const fabrics = await readReddis(key);
     const fab = JSON.parse(fabrics);
@@ -680,7 +708,10 @@ export const updateDiagram = async (key, appName, artifacts , version, value) =>
       fab[key][appName][artifacts].hasOwnProperty(version) &&
       fab[key][appName][artifacts][version]
     ) {
-      const file = { ...fab[key][appName][artifacts], [version]: JSON.parse(value) };
+      const file = {
+        ...fab[key][appName][artifacts],
+        [version]: JSON.parse(value),
+      };
       fab[key][appName][artifacts] = file;
       const res = await writeReddis(key, fab);
       return res;
@@ -692,14 +723,14 @@ export const updateDiagram = async (key, appName, artifacts , version, value) =>
   }
 };
 
-export const versionServerERD = async (key, appName , artifacts) => {
+export const versionServerERD = async (key, appName, artifacts) => {
   try {
     const fabrics = await readReddis(key);
     const fab = JSON.parse(fabrics);
     if (
       fabrics &&
       fab.hasOwnProperty(key) &&
-      Object.keys(fab[key]).includes(appName) && 
+      Object.keys(fab[key]).includes(appName) &&
       Object.keys(fab[key][appName]).includes(artifacts)
     ) {
       return Object.keys(fab[key][appName][artifacts]);
@@ -711,7 +742,7 @@ export const versionServerERD = async (key, appName , artifacts) => {
   }
 };
 
-export const serveDataForERD = async (key, appName, artifacts ,  version) => {
+export const serveDataForERD = async (key, appName, artifacts, version) => {
   try {
     const fabrics = await readReddis(key);
     const fab = JSON.parse(fabrics);

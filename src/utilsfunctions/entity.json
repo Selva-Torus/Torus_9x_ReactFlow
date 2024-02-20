@@ -12,8 +12,8 @@
         "asdas": "asdasd",
         "asdasd": "asdasd",
         "ase": {
-          "as": "asdasd",
-          "asdas": "asdasd"
+          "selectedValue":"",
+          "selectionList":["yes","no","maybe","or"]
         }
       },
       "columns": [

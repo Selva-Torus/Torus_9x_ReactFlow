@@ -12,6 +12,7 @@ import ReactFlowDia from "./container/reactflowDia";
 import dagre from "dagre";
 import FloatingEdge from "./container/customEdge/FloatEdge";
 import 'primeflex/primeflex.css';
+import 'primereact/resources/themes/tailwind-light/theme.css'
 import {
   StartNode,
   EndNode,
