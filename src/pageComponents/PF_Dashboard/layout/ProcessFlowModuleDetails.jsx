@@ -184,7 +184,7 @@ const ModuleDetails = ({
             Create Module
           </p>
         </div> */}
-        <div
+        <button
           className="flex justify-content-center align-items-center "
           style={{
             width: "200px",
@@ -192,9 +192,10 @@ const ModuleDetails = ({
             borderRadius: "10px",
             border: "1px solid #5A47B0",
             backgroundColor: "#5A47B0",
-            cursor: isAdmin.canEdit ? "pointer" : "not-allowed",
-            opacity: isAdmin.canEdit ? "100%" : "50%",
+            cursor: (isAdmin.canEdit && selectedAppVersion) ? "pointer" : "not-allowed",
+            opacity: (isAdmin.canEdit && selectedAppVersion) ? "100%" : "50%",
           }}
+          disabled = {!selectedAppVersion || selectedAppVersion ==""}
           onClick={() => {
             if (isAdmin.canEdit) {
               if (nodes.length) {
@@ -231,7 +232,7 @@ const ModuleDetails = ({
           >
             Update (Current Version)
           </p>
-        </div>
+        </button>
         <div
           className="flex justify-content-center align-items-center"
           style={{
